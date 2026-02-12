@@ -46,10 +46,12 @@ const Navbar = () => {
         <nav className="flex size-full items-center justify-between p-4 bg-black/50 backdrop-blur-md rounded-lg">
 
           <div className="flex items-center gap-7">
-            <img src="/img/logo.jpg" alt="logo" className="w-10 rounded-full" />
+            <Link to="/">
+              <img src="/img/logo.jpg" alt="logo" className="w-10 rounded-full" />
+            </Link>
             <Button
               id="product-button"
-              title="Products"
+              title="Riot Games"
               rightIcon={<TiLocationArrow />}
               containerClass="bg-blue-50 md:flex hidden items-center justify-center gap-1"
             />
