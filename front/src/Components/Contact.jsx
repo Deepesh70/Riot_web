@@ -12,7 +12,7 @@ const Contact = () => {
   return (
     <div id="contact" className="my-20 min-h-96 w-screen  px-10">
       <div className="relative rounded-lg bg-black py-24 text-blue-50 sm:overflow-hidden">
-        {/* Left Decorative Image */}
+
         <div className="absolute -left-20 top-0 hidden h-full w-72 overflow-hidden sm:block lg:left-20 lg:w-96">
           <ImageClipBox
             src="/img/contact-1.webg.jpg"
@@ -24,7 +24,7 @@ const Contact = () => {
           />
         </div>
 
-        {/* Right Decorative Image */}
+
         <div className="absolute -top-40 left-20 w-60 sm:top-1/2 md:left-auto md:right-10 lg:top-20 lg:w-80">
           <ImageClipBox
             src="/img/gallery-2.jpg"
@@ -36,7 +36,7 @@ const Contact = () => {
           />
         </div>
 
-        {/* Content */}
+
         <div className="flex flex-col items-center text-center">
           <p className="mb-10 font-general text-[10px] uppercase">
             Join Riot

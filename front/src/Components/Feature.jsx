@@ -1,7 +1,7 @@
 import React from 'react';
 import { TiLocationArrow } from 'react-icons/ti';
 
-// Simplified Card - No 3D Tilt Logic
+
 const BentoCard = ({ src, title, description, isComingSoon }) => {
   return (
     <div className="relative size-full overflow-hidden rounded-xl border border-white/20 bg-black/50 p-6 flex flex-col justify-end min-h-64 group hover:bg-black/70 transition-colors">
@@ -46,7 +46,7 @@ const Feature = () => {
           </p>
         </div>
 
-        {/* Simplified Grid Layout */}
+
         <div className="grid h-[135vh] w-full grid-cols-2 grid-rows-3 gap-7 pb-7">
           <div className="col-span-2 row-span-1 md:col-span-1 md:row-span-2">
             <BentoCard

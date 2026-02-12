@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
-// Simplified AnimatedTitle - uses simple useEffect instead of complex context
+
 const AnimatedTitle = ({ title, containerClass }) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    // Simple animation: Fade in and slide up
+
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".animated-word",
@@ -15,12 +15,12 @@ const AnimatedTitle = ({ title, containerClass }) => {
           opacity: 1,
           transform: 'translate3d(0, 0, 0) rotateY(0deg)',
           ease: 'power2.out',
-          stagger: 0.1, // Stagger the animation for each line
+          stagger: 0.1,
           scrollTrigger: {
-             trigger: containerRef.current,
-             start: '100 bottom',
-             end: 'center bottom',
-             toggleActions: 'play none none reverse',
+            trigger: containerRef.current,
+            start: '100 bottom',
+            end: 'center bottom',
+            toggleActions: 'play none none reverse',
           }
         }
       );

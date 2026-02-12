@@ -1,5 +1,5 @@
 import React from 'react'
-// Imports from original App.jsx
+
 
 
 import Hero from './Hero'

@@ -7,28 +7,27 @@ const Hero = () => {
   const totalVideos = 4;
 
   const handleVideoLoad = () => {
-    // Just a placeholder for any loading logic if needed, but keeping it simple
+
   };
 
   const handleMiniVdClick = () => {
     setCurrentIndex((prevIndex) => (prevIndex % totalVideos) + 1);
   };
 
-  // Simplified: No preloading logic, just get the video src.
-  // const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
+
   const getVideoSrc = (index) => `/videos/hero-${index}.mp4`;
 
   return (
     <div className="relative h-dvh w-screen overflow-x-hidden">
-      {/* Main Video Background with Clickable Logic */}
+
       <div
         id="video-frame"
         className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75"
-        onClick={handleMiniVdClick} // Simple click handler
+        onClick={handleMiniVdClick}
       >
         <div>
           <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg hover:scale-105 transition-transform duration-300">
-            {/* Mini Video Preview - Simplified */}
+
             <div
               className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100"
             >
@@ -44,7 +43,7 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Main Full Screen Video */}
+
           <video
             key={`main-${currentIndex}`}
             src={getVideoSrc(currentIndex)}

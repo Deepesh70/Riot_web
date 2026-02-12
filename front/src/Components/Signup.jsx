@@ -35,7 +35,7 @@ const Signup = () => {
 
     return (
         <div className="relative h-screen w-screen overflow-hidden">
-            {/* Background Video */}
+
             <video
                 src="videos/hero-2.mp4"
                 autoPlay
@@ -44,10 +44,10 @@ const Signup = () => {
                 className="absolute top-0 left-0 w-full h-full object-cover z-0"
             />
 
-            {/* Overlay */}
+
             <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10" />
 
-            {/* Content Container */}
+
             <div className="relative z-20 flex h-full items-center justify-center p-4">
                 <div className="w-full max-w-md bg-black/30 backdrop-blur-md p-8 rounded-2xl border border-white/10 shadow-2xl">
                     <h1 className="special-font hero-heading text-blue-75 text-center text-4xl mb-2">
