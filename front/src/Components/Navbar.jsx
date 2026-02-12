@@ -3,7 +3,7 @@ import { TiLocationArrow } from 'react-icons/ti';
 import Button from './Button';
 import { Link, useNavigate } from 'react-router-dom';
 
-const navItems = ['Drift', 'News', 'About', 'Contact', 'Profile'];
+const navItems = ['Drift', 'News', 'Esport', 'About', 'Contact', 'Profile'];
 
 const Navbar = () => {
 
@@ -76,6 +76,16 @@ const Navbar = () => {
                     <Link
                       key={index}
                       to="/"
+                      className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors"
+                    >
+                      {item}
+                    </Link>
+                  )
+                } else if (item === 'Esport') {
+                  return (
+                    <Link
+                      key={index}
+                      to="/esport"
                       className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors"
                     >
                       {item}
