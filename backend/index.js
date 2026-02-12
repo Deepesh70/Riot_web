@@ -8,25 +8,25 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
+
 app.use(cors());
 app.use(express.json());
 
-// User Routes
+
 app.use('/api/users', userRoutes);
 
-// Database Connection Logic
+
 const connectDB = async () => {
     try {
         const conn = await mongoose.connect(process.env.MONGO_URI);
         console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
         console.error(`Error: ${error.message}`);
-        process.exit(1); // Exit process with failure
+        process.exit(1);
     }
 };
 
-// Start Server
+
 const PORT = process.env.PORT || 5000;
 
 connectDB().then(() => {
@@ -35,7 +35,21 @@ connectDB().then(() => {
     });
 });
 
-// Basic Health Check Route
+
+app.get('/api/news', async (req, res) => {
+    try {
+        const apiKey = 'a90297fb0e554032ac48ff512ced53e7';
+        const query = req.query.q || 'gaming';
+        const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&language=en&sortBy=publishedAt&apiKey=${apiKey}`);
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching news:', error);
+        res.status(500).json({ message: 'Error fetching news' });
+    }
+});
+
+
 app.get('/', (req, res) => {
     res.send('Riot Reimagined API is Live.');
 });
