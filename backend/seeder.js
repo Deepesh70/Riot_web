@@ -19,10 +19,10 @@ const importData = async () => {
     try {
         await connectDB();
 
-        await User.deleteMany(); // Clear existing users
+        await User.deleteMany();
 
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash('123456', salt); // Default password for all seeded users
+        const hashedPassword = await bcrypt.hash('123456', salt);
 
         const users = [
             {
@@ -55,7 +55,7 @@ const importData = async () => {
 const destroyData = async () => {
     try {
         await connectDB();
-        
+
         await User.deleteMany();
 
         console.log('Data Destroyed!');
