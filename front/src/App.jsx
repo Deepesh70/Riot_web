@@ -4,6 +4,7 @@ import Home from './components/Home'
 import Login from './components/Login'
 import Signup from './components/Signup'
 import News from './components/News'
+import UserProfile from './components/UserProfile'
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/news" element={<News />} />
+      <Route path="/profile" element={<UserProfile />} />
     </Routes>
   )
 }

@@ -9,12 +9,12 @@ body {
   overflow-x: hidden;
   background-color: #dfdff0;
   font-family: "General Sans", sans-serif;
-  
 
-.hero-heading {
-  font-size: clamp(2rem, 5vw, 7rem);
-  line-height: 1.1;
-}
+
+  .hero-heading {
+    font-size: clamp(2rem, 5vw, 7rem);
+    line-height: 1.1;
+  }
 }
 
 @layer base {
@@ -163,10 +163,12 @@ body {
     height: 4px;
     transform: translateY(-0px);
   }
+
   50% {
     height: 16px;
     transform: translateY(-4px);
   }
+
   100% {
     height: 4px;
     transform: translateY(-0px);
@@ -226,8 +228,7 @@ body {
 .three-body__dot:nth-child(2)::after {
   bottom: 0;
   left: 0;
-  animation: wobble1 var(--uib-speed) infinite calc(var(--uib-speed) * -0.15)
-    ease-in-out;
+  animation: wobble1 var(--uib-speed) infinite calc(var(--uib-speed) * -0.15) ease-in-out;
 }
 
 .three-body__dot:nth-child(3) {
@@ -253,6 +254,7 @@ body {
 }
 
 @keyframes wobble1 {
+
   0%,
   100% {
     transform: translateY(0%) scale(1);
@@ -266,6 +268,7 @@ body {
 }
 
 @keyframes wobble2 {
+
   0%,
   100% {
     transform: translateY(0%) scale(1);
@@ -275,5 +278,66 @@ body {
   50% {
     transform: translateY(66%) scale(0.65);
     opacity: 0.8;
+  }
+}
+
+/* Glitch Effect */
+.glitch-effect {
+  position: relative;
+}
+
+.glitch-effect:hover {
+  animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+  color: white;
+}
+
+.glitch-effect:hover::before,
+.glitch-effect:hover::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+}
+
+.glitch-effect:hover::before {
+  left: 2px;
+  text-shadow: -1px 0 #00ffff;
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.glitch-effect:hover::after {
+  left: -2px;
+  text-shadow: -1px 0 #ff00ff;
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim2 5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+
+  20% {
+    transform: translate(-2px, 2px);
+  }
+
+  40% {
+    transform: translate(-2px, -2px);
+  }
+
+  60% {
+    transform: translate(2px, 2px);
+  }
+
+  80% {
+    transform: translate(2px, -2px);
+  }
+
+  100% {
+    transform: translate(0);
   }
 }
