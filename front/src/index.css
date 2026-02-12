@@ -10,7 +10,7 @@ body {
   background-color: #dfdff0;
   font-family: "General Sans", sans-serif;
   
-/* Responsive text sizing */
+
 .hero-heading {
   font-size: clamp(2rem, 5vw, 7rem);
   line-height: 1.1;
@@ -39,8 +39,8 @@ body {
   }
 
   @font-face {
-    font-family: "zentry";
-    src: url("/fonts/zentry-regular.woff2") format("woff2");
+    font-family: "riot";
+    src: url("/fonts/riot-regular.woff2") format("woff2");
   }
 }
 
@@ -70,12 +70,12 @@ body {
   }
 
   .special-font b {
-    font-family: "Zentry";
+    font-family: "Riot";
     font-feature-settings: "ss01" on;
   }
 
   .hero-heading {
-    @apply uppercase font-zentry font-black text-5xl sm:right-10 sm:text-7xl md:text-9xl lg:text-[12rem];
+    @apply uppercase font-riot font-black text-5xl sm:right-10 sm:text-7xl md:text-9xl lg:text-[12rem];
   }
 
   .about-subtext {
@@ -91,7 +91,7 @@ body {
   }
 
   .animated-word {
-    @apply special-font font-zentry font-black opacity-0;
+    @apply special-font font-riot font-black opacity-0;
     transform: translate3d(10px, 51px, -60px) rotateY(60deg) rotateX(-40deg);
     transform-origin: 50% 50% -150px !important;
     will-change: opacity, transform;
@@ -106,7 +106,7 @@ body {
   }
 
   .bento-title {
-    @apply uppercase md:text-6xl text-4xl font-black font-zentry;
+    @apply uppercase md:text-6xl text-4xl font-black font-riot;
   }
 
   .story-img-container {
@@ -173,8 +173,8 @@ body {
   }
 }
 
-/* From Uiverse.io by G4b413l */
-/* https://uiverse.io/G4b413l/tidy-walrus-92 */
+
+
 .three-body {
   --uib-size: 35px;
   --uib-speed: 0.8s;

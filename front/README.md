@@ -1,6 +1,6 @@
-# Zentry Gaming Web
+# Riot Gaming Web
 
-Welcome to the Zentry Gaming Web project!  This is a modern, visually engaging landing page for the Zentry gaming universe, built with React, Vite, and Tailwind CSS.(This is just a Landing Page)
+Welcome to the Riot Gaming Web project!  This is a modern, visually engaging landing page for the Riot gaming universe, built with React, Vite, and Tailwind CSS.(This is just a Landing Page)
 
 ## Features
 
@@ -22,7 +22,7 @@ Welcome to the Zentry Gaming Web project!  This is a modern, visually engaging l
 1. Clone this repository or download the source code.
 2. Open a terminal and navigate to the project directory:
    ```sh
-   cd Zentry
+   cd Riot
    ```
 3. Install dependencies:
    ```sh

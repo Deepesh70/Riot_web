@@ -1,24 +1,16 @@
 import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
-import Hero from './components/Hero'
-import About from './components/About'
-import Navbar from './components/Navbar'
-import Feature from './components/Feature'
-import Story from './components/Story'
-import Contact from './components/Contact'
-import Footer from './components/Footer'
+import { Routes, Route } from 'react-router-dom'
+import Home from './components/Home'
+import Login from './components/Login'
+import Signup from './components/Signup'
 
 const App = () => {
   return (
-      <main className="min-h-screen overflow-x-hidden">
-        <Navbar />
-        <Hero />
-        <About />
-        <Feature />
-        <Story/>
-        <Contact/>
-        <Footer />
-      </main>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+    </Routes>
   )
 }
 
