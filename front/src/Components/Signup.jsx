@@ -5,6 +5,8 @@ const Signup = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [riotGameName, setRiotGameName] = useState('');
+    const [riotTagLine, setRiotTagLine] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
@@ -13,12 +15,12 @@ const Signup = () => {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:5000/api/users/signup', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name, email, password }),
+                body: JSON.stringify({ name, email, password, riotGameName, riotTagLine }),
             });
 
             const data = await response.json();
@@ -96,6 +98,31 @@ const Signup = () => {
                                 placeholder="CREATE A PASSWORD"
                                 required
                             />
+                        </div>
+
+                        <div className="flex gap-2">
+                             <div className="mb-4 flex-1">
+                                <label className="block text-blue-50 mb-2 font-general text-sm uppercase tracking-wider" htmlFor="riotGameName">Riot Game Name </label>
+                                <input
+                                    type="text"
+                                    id="riotGameName"
+                                    placeholder="Deepesh"
+                                    className="w-full p-3 rounded bg-blue-50/10 border border-blue-50/20 text-white placeholder-blue-50/30 focus:outline-none focus:border-yellow-300 transition-colors"
+                                    value={riotGameName}
+                                    onChange={(e) => setRiotGameName(e.target.value)}
+                                />
+                            </div>
+                            <div className="mb-4 w-24">
+                                <label className="block text-blue-50 mb-2 font-general text-sm uppercase tracking-wider" htmlFor="riotTagLine">Tag</label>
+                                <input
+                                    type="text"
+                                    id="riotTagLine"
+                                    placeholder="#9021"
+                                    className="w-full p-3 rounded bg-blue-50/10 border border-blue-50/20 text-white placeholder-blue-50/30 focus:outline-none focus:border-yellow-300 transition-colors"
+                                    value={riotTagLine}
+                                    onChange={(e) => setRiotTagLine(e.target.value)}
+                                />
+                            </div>
                         </div>
 
                         <button

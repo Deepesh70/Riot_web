@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TiStarFullOutline, TiFlash } from 'react-icons/ti';
 import { FaTrophy } from 'react-icons/fa';
 import gsap from 'gsap';
@@ -6,26 +7,36 @@ import { useGSAP } from '@gsap/react';
 import Navbar from '../components/Navbar';
 
 const UserProfile = () => {
+    const navigate = useNavigate();
     // State for user data
     const [userData, setUserData] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
 
-    // Mock User Data (Fallback/Extended info not in DB)
-    const mockExtendedData = {
-        tag: "#9021",
-        level: 42,
-        xp: 8500,
-        maxXp: 10000,
-        rank: "Diamond II",
-        avatar: "https://ui-avatars.com/api/?name=Night+Stalker&background=0D8ABC&color=fff&size=128",
-        coverString: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop", // Gaming setup/neon
-        stats: {
-            matches: 142,
-            wins: 89,
-            winRate: "62.6%",
-            kdClass: "2.4"
+    // Riot Search State
+    const [riotGameName, setRiotGameName] = React.useState('');
+    const [riotTagLine, setRiotTagLine] = React.useState('');
+    const [selectedGame, setSelectedGame] = React.useState('lol');
+
+    const handleSearch = () => {
+        if (!riotGameName || !riotTagLine) {
+            alert("Please enter both Game Name and Tag Line");
+            return;
         }
+        navigate(`/player/${selectedGame}/${riotGameName}/${riotTagLine}`);
+    };
+
+    // Default Empty / Loading State Data
+    const defaultData = {
+        username: "Player",
+        tag: "#0000",
+        level: 1,
+        rank: "Unranked",
+        avatar: "https://ui-avatars.com/api/?name=Player&background=333&color=fff",
+        coverString: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop",
+        xp: 0,
+        maxXp: 1000,
+        stats: { matches: 0, wins: 0, winRate: "0%", kdClass: "0.0" }
     };
 
     const [activeTab, setActiveTab] = React.useState('valorant');
@@ -66,7 +77,8 @@ const UserProfile = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:5000/api/users/profile', {
+                // 1. Fetch Local Profile
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/profile`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -78,8 +90,35 @@ const UserProfile = () => {
                     throw new Error('Failed to fetch profile');
                 }
 
-                const data = await response.json();
-                setUserData(data);
+                const localData = await response.json();
+                
+                // 2. If user has linked Riot account, fetch external data immediately
+                let externalData = {};
+                if (localData.riotGameName && localData.riotTagLine) {
+                    try {
+                        const riotRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/riot/val/account/${localData.riotGameName}/${localData.riotTagLine}`);
+                        if (riotRes.ok) {
+                            const riotData = await riotRes.json();
+                            externalData = {
+                                level: riotData.account_level,
+                                rank: riotData.region?.toUpperCase() || "VALORANT", 
+                                avatar: riotData.card?.small,
+                                coverString: riotData.card?.wide, 
+                                username: riotData.name,
+                                tag: '#' + riotData.tag,
+                                // Keep default stats as API doesn't provide them, or hide stats section if needed
+                                stats: defaultData.stats 
+                            };
+                            // Pre-fill search inputs
+                            setRiotGameName(riotData.name);
+                            setRiotTagLine(riotData.tag);
+                        }
+                    } catch (riotErr) {
+                        console.error("Auto-fetch Riot data failed", riotErr);
+                    }
+                }
+
+                setUserData({ ...localData, ...externalData });
             } catch (err) {
                 setError(err.message);
                 console.error("Error fetching profile:", err);
@@ -91,8 +130,8 @@ const UserProfile = () => {
         fetchUserData();
     }, []);
 
-    // Merge DB data with mock data for display
-    const user = userData ? { ...mockExtendedData, ...userData, username: userData.name, avatar: `https://ui-avatars.com/api/?name=${userData.name}&background=0D8ABC&color=fff&size=128` } : mockExtendedData;
+    // Merge DB data with default data
+    const user = userData ? { ...defaultData, ...userData, username: userData.name || userData.username, avatar: userData.avatar || `https://ui-avatars.com/api/?name=${userData.name}&background=0D8ABC&color=fff&size=128` } : defaultData;
 
     const containerRef = useRef(null);
 
@@ -162,6 +201,42 @@ const UserProfile = () => {
             </div>
 
             <div className="relative z-10 pt-24 px-4 sm:px-8 max-w-5xl mx-auto">
+                {/* Riot ID Search */}
+                <div className="flex justify-end gap-2 mb-6 items-center">
+                    <div className="flex flex-col sm:flex-row bg-neutral-900/80 backdrop-blur border border-white/20 rounded-lg overflow-hidden">
+                        <input 
+                            type="text" 
+                            placeholder="Game Name" 
+                            value={riotGameName}
+                            onChange={(e) => setRiotGameName(e.target.value)}
+                            className="bg-transparent text-white px-4 py-2 outline-none w-40 placeholder-neutral-500"
+                        />
+                        <div className="hidden sm:block bg-white/10 w-px self-stretch my-2"></div>
+                        <input 
+                            type="text" 
+                            placeholder="#Tag" 
+                            value={riotTagLine}
+                            onChange={(e) => setRiotTagLine(e.target.value)}
+                            className="bg-transparent text-white px-4 py-2 outline-none w-24 placeholder-neutral-500" 
+                        />
+                         <div className="hidden sm:block bg-white/10 w-px self-stretch my-2"></div>
+                        <select 
+                            value={selectedGame} 
+                            onChange={(e) => setSelectedGame(e.target.value)}
+                            className="bg-neutral-900 text-white px-2 py-2 outline-none cursor-pointer hover:bg-neutral-800 transition-colors"
+                        >
+                            <option value="lol">LoL</option>
+                            <option value="val">Valorant</option>
+                        </select>
+                    </div>
+                    <button 
+                        onClick={handleSearch}
+                        className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg transition-colors border border-blue-500/50 shadow-[0_0_15px_rgba(37,99,235,0.3)]"
+                    >
+                        SEARCH
+                    </button>
+                </div>
+
                 {/* Profile Header */}
                 <div className="profile-header relative bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden group shadow-2xl mb-10">
                     {/* Cover Image */}

@@ -38,7 +38,7 @@ connectDB().then(() => {
 
 app.get('/api/news', async (req, res) => {
     try {
-        const apiKey = 'a90297fb0e554032ac48ff512ced53e7';
+        const apiKey = process.env.NEWS_API_KEY;
         const query = req.query.q || 'gaming';
         const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&language=en&sortBy=publishedAt&apiKey=${apiKey}`);
         const data = await response.json();

@@ -2,6 +2,51 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import { TiLocationArrow } from 'react-icons/ti';
 
+const DUMMY_NEWS = [
+    {
+        title: "Major Update Coming for Valorant",
+        description: "Riot Games teases a massive update for Valorant, introducing new agents and map changes that will shake up the competitive meta.",
+        url: "#",
+        urlToImage: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop",
+        publishedAt: new Date().toISOString()
+    },
+    {
+        title: "E-Sports Tournament Finals This Weekend",
+        description: "Top teams from around the world gather for the ultimate showdown in the annual championship. Don't miss the action live on stream.",
+        url: "#",
+        urlToImage: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop",
+        publishedAt: new Date().toISOString()
+    },
+    {
+        title: "New Graphics Card Generation Revealed",
+        description: "Tech giants unveil the next generation of graphics cards promising 2x performance in modern games and ray-tracing capabilities.",
+        url: "#",
+        urlToImage: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=2000&auto=format&fit=crop",
+        publishedAt: new Date().toISOString()
+    },
+    {
+        title: "Indie Game Sensation Hits 1 Million Sales",
+        description: "A small team's passion project has taken the gaming world by storm, reaching a major milestone in just under a month.",
+        url: "#",
+        urlToImage: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=900&auto=format&fit=crop",
+        publishedAt: new Date().toISOString()
+    },
+     {
+        title: "Cyberpunk 2077 DLC Reviews Are In",
+        description: "The long-awaited expansion for Cyberpunk 2077 has finally arrived. Critics praise the new story and gameplay improvements.",
+        url: "#",
+        urlToImage: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=2000&auto=format&fit=crop",
+        publishedAt: new Date().toISOString()
+    },
+    {
+         title: "The Future of Cloud Gaming",
+         description: "Is cloud gaming really the future? We dive deep into the technology and what it means for hardware manufacturers.",
+         url: "#",
+         urlToImage: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop",
+         publishedAt: new Date().toISOString()
+    }
+];
+
 const NewsSection = ({ title, query, limit }) => {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -21,7 +66,9 @@ const NewsSection = ({ title, query, limit }) => {
 
                 setArticles(validArticles);
             } catch (err) {
-                setError(err.message);
+                console.log("API failed, using dummy data");
+                setArticles(DUMMY_NEWS.slice(0, limit));
+                // setError(err.message); // Supress error to show dummy data
             } finally {
                 setLoading(false);
             }

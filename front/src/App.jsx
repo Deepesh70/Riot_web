@@ -6,6 +6,7 @@ import Signup from './components/Signup'
 import News from './components/News'
 import UserProfile from './components/UserProfile'
 import Esport from './components/Esport'
+import PlayerStats from './components/PlayerStats'
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
       <Route path="/signup" element={<Signup />} />
       <Route path="/news" element={<News />} />
       <Route path="/profile" element={<UserProfile />} />
+      <Route path="/player/:game/:gameName/:tagLine" element={<PlayerStats />} />
     </Routes>
   )
 }
