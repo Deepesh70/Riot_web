@@ -19,20 +19,20 @@ const PlayerStats = () => {
                 setLoading(true);
                 let accData = null;
 
-                // 1. Get Account Info (Only needed for LoL or displaying generic profile info)
-                // For Val (HenrikDev), we might not need Riot Account Endpoint if we trust the input, 
-                // but we keep it for consistency in displaying the header info (GameName#Tag)
+                // 1. Get Account Info
                 const accRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/riot/account/${gameName}/${tagLine}`);
                 if (accRes.ok) {
                     accData = await accRes.json();
                     setPlayerData(accData);
                 } else {
-                    // If Riot Account lookup fails but we are in Val mode, maybe we can proceed? 
-                    // But let's assume we need it for now or just set basic info.
+                    console.warn(`Riot Account API failed with status: ${accRes.status}`);
                     if (game === 'val') {
-                        setPlayerData({ gameName, tagLine }); // Fallback
+                        // For Valorant, we can proceed without Riot Account data if we just use name/tag
+                        accData = { gameName, tagLine };
+                        setPlayerData(accData); 
                     } else {
-                        throw new Error('Player not found');
+                        // For LoL, we likely need PUUID from account endpoint, so we can't easily proceed
+                        throw new Error(`Player lookup failed: ${accRes.statusText || 'Start server/Check API Key'}`);
                     }
                 }
 

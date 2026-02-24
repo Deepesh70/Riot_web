@@ -39,7 +39,7 @@ const Signup = () => {
         <div className="relative h-screen w-screen overflow-hidden">
 
             <video
-                src="videos/hero-2.mp4"
+                src="videos/feature-5.mp4"
                 autoPlay
                 loop
                 muted

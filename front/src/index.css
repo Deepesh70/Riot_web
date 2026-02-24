@@ -341,3 +341,68 @@ body {
     transform: translate(0);
   }
 }
+
+/* ── Esport Match Card ── */
+.esport-match-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.esport-match-card:hover {
+  border-color: rgba(239, 68, 68, 0.25);
+  box-shadow: 0 8px 40px -12px rgba(239, 68, 68, 0.1), 0 0 0 1px rgba(239, 68, 68, 0.08);
+}
+
+/* ── Region Tabs ── */
+.esport-region-tab {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.esport-region-tab:hover {
+  color: #d1d5db;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.esport-region-tab.active {
+  color: #fff;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+/* ── Live Dot ── */
+.esport-live-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
+  animation: esportLivePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes esportLivePulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+  }
+
+  50% {
+    box-shadow: 0 0 0 5px rgba(239, 68, 68, 0);
+  }
+}

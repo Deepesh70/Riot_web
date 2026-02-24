@@ -92,7 +92,8 @@ router.get('/riot/account/:gameName/:tagLine', async (req, res) => {
         res.json(data);
     } catch (error) {
         console.error("Riot API Error:", error);
-        res.status(500).json({ error: error.message });
+        // Don't leak internal API key errors, but provide a useful message
+        res.status(500).json({ error: "Failed to fetch Riot Account data. API Key may be invalid." });
     }
 });
 
@@ -149,7 +150,7 @@ router.get('/riot/matches/val/:name/:tag', async (req, res) => {
         console.error("Riot Val Matches Error:", error);
         res.status(500).json({ error: error.message });
     }
-});
+}); 
 
 router.get('/riot/val/account/:name/:tag', async (req, res) => {
     try {
