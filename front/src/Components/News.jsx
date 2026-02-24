@@ -31,7 +31,7 @@ const DUMMY_NEWS = [
         urlToImage: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=900&auto=format&fit=crop",
         publishedAt: new Date().toISOString()
     },
-     {
+    {
         title: "Cyberpunk 2077 DLC Reviews Are In",
         description: "The long-awaited expansion for Cyberpunk 2077 has finally arrived. Critics praise the new story and gameplay improvements.",
         url: "#",
@@ -39,11 +39,11 @@ const DUMMY_NEWS = [
         publishedAt: new Date().toISOString()
     },
     {
-         title: "The Future of Cloud Gaming",
-         description: "Is cloud gaming really the future? We dive deep into the technology and what it means for hardware manufacturers.",
-         url: "#",
-         urlToImage: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop",
-         publishedAt: new Date().toISOString()
+        title: "The Future of Cloud Gaming",
+        description: "Is cloud gaming really the future? We dive deep into the technology and what it means for hardware manufacturers.",
+        url: "#",
+        urlToImage: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop",
+        publishedAt: new Date().toISOString()
     }
 ];
 
@@ -55,7 +55,7 @@ const NewsSection = ({ title, query, limit }) => {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/news?q=${query}`);
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/news?q=${query}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch news');
                 }
@@ -66,7 +66,6 @@ const NewsSection = ({ title, query, limit }) => {
 
                 setArticles(validArticles);
             } catch (err) {
-                console.log("API failed, using dummy data");
                 setArticles(DUMMY_NEWS.slice(0, limit));
                 // setError(err.message); // Supress error to show dummy data
             } finally {

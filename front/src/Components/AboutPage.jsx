@@ -104,30 +104,30 @@ const AboutPage = () => {
             .from('.about-hero-title', { y: 60, opacity: 0, duration: 0.9, stagger: 0.15 }, '-=0.3')
             .from('.about-hero-desc', { y: 30, opacity: 0, duration: 0.6 }, '-=0.4');
 
-        gsap.from('.about-stat', {
-            scrollTrigger: { trigger: '.about-stats', start: 'top 80%', toggleActions: 'play none none reverse' },
-            y: 40, opacity: 0, stagger: 0.1, duration: 0.7,
-        });
+        gsap.fromTo('.about-stat',
+            { y: 40, opacity: 0 },
+            { scrollTrigger: { trigger: '.about-stats', start: 'top 85%', once: true }, y: 0, opacity: 1, stagger: 0.1, duration: 0.7 }
+        );
 
-        gsap.from('.about-story-content', {
-            scrollTrigger: { trigger: '.about-story', start: 'top 75%', toggleActions: 'play none none reverse' },
-            y: 60, opacity: 0, duration: 0.9,
-        });
+        gsap.fromTo('.about-story-content',
+            { y: 60, opacity: 0 },
+            { scrollTrigger: { trigger: '.about-story', start: 'top 85%', once: true }, y: 0, opacity: 1, duration: 0.9 }
+        );
 
-        gsap.from('.about-value-card', {
-            scrollTrigger: { trigger: '.about-values', start: 'top 75%', toggleActions: 'play none none reverse' },
-            y: 50, opacity: 0, stagger: 0.12, duration: 0.7,
-        });
+        gsap.fromTo('.about-value-card',
+            { y: 50, opacity: 0 },
+            { scrollTrigger: { trigger: '.about-values', start: 'top 85%', once: true }, y: 0, opacity: 1, stagger: 0.12, duration: 0.7 }
+        );
 
-        gsap.from('.about-team-card', {
-            scrollTrigger: { trigger: '.about-team', start: 'top 75%', toggleActions: 'play none none reverse' },
-            y: 40, opacity: 0, scale: 0.95, stagger: 0.08, duration: 0.6,
-        });
+        gsap.fromTo('.about-team-card',
+            { y: 40, opacity: 0, scale: 0.95 },
+            { scrollTrigger: { trigger: '.about-team', start: 'top 85%', once: true }, y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.6 }
+        );
 
-        gsap.from('.about-join-content', {
-            scrollTrigger: { trigger: '.about-join', start: 'top 80%', toggleActions: 'play none none reverse' },
-            y: 50, opacity: 0, duration: 0.8,
-        });
+        gsap.fromTo('.about-join-content',
+            { y: 50, opacity: 0 },
+            { scrollTrigger: { trigger: '.about-join', start: 'top 85%', once: true }, y: 0, opacity: 1, duration: 0.8 }
+        );
 
         gsap.utils.toArray('.about-parallax').forEach(el => {
             gsap.to(el, {
@@ -241,10 +241,10 @@ const AboutPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {VALUES.map((v, i) => (
                             <div key={i} className="about-value-card p-7 rounded-2xl transition-all duration-400 group cursor-default"
-                                style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03))', border: '1px solid rgba(255,255,255,0.12)' }}>
                                 <div className="text-3xl mb-5 transform group-hover:scale-110 transition-transform duration-300">{v.icon}</div>
                                 <h3 className="text-white font-bold text-lg mb-3">{v.title}</h3>
-                                <p className="text-white/35 text-sm leading-relaxed">{v.desc}</p>
+                                <p className="text-white/60 text-sm leading-relaxed">{v.desc}</p>
                             </div>
                         ))}
                     </div>

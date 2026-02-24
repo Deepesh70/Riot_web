@@ -15,7 +15,7 @@ const Contact = () => {
 
         <div className="absolute -left-20 top-0 hidden h-full w-72 overflow-hidden sm:block lg:left-20 lg:w-96">
           <ImageClipBox
-            src="/img/contact-1.webg.jpg"
+            src="/img/contact-1.webp.jpg"
             clipClass="contact-clip-path-1"
           />
           <ImageClipBox

@@ -185,8 +185,8 @@ const Esport = () => {
     setError(null);
     try {
       const url = region
-        ? `http://localhost:5000/api/esports/schedule?region=${region}`
-        : 'http://localhost:5000/api/esports/schedule';
+        ? `${import.meta.env.VITE_API_BASE_URL}/api/esports/schedule?region=${region}`
+        : `${import.meta.env.VITE_API_BASE_URL}/api/esports/schedule`;
       const res = await fetch(url);
       if (!res.ok) throw new Error(`Failed to load (${res.status})`);
       const data = await res.json();
