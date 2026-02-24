@@ -46,15 +46,15 @@ const Navbar = () => {
     <div className="fixed inset-x-0 top-4 z-50 h-16 border-none transition-all duration-700 sm:inset-x-6">
       <header className="absolute top-1/2 w-full -translate-y-1/2">
         <nav className="flex size-full items-center justify-between p-4 bg-black/50 backdrop-blur-md rounded-lg">
-            {location.pathname !== '/' && (
-              <button 
-                  onClick={() => navigate(-1)} 
-                  className="md:hidden text-white p-1 hover:text-red-500 transition-colors"
-                  aria-label="Go Back"
-              >
-                  <TiArrowBack size={24} />
-              </button>
-            )}
+          {location.pathname !== '/' && (
+            <button
+              onClick={() => navigate(-1)}
+              className="md:hidden text-white p-1 hover:text-red-500 transition-colors"
+              aria-label="Go Back"
+            >
+              <TiArrowBack size={24} />
+            </button>
+          )}
           <div className="flex items-center gap-7">
             <Link to="/">
               <img src="/img/logo.jpg" alt="logo" className="w-10 rounded-full" />
@@ -107,6 +107,16 @@ const Navbar = () => {
                     <Link
                       key={index}
                       to="/profile"
+                      className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors"
+                    >
+                      {item}
+                    </Link>
+                  )
+                } else if (item === 'About') {
+                  return (
+                    <Link
+                      key={index}
+                      to="/about"
                       className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors"
                     >
                       {item}
@@ -167,12 +177,12 @@ const Navbar = () => {
                 />
               ))}
             </button>
-            
+
             <button
-                className="md:hidden text-white ml-5 p-2 z-50 relative"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden text-white ml-5 p-2 z-50 relative"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-                {isMobileMenuOpen ? <TiTimes size={28} /> : <TiThMenu size={24} />}
+              {isMobileMenuOpen ? <TiTimes size={28} /> : <TiThMenu size={24} />}
             </button>
           </div>
         </nav>
@@ -180,40 +190,42 @@ const Navbar = () => {
 
       {/* Mobile Menu Overlay */}
       <div className={`fixed inset-0 bg-black/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center gap-8 transition-transform duration-500 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-          {navItems.map((item, index) => {
-             const commonClasses = "text-3xl font-black uppercase text-white hover:text-blue-500 transition-colors tracking-tighter";
-             const handleClick = () => setIsMobileMenuOpen(false);
+        {navItems.map((item, index) => {
+          const commonClasses = "text-3xl font-black uppercase text-white hover:text-blue-500 transition-colors tracking-tighter";
+          const handleClick = () => setIsMobileMenuOpen(false);
 
-             if (item === 'News') {
-                  return <Link key={index} to="/news" className={commonClasses} onClick={handleClick}>{item}</Link>
-             } else if (item === 'Drift') {
-                  return <Link key={index} to="/" className={commonClasses} onClick={handleClick}>{item}</Link>
-             } else if (item === 'Esport') {
-                  return <Link key={index} to="/esport" className={commonClasses} onClick={handleClick}>{item}</Link>
-             } else if (item === 'Profile') {
-                  if (!isLoggedIn) return null;
-                  return <Link key={index} to="/profile" className={commonClasses} onClick={handleClick}>{item}</Link>
-             } else {
-                  return <a key={index} href={`#${item.toLowerCase()}`} className={commonClasses} onClick={handleClick}>{item}</a>
-             }
-          })}
-          
-          {isLoggedIn ? (
-                <button
-                  onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
-                  className="mt-8 px-8 py-3 bg-red-600 text-white font-bold rounded-full uppercase tracking-wider hover:bg-red-700 transition-colors"
-                >
-                  Logout
-                </button>
-              ) : (
-                <Link
-                  to="/login"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="mt-8 px-8 py-3 bg-blue-600 text-white font-bold rounded-full uppercase tracking-wider hover:bg-blue-700 transition-colors"
-                >
-                  Login
-                </Link>
-          )}
+          if (item === 'News') {
+            return <Link key={index} to="/news" className={commonClasses} onClick={handleClick}>{item}</Link>
+          } else if (item === 'Drift') {
+            return <Link key={index} to="/" className={commonClasses} onClick={handleClick}>{item}</Link>
+          } else if (item === 'Esport') {
+            return <Link key={index} to="/esport" className={commonClasses} onClick={handleClick}>{item}</Link>
+          } else if (item === 'About') {
+            return <Link key={index} to="/about" className={commonClasses} onClick={handleClick}>{item}</Link>
+          } else if (item === 'Profile') {
+            if (!isLoggedIn) return null;
+            return <Link key={index} to="/profile" className={commonClasses} onClick={handleClick}>{item}</Link>
+          } else {
+            return <a key={index} href={`#${item.toLowerCase()}`} className={commonClasses} onClick={handleClick}>{item}</a>
+          }
+        })}
+
+        {isLoggedIn ? (
+          <button
+            onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
+            className="mt-8 px-8 py-3 bg-red-600 text-white font-bold rounded-full uppercase tracking-wider hover:bg-red-700 transition-colors"
+          >
+            Logout
+          </button>
+        ) : (
+          <Link
+            to="/login"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="mt-8 px-8 py-3 bg-blue-600 text-white font-bold rounded-full uppercase tracking-wider hover:bg-blue-700 transition-colors"
+          >
+            Login
+          </Link>
+        )}
       </div>
 
     </div>

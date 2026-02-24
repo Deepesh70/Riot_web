@@ -7,12 +7,14 @@ import News from './components/News'
 import UserProfile from './components/UserProfile'
 import Esport from './components/Esport'
 import PlayerStats from './components/PlayerStats'
+import AboutPage from './components/AboutPage'
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/esport" element={<Esport />} />
+      <Route path="/about" element={<AboutPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/news" element={<News />} />

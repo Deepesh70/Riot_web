@@ -463,3 +463,18 @@ body {
   transform: translateY(-1px);
   box-shadow: 0 8px 25px -8px rgba(239, 68, 68, 0.4);
 }
+
+/* ── About Team Card ── */
+.about-team-card {
+  padding: 2rem 1.5rem;
+  border-radius: 1rem;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: default;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.about-team-card:hover {
+  border-color: rgba(239, 68, 68, 0.2);
+  box-shadow: 0 8px 30px -10px rgba(239, 68, 68, 0.08);
+}
