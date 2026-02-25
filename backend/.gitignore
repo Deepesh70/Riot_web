@@ -48,3 +48,6 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+
+.package-lock.json
