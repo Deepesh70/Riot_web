@@ -9,6 +9,7 @@ import Esport from './components/Esport'
 import PlayerStats from './components/PlayerStats'
 import AboutPage from './components/AboutPage'
 import Games from './components/Games'
+import AgentDetails from './components/AgentDetails'
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/games" element={<Games />} />
       <Route path="/games/:game" element={<Games />} />
+      <Route path="/games/valorant/agents/:id" element={<AgentDetails />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/news" element={<News />} />

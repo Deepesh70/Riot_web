@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Link } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -29,7 +30,7 @@ const ValorantPage = () => {
                 setAgents(agentsData.data || []);
                 setMaps(mapsData.data || []);
                 // Pick ISO as featured agent, fallback to first duelist
-                const iso = agentsData.data?.find(a => a.displayName === 'Iso');
+                const iso = agentsData.data?.find(a => a.displayName === 'Is    o');
                 setFeaturedAgent(iso || agentsData.data?.[0]);
             } catch (err) {
                 console.error('Error fetching Valorant data:', err);
@@ -242,8 +243,12 @@ const ValorantPage = () => {
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                         {(showAllAgents ? agents : agents.slice(0, 12)).map((agent) => (
-                            <div key={agent.uuid} className="group relative rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:z-10"
-                                style={{ background: `linear-gradient(180deg, #${agent.backgroundGradientColors?.[0]?.slice(0, 6) || '1a1a2e'}90, #0f1923)` }}>
+                            <Link
+                                to={`/games/valorant/agents/${agent.uuid}`}
+                                key={agent.uuid}
+                                className="group relative rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:z-10 block"
+                                style={{ background: `linear-gradient(180deg, #${agent.backgroundGradientColors?.[0]?.slice(0, 6) || '1a1a2e'}90, #0f1923)` }}
+                            >
                                 <div className="relative aspect-[3/4] overflow-hidden">
                                     <img src={agent.background} alt="" className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 transition-opacity" />
                                     <img src={agent.fullPortrait} alt={agent.displayName}
@@ -259,7 +264,7 @@ const ValorantPage = () => {
                                         <p className="text-xs font-bold uppercase tracking-wider">{agent.displayName}</p>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                     <div className="text-center mt-10">

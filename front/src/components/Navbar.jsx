@@ -46,18 +46,9 @@ const Navbar = () => {
     <div className="fixed inset-x-0 top-4 z-50 h-16 border-none transition-all duration-700 sm:inset-x-6">
       <header className="absolute top-1/2 w-full -translate-y-1/2">
         <nav className="flex size-full items-center justify-between p-4 bg-black/50 backdrop-blur-md rounded-lg">
-          {location.pathname !== '/' && (
-            <button
-              onClick={() => navigate(-1)}
-              className="lg:hidden text-white p-1 hover:text-red-500 transition-colors"
-              aria-label="Go Back"
-            >
-              <TiArrowBack size={24} />
-            </button>
-          )}
           <div className="flex items-center gap-7">
             <Link to="/">
-              <img src="/img/logo.jpg" alt="logo" className="w-10 rounded-full" />
+              <img src="/img/logo.png" alt="logo" className="w-10 rounded-full" />
             </Link>
             <Button
               id="product-button"
@@ -214,6 +205,14 @@ const Navbar = () => {
 
       {/* Mobile Menu Overlay */}
       <div className={`fixed inset-0 bg-black/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center gap-8 transition-transform duration-500 ease-in-out lg:hidden ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        {location.pathname !== '/' && (
+          <button
+            onClick={() => { navigate(-1); setIsMobileMenuOpen(false); }}
+            className="flex items-center gap-2 text-3xl font-black uppercase text-white hover:text-red-500 transition-colors tracking-tighter"
+          >
+            <TiArrowBack size={32} /> Back
+          </button>
+        )}
         {navItems.map((item, index) => {
           const commonClasses = "text-3xl font-black uppercase text-white hover:text-blue-500 transition-colors tracking-tighter";
           const handleClick = () => setIsMobileMenuOpen(false);
