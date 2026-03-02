@@ -92,7 +92,7 @@ const ValorantPage = () => {
 
                 <div ref={titleRef} className="relative z-10 text-center px-4">
                     <div className="flex items-center justify-center gap-3 mb-4">
-                        <img src="/img/logo.jpg" alt="Riot Games" className="w-10 h-10 rounded-full" />
+                        <img src="/img/logo.png" alt="Riot Games" className="w-10 h-10 rounded-full" />
                         <span className="text-xs font-bold uppercase tracking-[0.3em] text-white/60">Riot Games</span>
                     </div>
                     <p className="text-[10px] sm:text-xs uppercase tracking-[0.4em] text-white/50 mb-3">5v5 character-based tactical shooter game</p>

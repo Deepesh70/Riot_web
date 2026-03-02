@@ -49,10 +49,10 @@ const Login = () => {
         <div ref={containerRef} className="h-screen w-screen flex bg-[#0c0c0c] overflow-hidden">
 
             {/* ─── LEFT: Form Panel ─── */}
-            <div className="w-full lg:w-[48%] h-full flex flex-col justify-between px-8 md:px-16 lg:px-20 py-10 relative z-10">
+            <div className="w-full lg:w-[48%] h-full flex flex-col px-8 md:px-16 lg:px-20 py-10 relative z-10 overflow-y-auto overflow-x-hidden custom-scrollbar">
 
                 {/* Top nav */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between flex-shrink-0 mb-8">
                     <Link to="/" className="login-brand flex items-center gap-2.5">
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #ef4444, #b91c1c)' }}>
                             <span className="text-white font-black text-base">R</span>
@@ -66,7 +66,7 @@ const Login = () => {
                 </div>
 
                 {/* Form */}
-                <div className="max-w-[380px] w-full">
+                <div className="max-w-[420px] w-full flex-shrink-0 my-auto py-4">
                     <p className="login-heading text-red-500 text-xs font-bold uppercase tracking-[0.25em] mb-4">Welcome Back</p>
                     <h1 className="login-heading text-white font-black text-5xl md:text-6xl uppercase leading-[0.95] mb-4">
                         Sign In
@@ -120,13 +120,13 @@ const Login = () => {
                         </div>
 
                         <button type="submit" className="login-btn auth-submit-btn">
-                            Login
+                            Sign In
                         </button>
                     </form>
                 </div>
 
                 {/* Bottom */}
-                <div className="login-footer flex items-center gap-6">
+                <div className="login-footer flex items-center gap-6 flex-shrink-0 mt-8">
                     {['Discord', 'Twitch', 'Twitter'].map(s => (
                         <span key={s} className="text-white/20 hover:text-white/50 text-[10px] font-bold uppercase tracking-widest cursor-pointer transition-colors">{s}</span>
                     ))}
