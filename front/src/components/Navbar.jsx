@@ -49,7 +49,7 @@ const Navbar = () => {
           {location.pathname !== '/' && (
             <button
               onClick={() => navigate(-1)}
-              className="md:hidden text-white p-1 hover:text-red-500 transition-colors"
+              className="lg:hidden text-white p-1 hover:text-red-500 transition-colors"
               aria-label="Go Back"
             >
               <TiArrowBack size={24} />
@@ -63,13 +63,13 @@ const Navbar = () => {
               id="product-button"
               title="Riot Games"
               rightIcon={<TiLocationArrow />}
-              containerClass="bg-blue-50 md:flex hidden items-center justify-center gap-1"
+              containerClass="bg-blue-50 lg:flex hidden items-center justify-center gap-1"
             />
           </div>
 
 
           <div className="flex h-full items-center">
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               {navItems.map((item, index) => {
                 if (item === 'News') {
                   return (
@@ -81,7 +81,7 @@ const Navbar = () => {
                       {item}
                     </Link>
                   )
-                } else if (item === 'Drift') {
+                } else if (item === 'Home') {
                   return (
                     <Link
                       key={index}
@@ -203,7 +203,7 @@ const Navbar = () => {
             </button>
 
             <button
-              className="md:hidden text-white ml-5 p-2 z-50 relative"
+              className="lg:hidden text-white ml-5 p-2 z-50 relative"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <TiTimes size={28} /> : <TiThMenu size={24} />}
@@ -213,14 +213,14 @@ const Navbar = () => {
       </header>
 
       {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 bg-black/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center gap-8 transition-transform duration-500 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed inset-0 bg-black/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center gap-8 transition-transform duration-500 ease-in-out lg:hidden ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         {navItems.map((item, index) => {
           const commonClasses = "text-3xl font-black uppercase text-white hover:text-blue-500 transition-colors tracking-tighter";
           const handleClick = () => setIsMobileMenuOpen(false);
 
           if (item === 'News') {
             return <Link key={index} to="/news" className={commonClasses} onClick={handleClick}>{item}</Link>
-          } else if (item === 'Drift') {
+          } else if (item === 'Home') {
             return <Link key={index} to="/" className={commonClasses} onClick={handleClick}>{item}</Link>
           } else if (item === 'Games') {
             return (

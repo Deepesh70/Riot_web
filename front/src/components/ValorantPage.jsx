@@ -11,6 +11,8 @@ const ValorantPage = () => {
     const [maps, setMaps] = useState([]);
     const [featuredAgent, setFeaturedAgent] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showAllAgents, setShowAllAgents] = useState(false);
+    const [showAllMaps, setShowAllMaps] = useState(false);
     const heroRef = useRef(null);
     const titleRef = useRef(null);
     const sectionsRef = useRef([]);
@@ -65,7 +67,7 @@ const ValorantPage = () => {
         agents.find(a => a.role?.displayName === 'Initiator'),
     ].filter(Boolean);
 
-    const displayedMaps = maps.slice(0, 4);
+    const displayedMaps = showAllMaps ? maps : maps.slice(0, 4);
 
     if (loading) {
         return (
@@ -239,7 +241,7 @@ const ValorantPage = () => {
                     </div>
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                        {agents.slice(0, 12).map((agent) => (
+                        {(showAllAgents ? agents : agents.slice(0, 12)).map((agent) => (
                             <div key={agent.uuid} className="group relative rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:z-10"
                                 style={{ background: `linear-gradient(180deg, #${agent.backgroundGradientColors?.[0]?.slice(0, 6) || '1a1a2e'}90, #0f1923)` }}>
                                 <div className="relative aspect-[3/4] overflow-hidden">
@@ -261,8 +263,11 @@ const ValorantPage = () => {
                         ))}
                     </div>
                     <div className="text-center mt-10">
-                        <button className="px-8 py-3 border border-white/20 text-white font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-white/10 transition-all duration-300 cursor-pointer">
-                            View All Agents →
+                        <button
+                            onClick={() => setShowAllAgents((prev) => !prev)}
+                            className="px-8 py-3 border border-white/20 text-white font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-white/10 transition-all duration-300 cursor-pointer"
+                        >
+                            {showAllAgents ? 'Show Less ←' : 'View All Agents →'}
                         </button>
                     </div>
                 </div>
@@ -297,8 +302,11 @@ const ValorantPage = () => {
                         ))}
                     </div>
                     <div className="text-center mt-10">
-                        <button className="px-8 py-3 border border-white/20 text-white font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-white/10 transition-all duration-300 cursor-pointer">
-                            View All Maps →
+                        <button
+                            onClick={() => setShowAllMaps((prev) => !prev)}
+                            className="px-8 py-3 border border-white/20 text-white font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-white/10 transition-all duration-300 cursor-pointer"
+                        >
+                            {showAllMaps ? 'Show Less ←' : 'View All Maps →'}
                         </button>
                     </div>
                 </div>
