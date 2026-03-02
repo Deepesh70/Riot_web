@@ -122,6 +122,18 @@ app.get('/api/valorant/agents', async (req, res) => {
     }
 });
 
+app.get('/api/valorant/agents/:id', async (req, res) => {
+    try {
+        const response = await fetch(`https://valorant-api.com/v1/agents/${req.params.id}`);
+        if (!response.ok) return res.status(response.status).json({ message: 'Valorant API error' });
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching agent:', error.message);
+        res.status(500).json({ message: 'Error fetching agent' });
+    }
+});
+
 app.get('/api/valorant/maps', async (req, res) => {
     try {
         const response = await fetch('https://valorant-api.com/v1/maps');
