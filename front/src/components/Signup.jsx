@@ -51,7 +51,7 @@ const Signup = () => {
         <div ref={containerRef} className="h-screen w-screen flex bg-[#0c0c0c] overflow-hidden">
 
             {/* ─── LEFT: Form Panel ─── */}
-            <div className="w-full lg:w-[48%] h-full flex flex-col px-8 md:px-16 lg:px-20 py-8 relative z-10 overflow-y-auto overflow-x-hidden custom-scrollbar">
+            <div className="w-full lg:w-[48%] h-full flex flex-col px-8 md:px-16 lg:px-20 py-8 relative z-10 overflow-y-hidden overflow-x-hidden custom-scrollbar">
 
                 {/* Top nav */}
                 <div className="flex items-center justify-between flex-shrink-0 mb-8">
@@ -172,12 +172,7 @@ const Signup = () => {
                     </form>
                 </div>
 
-                {/* Bottom */}
-                <div className="signup-footer flex items-center gap-6 flex-shrink-0 mt-8">
-                    {['Discord', 'Twitch', 'Twitter'].map(s => (
-                        <span key={s} className="text-white/20 hover:text-white/50 text-[10px] font-bold uppercase tracking-widest cursor-pointer transition-colors">{s}</span>
-                    ))}
-                </div>
+                
             </div>
 
             {/* ─── RIGHT: Video Panel ─── */}
