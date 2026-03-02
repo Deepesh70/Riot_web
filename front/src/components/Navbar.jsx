@@ -3,7 +3,7 @@ import { TiLocationArrow, TiThMenu, TiTimes, TiArrowBack } from 'react-icons/ti'
 import Button from './Button';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-const navItems = ['Drift', 'News', 'Esport', 'About', 'Contact', 'Profile'];
+const navItems = ['Home', 'Games', 'News', 'Esport', 'About', 'Contact', 'Profile'];
 
 const Navbar = () => {
 
@@ -90,6 +90,30 @@ const Navbar = () => {
                     >
                       {item}
                     </Link>
+                  )
+                } else if (item === 'Games') {
+                  return (
+                    <div key={index} className="relative group inline-flex items-center h-full align-middle">
+                      <button className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors uppercase cursor-pointer h-full flex items-center">
+                        {item}
+                      </button>
+
+                      {/* Dropdown Menu */}
+                      <div className="absolute top-[80%] left-1/2 -translate-x-1/2 mt-2 w-48 bg-black/90 backdrop-blur-md rounded-md shadow-lg border border-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 pt-2 pb-2 z-[60]">
+                        <Link
+                          to="/games/valorant"
+                          className="block px-4 py-3 text-sm text-white/80 hover:text-[#ff4655] hover:bg-white/5 transition-colors font-bold uppercase tracking-wider text-center"
+                        >
+                          Valorant
+                        </Link>
+                        <Link
+                          to="/games/league-of-legends"
+                          className="block px-4 py-3 text-sm text-white/80 hover:text-[#c89b3c] hover:bg-white/5 transition-colors font-bold uppercase tracking-wider text-center"
+                        >
+                          League of Legends
+                        </Link>
+                      </div>
+                    </div>
                   )
                 } else if (item === 'Esport') {
                   return (
@@ -198,6 +222,14 @@ const Navbar = () => {
             return <Link key={index} to="/news" className={commonClasses} onClick={handleClick}>{item}</Link>
           } else if (item === 'Drift') {
             return <Link key={index} to="/" className={commonClasses} onClick={handleClick}>{item}</Link>
+          } else if (item === 'Games') {
+            return (
+              <div key={index} className="flex flex-col items-center gap-4 w-full">
+                <span className={`${commonClasses} text-white/50 cursor-default`}>{item}</span>
+                <Link to="/games/valorant" className="text-2xl font-black uppercase text-white hover:text-[#ff4655] transition-colors tracking-tighter" onClick={handleClick}>Valorant</Link>
+                <Link to="/games/league-of-legends" className="text-2xl font-black uppercase text-white hover:text-[#c89b3c] transition-colors tracking-tighter" onClick={handleClick}>League of Legends</Link>
+              </div>
+            )
           } else if (item === 'Esport') {
             return <Link key={index} to="/esport" className={commonClasses} onClick={handleClick}>{item}</Link>
           } else if (item === 'About') {

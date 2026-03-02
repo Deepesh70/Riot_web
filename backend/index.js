@@ -9,22 +9,22 @@ dotenv.config();
 const app = express();
 
 const allowedOrigins = [
-  'http://localhost:5173',
-  'https://riot-web-ten.vercel.app'
+    'http://localhost:5173',
+    'https://riot-web-ten.vercel.app'
 ];
 
-if(process.env.ALLOWED_ORIGINS) {
-  const envOrigins = process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim());
-  allowedOrigins.push(...envOrigins);
+if (process.env.ALLOWED_ORIGINS) {
+    const envOrigins = process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim());
+    allowedOrigins.push(...envOrigins);
 }
 
 app.use(cors({
     origin: function (origin, callback) {
         // allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
-        
+
         // Allow Vercel previews and production
-        if(origin.includes("vercel.app") || allowedOrigins.indexOf(origin) !== -1){
+        if (origin.includes("vercel.app") || allowedOrigins.indexOf(origin) !== -1) {
             return callback(null, true);
         }
 
@@ -106,6 +106,33 @@ app.get('/api/esports/schedule', async (req, res) => {
     } catch (error) {
         console.error('Error fetching esports schedule:', error.message);
         res.status(500).json({ message: 'Error fetching esports schedule' });
+    }
+});
+
+// ── Valorant Game Data (valorant-api.com - no key needed) ──
+app.get('/api/valorant/agents', async (req, res) => {
+    try {
+        const response = await fetch('https://valorant-api.com/v1/agents?isPlayableCharacter=true');
+        if (!response.ok) return res.status(response.status).json({ message: 'Valorant API error' });
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching agents:', error.message);
+        res.status(500).json({ message: 'Error fetching agents' });
+    }
+});
+
+app.get('/api/valorant/maps', async (req, res) => {
+    try {
+        const response = await fetch('https://valorant-api.com/v1/maps');
+        if (!response.ok) return res.status(response.status).json({ message: 'Valorant API error' });
+        const data = await response.json();
+        // Filter out non-standard maps (skirmish, range, etc.)
+        const standardMaps = data.data.filter(m => m.tacticalDescription && m.displayIcon);
+        res.json({ status: data.status, data: standardMaps });
+    } catch (error) {
+        console.error('Error fetching maps:', error.message);
+        res.status(500).json({ message: 'Error fetching maps' });
     }
 });
 

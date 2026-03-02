@@ -8,6 +8,7 @@ import UserProfile from './components/UserProfile'
 import Esport from './components/Esport'
 import PlayerStats from './components/PlayerStats'
 import AboutPage from './components/AboutPage'
+import Games from './components/Games'
 
 const App = () => {
   return (
@@ -15,6 +16,8 @@ const App = () => {
       <Route path="/" element={<Home />} />
       <Route path="/esport" element={<Esport />} />
       <Route path="/about" element={<AboutPage />} />
+      <Route path="/games" element={<Games />} />
+      <Route path="/games/:game" element={<Games />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/news" element={<News />} />
