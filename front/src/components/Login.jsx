@@ -119,7 +119,7 @@ const Login = () => {
                             </div>
                         </div>
 
-                        <button type="submit" className="login-btn auth-submit-btn">
+                        <button type="submit" className=" auth-submit-btn" >
                             Sign In
                         </button>
                     </form>

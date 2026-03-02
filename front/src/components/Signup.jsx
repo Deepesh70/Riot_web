@@ -69,7 +69,7 @@ const Signup = () => {
 
                 {/* Form */}
                 <div className="max-w-[420px] w-full flex-shrink-0 my-auto py-2">
-                    <p className="signup-heading text-red-500 text-xs font-bold uppercase tracking-[0.25em] mb-4">Start For Free</p>
+                    {/* <p className="signup-heading text-red-500 text-xs font-bold uppercase tracking-[0.25em] mb-4">Start For Free</p> */}
                     <h1 className="signup-heading text-white font-black text-4xl md:text-5xl uppercase leading-[0.95] mb-4">
                         Create New<br />Account
                     </h1>
@@ -166,7 +166,7 @@ const Signup = () => {
                             </div>
                         </div>
 
-                        <button type="submit" className="signup-btn auth-submit-btn">
+                        <button type="submit" className=" auth-submit-btn ">
                             Signup
                         </button>
                     </form>
