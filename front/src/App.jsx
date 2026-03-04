@@ -10,6 +10,7 @@ import PlayerStats from './components/PlayerStats'
 import AboutPage from './components/AboutPage'
 import Games from './components/Games'
 import AgentDetails from './components/AgentDetails'
+import MapDetails from './components/MapDetails'
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
       <Route path="/games" element={<Games />} />
       <Route path="/games/:game" element={<Games />} />
       <Route path="/games/valorant/agents/:id" element={<AgentDetails />} />
+      <Route path="/games/valorant/maps/:id" element={<MapDetails />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/news" element={<News />} />
