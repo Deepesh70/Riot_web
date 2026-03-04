@@ -5,7 +5,7 @@ import Button from './Button';
 const Story = () => {
   return (
     <div id="story" className="min-h-dvh w-full px-4 text-black">
-      <div className="flex size-full flex-col items-center py-10 pb-24">
+      <div className="flex size-full flex-col items-center pt-24 pb-24">
 
         <p className="font-general text-sm text-blue-500 uppercase md:text-[10px]">
           The World of Runeterra
@@ -69,7 +69,7 @@ const Story = () => {
             <Button
               id="realm-btn"
               title="Read Universe"
-              containerClass="mt-5 bg-blue-500 text-black hover:bg-blue-600 "
+              containerClass="mt-5 bg-blue-500 text-black hover:bg-blue-600 z-auto"
             />
           </div>
         </div>
