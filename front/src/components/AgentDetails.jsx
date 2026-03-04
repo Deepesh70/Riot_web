@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { TiArrowBack } from 'react-icons/ti';
 import { gsap } from 'gsap';
+import { agentVideos } from '../agentVideos';
 
 const API = import.meta.env.VITE_API_BASE_URL;
 
@@ -66,11 +67,41 @@ const AgentDetails = () => {
         ? `linear-gradient(135deg, #${agent.backgroundGradientColors[0] || '1a1a2e'}40, #0f1923, #${agent.backgroundGradientColors[2] || '16213e'}40)`
         : 'linear-gradient(135deg, #1a1a2e40, #0f1923, #16213e40)';
 
+    // Get the videos for this agent
+    const agentVideosList = agentVideos[id];
+    const defaultBgVideo = agentVideosList && agentVideosList.length > 0 ? agentVideosList[0] : null;
+
+    // Determine the video to play based on the selected ability
+    const getCurrentVideo = () => {
+        if (!agentVideosList || !selectedAbility) return defaultBgVideo;
+        const activeAbilities = agent.abilities.filter(a => a.slot !== 'Passive');
+        const index = activeAbilities.findIndex(a => a.displayName === selectedAbility.displayName);
+        if (index >= 0 && agentVideosList[index]) {
+            return agentVideosList[index];
+        }
+        return defaultBgVideo;
+    };
+
+    const currentVideo = getCurrentVideo();
+
     return (
         <div ref={containerRef} className="relative min-h-screen bg-[#0f1923] text-white overflow-hidden flex items-center">
             {/* Background Map/Gradient */}
             <div className="absolute inset-0" style={{ background: bgGradient }} />
-            {agent.background && (
+
+            {/* Background Video */}
+            {currentVideo ? (
+                <video
+                    key={currentVideo}
+                    src={currentVideo}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover opacity-[0.15] mix-blend-screen pointer-events-none transition-opacity duration-1000"
+                    style={{ filter: 'grayscale(30%)' }}
+                />
+            ) : agent.background && (
                 <img
                     src={agent.background}
                     alt=""
