@@ -279,8 +279,10 @@ const ValorantPage = () => {
             </section>
 
             {/* ═══ MAPS ═══ */}
-            <section ref={addSectionRef} className="relative py-24 px-4 sm:px-8 lg:px-16">
+            <section ref={addSectionRef} className="relative py-24 px-4 sm:px-8 lg:px-16 overflow-hidden">
+                {/* Background Video that changes on map hover */}
                 <div className="absolute inset-0 bg-gradient-to-b from-[#0f1923] to-[#1a2a3a]" />
+
                 <div className="relative z-10 max-w-7xl mx-auto">
                     <div className="mb-12">
                         <h2 className="font-riot text-5xl sm:text-6xl md:text-7xl font-black uppercase text-white leading-[0.9] mb-3">Map</h2>
@@ -292,18 +294,23 @@ const ValorantPage = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {displayedMaps.map((map) => (
-                            <div key={map.uuid} className="group relative rounded-lg overflow-hidden cursor-pointer h-48 md:h-64 transition-all duration-300 hover:scale-[1.02]">
+                            <Link
+                                to={`/games/valorant/maps/${map.uuid}`}
+                                key={map.uuid}
+                                className="group relative rounded-lg overflow-hidden cursor-pointer h-48 md:h-64 transition-all duration-300 hover:scale-[1.02] block element-focus" // Added 'block' for correct Link rendering
+                            >
                                 <img src={map.splash} alt={map.displayName}
-                                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                                <div className="absolute bottom-4 left-4">
+                                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 group-hover:opacity-70 transition-all duration-700" />
+
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+                                <div className="absolute bottom-4 left-4 pointer-events-none">
                                     <p className="text-xs uppercase tracking-widest text-white/50 mb-1">{map.tacticalDescription}</p>
                                     <h3 className="text-2xl font-black uppercase tracking-wider">{map.displayName}</h3>
                                     {map.coordinates && (
                                         <p className="text-[10px] text-white/30 mt-1 font-mono">{map.coordinates}</p>
                                     )}
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                     <div className="text-center mt-10">

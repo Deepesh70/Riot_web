@@ -59,7 +59,7 @@ const Navbar = () => {
           </div>
 
 
-          <div className="flex h-full items-center">
+          <div className="flex h-full items-center gap-4 md:gap-6">
             <div className="hidden lg:block">
               {navItems.map((item, index) => {
                 if (item === 'News') {
@@ -185,7 +185,7 @@ const Navbar = () => {
 
             <button
               onClick={toggleAudio}
-              className="ml-5 flex items-center space-x-0.5"
+              className="flex items-center space-x-0.5"
             >
               <audio
                 ref={audioElementRef}
@@ -210,7 +210,7 @@ const Navbar = () => {
             </button>
 
             <button
-              className="lg:hidden text-white ml-5 p-2 z-50 relative"
+              className="lg:hidden text-white p-2 z-50 relative"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <TiTimes size={28} /> : <TiThMenu size={24} />}
@@ -230,7 +230,7 @@ const Navbar = () => {
           </button>
         )}
         {navItems.map((item, index) => {
-          const commonClasses = "text-3xl font-black uppercase text-white hover:text-blue-500 transition-colors tracking-tighter";
+          const commonClasses = "text-2xl sm:text-3xl font-black uppercase text-white hover:text-blue-500 transition-colors tracking-normal sm:tracking-tighter";
           const handleClick = () => setIsMobileMenuOpen(false);
 
           if (item === 'News') {

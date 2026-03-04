@@ -19,7 +19,12 @@ const Hero = () => {
     // 'https://cmsassets.rgpub.io/sanity/files/dsfx7636/news/8df78cd4a12001bb055fe0fcbd7a17720def040a.mp4', // League of Legends
     'https://cmsassets.rgpub.io/sanity/files/dsfx7636/news/f6ccf20dfe3f6a24ea9216bb8afaaa66740c715d.mp4', // Valorant
     'https://cmsassets.rgpub.io/sanity/files/dsfx7636/news/53c202665c409ecd9f3d41f3e395675593e260ea.mp4', // Wild Rift
-    'https://cmsassets.rgpub.io/sanity/files/dsfx7636/news/4b70a7cbcdedca007f6a8f0d6df704ea889a7a1a.mp4', // Another Wild Rift / General Cinematic
+     // Another Wild Rift / General Cinematic
+    
+    'https://cmsassets.rgpub.io/sanity/files/dsfx7636/news/409ab2fc369ba5e1fe50bac10c6676d7d1365a9f.mp4', // Valorant Loop 2
+    'https://cmsassets.rgpub.io/sanity/files/dsfx7636/game_data/4cbc968f05713579aae9464c5a16dc3f6863f943.mp4', // Valorant Jett
+    'https://cmsassets.rgpub.io/sanity/files/dsfx7636/news/4b70a7cbcdedca007f6a8f0d6df704ea889a7a1a.mp4',
+    
   ];
 
   const getVideoSrc = (index) => riotVideos[(index - 1) % riotVideos.length];

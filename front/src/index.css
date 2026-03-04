@@ -75,7 +75,7 @@ body {
   }
 
   .hero-heading {
-    @apply uppercase font-riot font-black text-5xl sm:right-10 sm:text-7xl md:text-9xl lg:text-[12rem];
+    @apply uppercase font-riot font-black text-4xl sm:right-10 sm:text-7xl md:text-9xl lg:text-[12rem];
   }
 
   .about-subtext {
@@ -83,11 +83,11 @@ body {
   }
 
   .about-image {
-    @apply absolute left-1/2 top-0 z-20 h-[60vh] w-96 origin-center -translate-x-1/2 overflow-hidden rounded-3xl md:w-[30vw];
+    @apply absolute left-1/2 top-0 z-20 h-[40vh] w-[80vw] origin-center -translate-x-1/2 overflow-hidden rounded-3xl md:h-[60vh] md:w-[30vw];
   }
 
   .animated-title {
-    @apply flex flex-col gap-1 text-7xl uppercase leading-[.8] text-white sm:px-32 md:text-[6rem];
+    @apply flex flex-col gap-1 text-5xl uppercase leading-[.8] text-white sm:px-32 sm:text-7xl md:text-[6rem];
   }
 
   .animated-word {
@@ -140,13 +140,13 @@ body {
     clip-path: polygon(16% 0, 89% 15%, 75% 100%, 0 97%);
   }
 
-  .contact-clip-path-1 {
+  /* .contact-clip-path-1 {
     clip-path: polygon(25% 0%, 74% 0, 69% 64%, 34% 73%);
-  }
+  } */
 
-  .contact-clip-path-2 {
-    clip-path: polygon(29% 15%, 85% 30%, 50% 100%, 10% 64%);
-  }
+  /* .contact-clip-path-2 {
+    clip-path: polygon(100% 1%, 95% 50%, 50% 100%,  94%);
+  } */
 }
 
 .indicator-line {
