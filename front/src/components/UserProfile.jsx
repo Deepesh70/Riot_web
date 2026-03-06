@@ -1,74 +1,58 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TiStarFullOutline, TiFlash } from 'react-icons/ti';
-import { FaTrophy } from 'react-icons/fa';
+import { TiStarFullOutline } from 'react-icons/ti';
+import { FaTrophy, FaGamepad, FaSearch, FaCrosshairs, FaShieldAlt } from 'react-icons/fa';
+import { SiValorant, SiLeagueoflegends } from 'react-icons/si';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import Navbar from '../components/Navbar';
 
 const UserProfile = () => {
     const navigate = useNavigate();
-    // State for user data
-    const [userData, setUserData] = React.useState(null);
-    const [loading, setLoading] = React.useState(true);
-    const [error, setError] = React.useState(null);
+    const containerRef = useRef(null);
 
-    // Riot Search State
-    const [riotGameName, setRiotGameName] = React.useState('');
-    const [riotTagLine, setRiotTagLine] = React.useState('');
-    const [selectedGame, setSelectedGame] = React.useState('lol');
+    // Core user state
+    const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const handleSearch = () => {
-        if (!riotGameName || !riotTagLine) {
-            alert("Please enter both Game Name and Tag Line");
-            return;
-        }
-        navigate(`/player/${selectedGame}/${riotGameName}/${riotTagLine}`);
-    };
+    // Search state
+    const [riotGameName, setRiotGameName] = useState('');
+    const [riotTagLine, setRiotTagLine] = useState('');
+    const [selectedGame, setSelectedGame] = useState('val');
 
-    // Default Empty / Loading State Data
-    const defaultData = {
-        username: "Player",
-        tag: "#0000",
-        level: 1,
-        rank: "Unranked",
-        avatar: "https://ui-avatars.com/api/?name=Player&background=333&color=fff",
-        coverString: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop",
-        xp: 0,
-        maxXp: 1000,
-        stats: { matches: 0, wins: 0, winRate: "0%", kdClass: "0.0" }
-    };
+    // Match data state
+    const [activeTab, setActiveTab] = useState('valorant');
+    const [valMatches, setValMatches] = useState([]);
+    const [lolMatches, setLolMatches] = useState([]);
+    const [matchesLoading, setMatchesLoading] = useState(false);
+    const [lolFetched, setLolFetched] = useState(false);
+    const [playerPuuid, setPlayerPuuid] = useState(null);
 
-    const [activeTab, setActiveTab] = React.useState('valorant');
+    // Decorative agents
+    const [agents, setAgents] = useState([]);
 
-    const gamesData = {
-        valorant: {
-            label: "Valorant",
-            matches: [
-                { id: 1, result: 'VICTORY', score: '13-9', map: 'Haven', kda: '24/12/5', agent: 'Jett', time: '2h ago', color: 'green' },
-                { id: 2, result: 'DEFEAT', score: '11-13', map: 'Ascent', kda: '18/15/4', agent: 'Omen', time: '5h ago', color: 'red' },
-                { id: 3, result: 'VICTORY', score: '13-5', map: 'Split', kda: '29/8/2', agent: 'Reyna', time: '1d ago', color: 'green' },
-            ]
-        },
-        league: {
-            label: "League of Legends",
-            matches: [
-                { id: 1, result: 'VICTORY', score: 'Win', map: "Summoner's Rift", kda: '12/2/15', agent: 'Ahri', time: '3h ago', color: 'green' },
-                { id: 2, result: 'DEFEAT', score: 'Loss', map: 'Howling Abyss', kda: '5/8/12', agent: 'Yasuo', time: '6h ago', color: 'red' },
-                { id: 3, result: 'VICTORY', score: 'Win', map: "Summoner's Rift", kda: '8/1/10', agent: 'Lee Sin', time: '2d ago', color: 'green' },
-            ]
-        },
-        tft: {
-            label: "Teamfight Tactics",
-            matches: [
-                { id: 1, result: 'TOP 1', score: '1st', map: 'Convergence', kda: 'N/A', agent: 'Pengu', time: '1h ago', color: 'blue' },
-                { id: 2, result: 'TOP 4', score: '3rd', map: 'Convergence', kda: 'N/A', agent: 'Furyhorn', time: '4h ago', color: 'purple' },
-            ]
-        }
-    };
+    const API = import.meta.env.VITE_API_BASE_URL;
 
-    React.useEffect(() => {
-        const fetchUserData = async () => {
+    // ─── Fetch decorative agents from Valorant API ───
+    useEffect(() => {
+        const fetchAgents = async () => {
+            try {
+                const res = await fetch(`${API}/api/valorant/agents`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setAgents(data.data || []);
+                }
+            } catch (e) {
+                console.error('Agent fetch failed', e);
+            }
+        };
+        fetchAgents();
+    }, []);
+
+    // ─── Fetch profile + Valorant data on mount ───
+    useEffect(() => {
+        const fetchAll = async () => {
             const token = localStorage.getItem('token');
             if (!token) {
                 setError('No token found. Please login.');
@@ -77,308 +61,482 @@ const UserProfile = () => {
             }
 
             try {
-                // 1. Fetch Local Profile
-                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/profile`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+                const profileRes = await fetch(`${API}/api/users/profile`, {
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
                 });
+                if (!profileRes.ok) throw new Error('Failed to fetch profile');
+                const localData = await profileRes.json();
+                let enriched = { ...localData };
 
-                if (!response.ok) {
-                    throw new Error('Failed to fetch profile');
-                }
-
-                const localData = await response.json();
-                
-                // 2. If user has linked Riot account, fetch external data immediately
-                let externalData = {};
                 if (localData.riotGameName && localData.riotTagLine) {
+                    setRiotGameName(localData.riotGameName);
+                    setRiotTagLine(localData.riotTagLine);
+
                     try {
-                        const riotRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/riot/val/account/${localData.riotGameName}/${localData.riotTagLine}`);
-                        if (riotRes.ok) {
-                            const riotData = await riotRes.json();
-                            externalData = {
-                                level: riotData.account_level,
-                                rank: riotData.region?.toUpperCase() || "VALORANT", 
-                                avatar: riotData.card?.small,
-                                coverString: riotData.card?.wide, 
-                                username: riotData.name,
-                                tag: '#' + riotData.tag,
-                                // Keep default stats as API doesn't provide them, or hide stats section if needed
-                                stats: defaultData.stats 
+                        const valAccRes = await fetch(`${API}/api/users/riot/val/account/${localData.riotGameName}/${localData.riotTagLine}`);
+                        if (valAccRes.ok) {
+                            const valAcc = await valAccRes.json();
+                            enriched = {
+                                ...enriched,
+                                level: valAcc.account_level,
+                                region: valAcc.region?.toUpperCase() || 'VALORANT',
+                                avatar: valAcc.card?.small,
+                                coverWide: valAcc.card?.wide,
+                                coverLarge: valAcc.card?.large,
+                                displayName: valAcc.name,
+                                tag: valAcc.tag,
                             };
-                            // Pre-fill search inputs
-                            setRiotGameName(riotData.name);
-                            setRiotTagLine(riotData.tag);
                         }
-                    } catch (riotErr) {
-                        console.error("Auto-fetch Riot data failed", riotErr);
-                    }
+                    } catch (e) { console.error('Valorant account fetch failed', e); }
+
+                    try {
+                        setMatchesLoading(true);
+                        const valMatchRes = await fetch(`${API}/api/users/riot/matches/val/${localData.riotGameName}/${localData.riotTagLine}`);
+                        if (valMatchRes.ok) {
+                            const valData = await valMatchRes.json();
+                            setValMatches(Array.isArray(valData) ? valData : []);
+                        }
+                    } catch (e) { console.error('Valorant matches fetch failed', e); }
+                    finally { setMatchesLoading(false); }
+
+                    try {
+                        const riotAccRes = await fetch(`${API}/api/users/riot/account/${localData.riotGameName}/${localData.riotTagLine}`);
+                        if (riotAccRes.ok) {
+                            const riotAcc = await riotAccRes.json();
+                            setPlayerPuuid(riotAcc.puuid);
+                        }
+                    } catch (e) { console.error('Riot account fetch failed', e); }
                 }
 
-                setUserData({ ...localData, ...externalData });
-            } catch (err) {
-                setError(err.message);
-                console.error("Error fetching profile:", err);
-            } finally {
-                setLoading(false);
-            }
+                setUserData(enriched);
+            } catch (err) { setError(err.message); }
+            finally { setLoading(false); }
         };
-
-        fetchUserData();
+        fetchAll();
     }, []);
 
-    // Merge DB data with default data
-    const user = userData ? { ...defaultData, ...userData, username: userData.name || userData.username, avatar: userData.avatar || `https://ui-avatars.com/api/?name=${userData.name}&background=0D8ABC&color=fff&size=128` } : defaultData;
+    // ─── Lazy fetch LoL matches ───
+    const fetchLolMatches = useCallback(async () => {
+        if (lolFetched || !playerPuuid) return;
+        setMatchesLoading(true);
+        try {
+            const res = await fetch(`${API}/api/users/riot/matches/lol/${playerPuuid}`);
+            if (res.ok) {
+                const data = await res.json();
+                setLolMatches(Array.isArray(data) ? data : []);
+            }
+        } catch (e) { console.error('LoL matches fetch failed', e); }
+        finally { setMatchesLoading(false); setLolFetched(true); }
+    }, [playerPuuid, lolFetched, API]);
 
-    const containerRef = useRef(null);
+    useEffect(() => {
+        if (activeTab === 'lol') fetchLolMatches();
+    }, [activeTab, fetchLolMatches]);
 
+    // ─── Search ───
+    const handleSearch = () => {
+        if (!riotGameName || !riotTagLine) return alert('Please enter both Game Name and Tag Line');
+        navigate(`/player/${selectedGame}/${riotGameName}/${riotTagLine}`);
+    };
+
+    // ─── Derived data ───
+    const user = userData ? {
+        username: userData.displayName || userData.name || 'Player',
+        tag: userData.tag ? '#' + userData.tag : '#0000',
+        level: userData.level || 1,
+        region: userData.region || 'VALORANT',
+        avatar: userData.avatar || `https://ui-avatars.com/api/?name=${userData.name}&background=1a1a2e&color=fff&size=128`,
+        coverWide: userData.coverWide || null,
+        coverLarge: userData.coverLarge || null,
+    } : null;
+
+    // Pick random decorative agents
+    const decorAgents = agents.length > 3 ? [agents[2], agents[5], agents[8]] : agents.slice(0, 3);
+
+    // ─── GSAP Animations ───
     useGSAP(() => {
-        const tl = gsap.timeline();
+        if (loading) return;
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-        tl.from('.profile-bg', {
-            opacity: 0,
-            duration: 1.5,
-            ease: 'power2.out'
-        })
-            .from('.profile-header', {
-                y: 50,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'back.out(1.7)'
-            }, '-=1')
-            .from('.stat-card', {
-                y: 30,
-                opacity: 0,
-                duration: 0.5,
-                stagger: 0.1,
-                ease: 'power2.out'
-            }, '-=0.4')
-            .from('.activity-item', {
-                x: -20,
-                opacity: 0,
-                duration: 0.5,
-                stagger: 0.1,
-                ease: 'power1.out'
-            }, '-=0.2');
+        // Background elements
+        tl.from('.profile-bg-video', { opacity: 0, scale: 1.1, duration: 2, ease: 'power2.out' })
+        // Decorative agents float in
+          .from('.deco-agent', { y: 100, opacity: 0, duration: 1.2, stagger: 0.15, ease: 'power2.out' }, '-=1.5')
+        // Hero section
+          .from('.profile-hero-title', { y: 60, opacity: 0, duration: 0.8 }, '-=1')
+          .from('.profile-hero-subtitle', { y: 30, opacity: 0, duration: 0.6 }, '-=0.5')
+        // Avatar
+          .from('.profile-avatar-section', { scale: 0.8, opacity: 0, duration: 0.7, ease: 'back.out(1.7)' }, '-=0.4')
+        // Info cards
+          .from('.profile-info-card', { y: 40, opacity: 0, duration: 0.5, stagger: 0.1 }, '-=0.3')
+        // Search
+          .from('.profile-search-section', { y: 20, opacity: 0, duration: 0.5 }, '-=0.2')
+        // Match section
+          .from('.profile-matches-section', { y: 40, opacity: 0, duration: 0.6 }, '-=0.2');
 
-    }, { scope: containerRef });
+        // Floating animation for decorative agents
+        gsap.to('.deco-agent-1', { y: -15, duration: 3, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+        gsap.to('.deco-agent-2', { y: 12, duration: 3.5, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 0.5 });
+        gsap.to('.deco-agent-3', { y: -10, duration: 2.8, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 1 });
 
+        // Particles floating
+        gsap.utils.toArray('.floating-particle').forEach((p, i) => {
+            gsap.to(p, {
+                y: `random(-50, 50)`,
+                x: `random(-30, 30)`,
+                duration: `random(4, 8)`,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut',
+                delay: i * 0.3,
+            });
+        });
+    }, { scope: containerRef, dependencies: [loading, agents] });
 
+    // Match card animations on tab switch
     useGSAP(() => {
-        gsap.fromTo('.match-card',
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.4, stagger: 0.1, ease: 'power2.out' }
+        if (matchesLoading) return;
+        gsap.fromTo('.profile-match-card',
+            { y: 30, opacity: 0, x: -10 },
+            { y: 0, opacity: 1, x: 0, duration: 0.45, stagger: 0.06, ease: 'power2.out' }
         );
-    }, { dependencies: [activeTab], scope: containerRef });
+    }, { dependencies: [activeTab, matchesLoading, valMatches, lolMatches], scope: containerRef });
 
+    // ─── Loading ───
     if (loading) {
-        return <div className="min-h-screen bg-black text-white flex items-center justify-center">Loading Profile...</div>;
+        return (
+            <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center">
+                <div className="three-body"><div className="three-body__dot"></div><div className="three-body__dot"></div><div className="three-body__dot"></div></div>
+                <p className="text-neutral-500 text-xs uppercase tracking-[0.3em] mt-6 font-bold">Loading Profile</p>
+            </div>
+        );
     }
 
     if (error) {
         return (
-            <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-4">
-                <p className="text-red-500 font-bold text-xl">Error: {error}</p>
-                <a href="/login" className="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700">Go to Login</a>
+            <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center gap-4">
+                <p className="text-red-500 font-bold text-xl">{error}</p>
+                <a href="/login" className="px-8 py-3 bg-[#ff4655] text-white font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-[#e83e4d] transition-all">Go to Login</a>
             </div>
         );
     }
 
+    if (!user) return null;
+
     return (
-        <div ref={containerRef} className="min-h-screen bg-black text-white font-sans relative overflow-hidden">
+        <div ref={containerRef} className="min-h-screen bg-[#0a0a0a] text-white font-sans relative overflow-hidden">
             <Navbar />
-            {/* Background Image with Overlay */}
-            <div className="fixed inset-0 z-0 profile-bg">
-                <img
-                    src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop"
-                    alt="Background"
-                    className="w-full h-full object-cover opacity-20 blur-sm"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+
+            {/* ═══════ CINEMATIC BACKGROUND ═══════ */}
+            <div className="fixed inset-0 z-0">
+                {/* Full-page HQ Valorant Background */}
+                <img src="/img/gallery-2.jpg" alt="" className="profile-bg-video absolute inset-0 w-full h-full object-cover opacity-[0.1]" />
+                {/* Gradient overlays */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-transparent to-[#0a0a0a]"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-transparent to-[#0a0a0a]"></div>
+                {/* Red radial glow */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px]" style={{ background: 'radial-gradient(ellipse, rgba(255,70,85,0.08) 0%, transparent 70%)' }}></div>
+                {/* Blue radial glow (bottom) */}
+                <div className="absolute bottom-0 right-0 w-[600px] h-[500px]" style={{ background: 'radial-gradient(ellipse, rgba(59,130,246,0.06) 0%, transparent 70%)' }}></div>
             </div>
 
-            <div className="relative z-10 pt-24 px-4 sm:px-8 max-w-5xl mx-auto">
-                {/* Riot ID Search */}
-                <div className="flex justify-end gap-2 mb-6 items-center">
-                    <div className="flex flex-col sm:flex-row bg-neutral-900/80 backdrop-blur border border-white/20 rounded-lg overflow-hidden">
-                        <input 
-                            type="text" 
-                            placeholder="Game Name" 
-                            value={riotGameName}
-                            onChange={(e) => setRiotGameName(e.target.value)}
-                            className="bg-transparent text-white px-4 py-2 outline-none w-40 placeholder-neutral-500"
-                        />
-                        <div className="hidden sm:block bg-white/10 w-px self-stretch my-2"></div>
-                        <input 
-                            type="text" 
-                            placeholder="#Tag" 
-                            value={riotTagLine}
-                            onChange={(e) => setRiotTagLine(e.target.value)}
-                            className="bg-transparent text-white px-4 py-2 outline-none w-24 placeholder-neutral-500" 
-                        />
-                         <div className="hidden sm:block bg-white/10 w-px self-stretch my-2"></div>
-                        <select 
-                            value={selectedGame} 
-                            onChange={(e) => setSelectedGame(e.target.value)}
-                            className="bg-neutral-900 text-white px-2 py-2 outline-none cursor-pointer hover:bg-neutral-800 transition-colors"
-                        >
-                            <option value="lol">LoL</option>
-                            <option value="val">Valorant</option>
-                        </select>
-                    </div>
-                    <button 
-                        onClick={handleSearch}
-                        className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg transition-colors border border-blue-500/50 shadow-[0_0_15px_rgba(37,99,235,0.3)]"
-                    >
-                        SEARCH
-                    </button>
+            {/* ═══════ FLOATING PARTICLES ═══════ */}
+            <div className="fixed inset-0 z-[1] pointer-events-none overflow-hidden">
+                {[...Array(8)].map((_, i) => (
+                    <div
+                        key={i}
+                        className="floating-particle absolute rounded-full"
+                        style={{
+                            width: `${2 + Math.random() * 3}px`,
+                            height: `${2 + Math.random() * 3}px`,
+                            background: i % 2 === 0 ? 'rgba(255,70,85,0.4)' : 'rgba(59,130,246,0.3)',
+                            top: `${10 + Math.random() * 80}%`,
+                            left: `${5 + Math.random() * 90}%`,
+                            boxShadow: i % 2 === 0 ? '0 0 10px rgba(255,70,85,0.3)' : '0 0 10px rgba(59,130,246,0.2)',
+                        }}
+                    ></div>
+                ))}
+            </div>
+
+            {/* ═══════ DECORATIVE AGENT PORTRAITS ═══════ */}
+            <div className="fixed inset-0 z-[2] pointer-events-none overflow-hidden">
+                {decorAgents[0]?.fullPortrait && (
+                    <img src={decorAgents[0].fullPortrait} alt="" className="deco-agent deco-agent-1 absolute -bottom-20 -left-16 h-[55vh] opacity-[0.06] hidden lg:block" />
+                )}
+                {decorAgents[1]?.fullPortrait && (
+                    <img src={decorAgents[1].fullPortrait} alt="" className="deco-agent deco-agent-2 absolute -bottom-10 -right-10 h-[50vh] opacity-[0.05] hidden lg:block" style={{ transform: 'scaleX(-1)' }} />
+                )}
+                {decorAgents[2]?.fullPortrait && (
+                    <img src={decorAgents[2].fullPortrait} alt="" className="deco-agent deco-agent-3 absolute top-20 right-[15%] h-[30vh] opacity-[0.04] hidden xl:block" />
+                )}
+            </div>
+
+            <div className="relative z-10 pt-24">
+
+                {/* ═══════ HERO SECTION ═══════ */}
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center mb-12">
+                    <p className="profile-hero-subtitle text-xs uppercase tracking-[0.4em] text-red-500/60 font-bold mb-4">Player HQ</p>
+                    <h1 className="profile-hero-title font-riot text-5xl sm:text-6xl md:text-8xl font-black uppercase leading-[0.9] mb-3"
+                        style={{ background: 'linear-gradient(180deg, #fff 20%, #ff4655 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                        {user.username}
+                    </h1>
+                    <p className="profile-hero-subtitle text-neutral-500 text-sm font-mono tracking-wider">{user.tag} • {user.region}</p>
                 </div>
 
-                {/* Profile Header */}
-                <div className="profile-header relative bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden group shadow-2xl mb-10">
-                    {/* Cover Image */}
-                    <div className="h-48 overflow-hidden relative">
-                        <img
-                            src={user.coverString}
-                            alt="Cover"
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-neutral-900/90"></div>
-                    </div>
-
-                    <div className="px-8 pb-8 -mt-16 flex flex-col md:flex-row items-end gap-6 md:gap-10">
-                        <div className="relative shrink-0">
-                            <div className="w-40 h-40 rounded-full p-1.5 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 shadow-lg shadow-purple-500/20">
-                                <img
-                                    src={user.avatar}
-                                    alt="Profile"
-                                    className="w-full h-full rounded-full object-cover border-[6px] border-neutral-900"
-                                />
+                {/* ═══════ PROFILE CARD ═══════ */}
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 mb-10">
+                    <div className="profile-avatar-section relative overflow-hidden rounded-2xl border border-white/[0.06]" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.005))' }}>
+                        {/* Banner */}
+                        {user.coverWide ? (
+                            <div className="h-44 sm:h-56 overflow-hidden relative profile-banner-container">
+                                <img src={user.coverWide} alt="Banner" className="profile-banner-img w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/50 to-transparent"></div>
                             </div>
-                            <div className="absolute bottom-2 right-2 bg-yellow-500 text-black font-black text-sm px-3 py-1 rounded-full border-4 border-neutral-900 flex items-center gap-1 shadow-lg">
-                                <TiStarFullOutline /> <span>LVL {user.level}</span>
+                        ) : (
+                            <div className="h-44 sm:h-56 relative" style={{ background: 'linear-gradient(135deg, #1a1030, #0f1923, #1a0a0a)' }}>
+                                <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 30% 50%, rgba(255,70,85,0.15), transparent 60%)' }}></div>
                             </div>
-                        </div>
+                        )}
 
-                        <div className="flex-1 text-center md:text-left w-full">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
-                                <h1 className="text-5xl font-black uppercase tracking-tight italic glitch-effect" data-text={user.username}>
+                        {/* Profile info overlay */}
+                        <div className="px-6 sm:px-8 pb-6 -mt-14 flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6 relative z-10">
+                            {/* Avatar */}
+                            <div className="relative shrink-0">
+                                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl p-[3px] profile-avatar-ring shadow-xl" style={{ background: 'linear-gradient(135deg, #ff4655, #ff8a65, #ff4655)' }}>
+                                    <img src={user.avatar} alt="Avatar" className="w-full h-full rounded-[10px] object-cover border-[3px] border-[#0a0a0a]" />
+                                </div>
+                                <div className="absolute -bottom-1 -right-1 bg-gradient-to-r from-yellow-500 to-amber-400 text-black font-black text-[10px] px-2 py-1 rounded-lg border-2 border-[#0a0a0a] flex items-center gap-0.5 shadow-lg">
+                                    <TiStarFullOutline /> LVL {user.level}
+                                </div>
+                            </div>
+
+                            {/* Name block */}
+                            <div className="flex-1 text-center sm:text-left">
+                                <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight leading-none">
                                     {user.username}
-                                    <span className="text-neutral-400 text-2xl ml-2 font-medium not-italic tracking-normal">{user.tag}</span>
-                                </h1>
-                                <div className="hidden md:block">
-                                    <button className="bg-white text-black font-bold py-2 px-6 rounded-full hover:bg-neutral-200 transition-colors uppercase tracking-wider text-sm">Edit Profile</button>
+                                    <span className="text-neutral-500 text-base ml-2 font-medium normal-case">{user.tag}</span>
+                                </h2>
+                                <div className="flex items-center gap-3 mt-2 justify-center sm:justify-start">
+                                    <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-red-400/80">
+                                        <FaCrosshairs className="text-[10px]" /> {user.region}
+                                    </span>
+                                    <span className="w-1 h-1 rounded-full bg-neutral-700"></span>
+                                    <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-yellow-500/80">
+                                        <FaShieldAlt className="text-[10px]" /> Level {user.level}
+                                    </span>
                                 </div>
                             </div>
 
-                            <p className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-bold text-xl mb-6 flex items-center justify-center md:justify-start gap-2">
-                                <FaTrophy className="text-yellow-400" /> {user.rank}
-                            </p>
-
-                            {/* XP Bar */}
-                            <div className="w-full max-w-md bg-neutral-800/80 backdrop-blur rounded-full h-3 overflow-hidden relative mx-auto md:mx-0 ring-1 ring-white/10">
-                                <div
-                                    className="bg-gradient-to-r from-blue-600 to-purple-600 h-full rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)]"
-                                    style={{ width: `${(user.xp / user.maxXp) * 100}%` }}
-                                ></div>
+                            {/* Quick stats badges */}
+                            <div className="flex gap-3">
+                                <div className="profile-info-card text-center px-5 py-3 rounded-xl border border-white/[0.06]" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                                    <p className="text-2xl font-black text-white">{valMatches.length}</p>
+                                    <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-500">Matches</p>
+                                </div>
+                                <div className="profile-info-card text-center px-5 py-3 rounded-xl border border-white/[0.06]" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                                    <p className="text-2xl font-black text-green-400">{valMatches.filter(m => m.mmr_change_to_last_game > 0).length}</p>
+                                    <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-500">Wins</p>
+                                </div>
                             </div>
-                            <p className="text-neutral-500 text-xs mt-2 font-mono tracking-wider">{user.xp} / {user.maxXp} XP</p>
                         </div>
                     </div>
                 </div>
 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <StatCard
-                        label="Matches"
-                        value={user.stats.matches}
-                        icon={<TiFlash className="text-blue-500 text-3xl drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" />}
-                        delay={0}
-                    />
-                    <StatCard
-                        label="Victories"
-                        value={user.stats.wins}
-                        icon={<FaTrophy className="text-yellow-500 text-3xl drop-shadow-[0_0_8px_rgba(234,179,8,0.5)]" />}
-                        delay={1}
-                    />
-                    <StatCard
-                        label="Win Rate"
-                        value={user.stats.winRate}
-                        icon={<TiStarFullOutline className="text-purple-500 text-3xl drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]" />}
-                        subValue={`KD RATIO: ${user.stats.kdClass}`}
-                        delay={2}
-                    />
-                </div>
-
-                {/* Games Tab Section */}
-                <div className="border border-white/10 bg-neutral-900/40 backdrop-blur-md rounded-3xl p-8 mb-20 animate-bg-pulse">
-                    
-                    {/* Tabs Header */}
-                    <div className="flex flex-wrap items-center gap-6 mb-8 border-b border-white/10 pb-4">
-                         {Object.keys(gamesData).map((gameKey) => (
-                            <button
-                                key={gameKey}
-                                onClick={() => setActiveTab(gameKey)}
-                                className={`text-xl font-black uppercase tracking-wider transition-colors relative pb-2 ${activeTab === gameKey ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
-                            >
-                                {gamesData[gameKey].label}
-                                {activeTab === gameKey && (
-                                    <span className="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-t-full shadow-[0_-2px_10px_#3b82f6]"></span>
-                                )}
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* Matches List */}
-                    <div className="space-y-4 min-h-[300px]">
-                        {gamesData[activeTab].matches.map((match) => (
-                            <div key={match.id} className="match-card group flex items-center justify-between bg-white/5 p-4 rounded-2xl hover:bg-white/10 transition-all duration-300 border border-white/5 hover:border-white/10 hover:translate-x-1">
-                                <div className="flex items-center gap-5">
-                                    <div className={`w-2 h-12 rounded-full shadow-[0_0_10px] 
-                                        ${match.color === 'green' ? 'bg-green-500 shadow-green-500/50' : 
-                                          match.color === 'red' ? 'bg-red-500 shadow-red-500/50' : 
-                                          match.color === 'blue' ? 'bg-blue-500 shadow-blue-500/50' :
-                                          'bg-purple-500 shadow-purple-500/50'
-                                        }`}></div>
-                                    <div>
-                                        <h3 className="font-bold text-lg group-hover:text-white text-neutral-200 transition-colors">{match.result} <span className="text-neutral-500 text-sm font-medium ml-2">{match.score}</span></h3>
-                                        <p className="text-neutral-500 text-xs font-mono uppercase tracking-widest mt-0.5">{match.time} • Map: {match.map} • Agent: {match.agent}</p>
-                                    </div>
-                                </div>
-                                <div className="text-right">
-                                    <span className={`block font-black text-xl tracking-wide 
-                                        ${match.color === 'green' ? 'text-green-400' : 
-                                          match.color === 'red' ? 'text-red-400' : 
-                                          match.color === 'blue' ? 'text-blue-400' : 
-                                          'text-purple-400'}`}>
-                                        {activeTab === 'tft' ? match.result : (match.result === 'VICTORY' ? 'WON' : 'LOST')}
-                                    </span>
-                                    <span className="text-neutral-500 text-sm font-bold">{match.kda !== 'N/A' && match.kda}</span>
-                                </div>
+                {/* ═══════ SEARCH BAR ═══════ */}
+                <div className="profile-search-section max-w-6xl mx-auto px-4 sm:px-6 mb-10">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                        <div className="flex-1 flex items-center profile-search-wrapper rounded-xl overflow-hidden border border-white/[0.06] transition-all" style={{ background: 'rgba(255,255,255,0.025)' }}>
+                            <div className="flex items-center gap-1 px-4 text-neutral-600">
+                                <FaSearch className="text-sm" />
                             </div>
-                        ))}
+                            <input type="text" placeholder="Game Name" value={riotGameName} onChange={(e) => setRiotGameName(e.target.value)}
+                                className="bg-transparent text-white px-2 py-3 outline-none flex-1 min-w-0 placeholder-neutral-600 text-sm" />
+                            <div className="w-px h-6 bg-white/10"></div>
+                            <input type="text" placeholder="#TAG" value={riotTagLine} onChange={(e) => setRiotTagLine(e.target.value)}
+                                className="bg-transparent text-white px-3 py-3 outline-none w-24 placeholder-neutral-600 text-sm font-mono" />
+                            <div className="w-px h-6 bg-white/10"></div>
+                            <select value={selectedGame} onChange={(e) => setSelectedGame(e.target.value)}
+                                className="bg-transparent text-neutral-400 px-3 py-3 outline-none cursor-pointer text-sm font-bold uppercase hover:text-white transition-colors">
+                                <option value="val" className="bg-neutral-900">Valorant</option>
+                                <option value="lol" className="bg-neutral-900">LoL</option>
+                            </select>
+                        </div>
+                        <button onClick={handleSearch}
+                            className="profile-search-btn bg-[#ff4655] hover:bg-[#e83e4d] text-white font-bold py-3 px-8 rounded-xl transition-all text-xs uppercase tracking-widest shadow-lg hover:shadow-[0_0_25px_rgba(255,70,85,0.3)] hover:translate-y-[-1px]">
+                            Search Player
+                        </button>
                     </div>
                 </div>
 
+                {/* ═══════ MATCH HISTORY ═══════ */}
+                <div className="profile-matches-section max-w-6xl mx-auto px-4 sm:px-6 pb-24">
+                    {/* Section title */}
+                    <div className="mb-8">
+                        <h2 className="font-riot text-3xl sm:text-4xl md:text-5xl font-black uppercase leading-[0.9]"
+                            style={{ background: 'linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.4) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                            Match<br />History
+                        </h2>
+                        <p className="text-neutral-600 text-xs uppercase tracking-widest font-bold mt-2">Recent competitive performance</p>
+                    </div>
+
+                    <div className="profile-matches-container border border-white/[0.06] rounded-2xl overflow-hidden" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005))' }}>
+                        {/* Tabs */}
+                        <div className="flex items-center border-b border-white/[0.06] px-6 pt-1">
+                            <button
+                                onClick={() => setActiveTab('valorant')}
+                                className={`profile-tab-btn flex items-center gap-2.5 px-5 py-4 text-sm font-bold uppercase tracking-wider transition-all relative ${activeTab === 'valorant' ? 'text-red-400' : 'text-neutral-600 hover:text-neutral-400'}`}>
+                                <SiValorant className="text-base" /> Valorant
+                                {activeTab === 'valorant' && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-red-500 to-orange-500 rounded-t shadow-[0_-4px_15px_rgba(255,70,85,0.5)]"></span>}
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('lol')}
+                                className={`profile-tab-btn flex items-center gap-2.5 px-5 py-4 text-sm font-bold uppercase tracking-wider transition-all relative ${activeTab === 'lol' ? 'text-blue-400' : 'text-neutral-600 hover:text-neutral-400'}`}>
+                                <SiLeagueoflegends className="text-base" /> League of Legends
+                                {activeTab === 'lol' && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500 to-cyan-400 rounded-t shadow-[0_-4px_15px_rgba(59,130,246,0.5)]"></span>}
+                            </button>
+                        </div>
+
+                        {/* Content */}
+                        <div className="p-6 min-h-[350px]">
+                            {matchesLoading ? (
+                                <div className="flex flex-col items-center justify-center py-16 gap-4">
+                                    <div className="three-body"><div className="three-body__dot"></div><div className="three-body__dot"></div><div className="three-body__dot"></div></div>
+                                    <p className="text-neutral-600 text-xs uppercase tracking-[0.3em] font-bold">Loading Matches</p>
+                                </div>
+                            ) : activeTab === 'valorant' ? (
+                                <ValMatchList matches={valMatches} />
+                            ) : (
+                                <LolMatchList matches={lolMatches} puuid={playerPuuid} />
+                            )}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
 };
 
-// Helper Component for Stats
-const StatCard = ({ label, value, icon, subValue, delay }) => (
-    <div className={`stat-card bg-neutral-900/60 backdrop-blur-md border border-white/5 p-6 rounded-3xl flex items-center justify-between hover:scale-[1.02] hover:bg-neutral-800/80 transition-all duration-300 group shadow-lg`}>
-        <div>
-            <p className="text-neutral-400 text-xs uppercase tracking-widest font-bold mb-2 group-hover:text-white transition-colors">{label}</p>
-            <h3 className="text-4xl font-black text-white tracking-tight">{value}</h3>
-            {subValue && <p className="text-neutral-500 text-xs mt-2 font-mono">{subValue}</p>}
+// ═══════════════════════════════════════════
+//  VALORANT MATCH LIST
+// ═══════════════════════════════════════════
+const ValMatchList = ({ matches }) => {
+    if (!matches || matches.length === 0) {
+        return <EmptyState message="No Valorant match data found" icon={<SiValorant className="text-3xl text-red-500/40" />} />;
+    }
+    return (
+        <div className="space-y-3">
+            {matches.map((match, i) => {
+                const isWin = match.mmr_change_to_last_game >= 0;
+                const result = match.mmr_change_to_last_game > 0 ? 'VICTORY' : match.mmr_change_to_last_game < 0 ? 'DEFEAT' : 'DRAW';
+
+                return (
+                    <div key={match.match_id || i} className="profile-match-card group relative overflow-hidden rounded-xl border border-white/[0.04] hover:border-white/10 transition-all duration-300 hover:translate-x-1">
+                        <div className={`absolute left-0 top-0 bottom-0 w-[3px] ${isWin ? 'bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.6)]' : 'bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.6)]'}`}></div>
+                        <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-5 py-4 pl-6 bg-white/[0.015] group-hover:bg-white/[0.04] transition-colors">
+                            <div className="flex flex-col items-center md:items-start min-w-[140px]">
+                                <span className={`font-black text-lg tracking-wide ${isWin ? 'text-cyan-400' : 'text-rose-400'}`}>{result}</span>
+                                <span className="text-neutral-500 text-xs uppercase font-bold tracking-widest">{match.map?.name || 'Unknown'}</span>
+                                <span className="text-neutral-700 text-[11px] mt-0.5">{match.date}</span>
+                            </div>
+                            <div className="flex items-center gap-4 flex-1">
+                                {match.images?.small && (
+                                    <div className="relative w-11 h-11">
+                                        <img src={match.images.small} alt="Rank" className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.15)]" />
+                                    </div>
+                                )}
+                                <div>
+                                    <div className="font-bold text-white">{match.currenttier_patched}</div>
+                                    <div className="text-sm text-neutral-500 flex gap-2 items-center">
+                                        RR: <span className={`font-mono font-bold ${isWin ? 'text-green-400' : 'text-red-400'}`}>
+                                            {match.mmr_change_to_last_game > 0 ? '+' : ''}{match.mmr_change_to_last_game}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="text-right hidden md:block">
+                                <div className="text-xl font-bold text-neutral-300">{match.elo} <span className="text-xs text-neutral-700">ELO</span></div>
+                                <div className="text-xs text-neutral-700">Tier: {match.ranking_in_tier}</div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })}
         </div>
-        <div className="bg-white/5 p-4 rounded-2xl border border-white/5 group-hover:border-white/10 transition-colors">
-            {icon}
+    );
+};
+
+// ═══════════════════════════════════════════
+//  LOL MATCH LIST
+// ═══════════════════════════════════════════
+const LolMatchList = ({ matches, puuid }) => {
+    if (!matches || matches.length === 0) {
+        return <EmptyState message="No League of Legends match data found" icon={<SiLeagueoflegends className="text-3xl text-blue-500/40" />} />;
+    }
+    return (
+        <div className="space-y-3">
+            {matches.map((match, i) => {
+                if (!match.info) return null;
+                const participant = match.info.participants.find(p => p.puuid === puuid);
+                if (!participant) return null;
+                const isWin = participant.win;
+                const durationMin = Math.floor(match.info.gameDuration / 60);
+                const gameDate = new Date(match.info.gameCreation).toLocaleDateString();
+                const kda = ((participant.kills + participant.assists) / Math.max(1, participant.deaths)).toFixed(2);
+
+                return (
+                    <div key={match.metadata?.matchId || i} className="profile-match-card group relative overflow-hidden rounded-xl border border-white/[0.04] hover:border-white/10 transition-all duration-300 hover:translate-x-1">
+                        <div className={`absolute left-0 top-0 bottom-0 w-[3px] ${isWin ? 'bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.6)]' : 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.6)]'}`}></div>
+                        <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-5 py-4 pl-6 bg-white/[0.015] group-hover:bg-white/[0.04] transition-colors">
+                            <div className="flex flex-col items-center md:items-start min-w-[120px]">
+                                <span className={`font-black text-lg ${isWin ? 'text-blue-400' : 'text-red-400'}`}>{isWin ? 'VICTORY' : 'DEFEAT'}</span>
+                                <span className="text-neutral-500 text-xs uppercase font-bold">{match.info.gameMode}</span>
+                                <span className="text-neutral-700 text-[11px] mt-0.5">{gameDate} • {durationMin}m</span>
+                            </div>
+                            <div className="flex items-center gap-4 flex-1">
+                                <div className="relative w-12 h-12 rounded-lg bg-neutral-800 overflow-hidden border border-white/10">
+                                    <img src={`https://ddragon.leagueoflegends.com/cdn/14.3.1/img/champion/${participant.championName}.png`} alt={participant.championName}
+                                        className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none' }} />
+                                </div>
+                                <div>
+                                    <div className="font-bold text-white">{participant.championName}</div>
+                                    <div className="text-sm text-neutral-400 flex gap-1">
+                                        <span className="text-white font-mono">{participant.kills}</span>/
+                                        <span className="text-red-400 font-mono">{participant.deaths}</span>/
+                                        <span className="text-white font-mono">{participant.assists}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="text-right hidden md:block">
+                                <div className="text-xl font-bold text-neutral-300">{kda} <span className="text-xs text-neutral-700">KDA</span></div>
+                                <div className="text-xs text-neutral-500">{participant.totalMinionsKilled + participant.neutralMinionsKilled} CS</div>
+                                <div className="text-sm text-yellow-500/80 mt-0.5">{participant.goldEarned.toLocaleString()} Gold</div>
+                            </div>
+                            <div className="flex gap-1">
+                                {[participant.item0, participant.item1, participant.item2, participant.item3, participant.item4, participant.item5].map((item, idx) => (
+                                    <div key={idx} className="w-8 h-8 bg-neutral-800/60 rounded border border-white/5 overflow-hidden">
+                                        {item > 0 && <img src={`https://ddragon.leagueoflegends.com/cdn/14.3.1/img/item/${item}.png`} alt="" className="w-full h-full" />}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                );
+            })}
         </div>
+    );
+};
+
+// ═══════════════════════════════════════════
+//  EMPTY STATE
+// ═══════════════════════════════════════════
+const EmptyState = ({ message, icon }) => (
+    <div className="flex flex-col items-center justify-center py-20 gap-4">
+        <div className="w-20 h-20 rounded-2xl border border-white/[0.06] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.02)' }}>
+            {icon || <FaGamepad className="text-3xl text-neutral-700" />}
+        </div>
+        <p className="text-neutral-500 text-sm font-medium">{message}</p>
+        <p className="text-neutral-700 text-xs">Try searching for a player above or check back later</p>
     </div>
 );
 

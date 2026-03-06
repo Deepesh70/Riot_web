@@ -478,3 +478,43 @@ body {
   border-color: rgba(239, 68, 68, 0.2);
   box-shadow: 0 8px 30px -10px rgba(239, 68, 68, 0.08);
 }
+
+/* ── Profile Page ── */
+.profile-banner-container:hover .profile-banner-img {
+  transform: scale(1.03);
+  transition: transform 6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.profile-banner-img {
+  transition: transform 6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.profile-avatar-ring {
+  animation: profileAvatarGlow 3s ease-in-out infinite;
+}
+
+@keyframes profileAvatarGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px -5px rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px -3px rgba(239, 68, 68, 0.5);
+  }
+}
+
+.profile-search-wrapper:focus-within {
+  border-color: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.06);
+}
+
+.profile-match-card {
+  background: linear-gradient(145deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
+}
+
+.profile-match-card:hover {
+  background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015));
+}
+
+.profile-matches-container {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%);
+}
