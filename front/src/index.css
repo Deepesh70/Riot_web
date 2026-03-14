@@ -78,6 +78,62 @@ body {
     @apply uppercase font-riot font-black text-4xl sm:right-10 sm:text-7xl md:text-9xl lg:text-[12rem];
   }
 
+  .hero-scroll-shell {
+    background-color: #dfdff0;
+  }
+
+  .hero-scroll-frame {
+    --hero-clip-path: polygon(1% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 100%, 0% 0%);
+    --hero-frame-scale: 1;
+    --hero-frame-shift: 0px;
+    --hero-frame-rotate: 0deg;
+    --hero-frame-radius: 24px;
+    --hero-media-scale: 1;
+    --hero-overlay-opacity: 0.22;
+    --hero-content-shift: 0px;
+    --hero-content-opacity: 1;
+    --hero-accent-shift: 0px;
+    clip-path: var(--hero-clip-path);
+    border-radius: var(--hero-frame-radius);
+    transform: translate3d(0, var(--hero-frame-shift), 0) scale(var(--hero-frame-scale)) rotate(var(--hero-frame-rotate));
+    transform-origin: center center;
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.18);
+    will-change: transform, clip-path, border-radius;
+    transition:
+      clip-path 220ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-radius 220ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .hero-scroll-media {
+    transform: scale(var(--hero-media-scale));
+    transform-origin: center center;
+    will-change: transform;
+    transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .hero-scroll-vignette {
+    background: linear-gradient(180deg, rgba(4, 6, 15, 0.48) 0%, rgba(4, 6, 15, 0.12) 30%, rgba(4, 6, 15, 0.28) 100%);
+    opacity: var(--hero-overlay-opacity);
+    transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .hero-scroll-content {
+    transform: translate3d(0, var(--hero-content-shift), 0);
+    opacity: var(--hero-content-opacity);
+    will-change: transform, opacity;
+    transition:
+      transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .hero-scroll-accent {
+    transform: translate3d(0, var(--hero-accent-shift), 0);
+    will-change: transform;
+    transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   .about-subtext {
     @apply absolute bottom-[-80dvh] left-1/2 w-full max-w-96 -translate-x-1/2 text-center font-circular-web text-lg md:max-w-[34rem];
   }

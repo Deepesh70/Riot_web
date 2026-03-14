@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import userRoutes from './Routes/user.js';
 
-dotenv.config();
+dotenv.config({ path: new URL('./.env', import.meta.url) });
 
 const app = express();
 
@@ -18,17 +18,29 @@ if (process.env.ALLOWED_ORIGINS) {
     allowedOrigins.push(...envOrigins);
 }
 
+const isAllowedOrigin = (origin) => {
+    if (!origin) return true;
+
+    try {
+        const { hostname } = new URL(origin);
+
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            return true;
+        }
+    } catch (error) {
+        return false;
+    }
+
+    return origin.includes('vercel.app') || allowedOrigins.includes(origin);
+};
+
 app.use(cors({
     origin: function (origin, callback) {
-        // allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-
-        // Allow Vercel previews and production
-        if (origin.includes("vercel.app") || allowedOrigins.indexOf(origin) !== -1) {
+        if (isAllowedOrigin(origin)) {
             return callback(null, true);
         }
 
-        var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+        const msg = `CORS blocked for origin: ${origin}`;
         return callback(new Error(msg), false);
     },
     credentials: true,
