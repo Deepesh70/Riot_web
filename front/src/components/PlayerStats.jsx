@@ -10,6 +10,7 @@ const PlayerStats = () => {
     const [matches, setMatches] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [persona, setPersona] = useState(null);
     const containerRef = useRef(null);
 
     useEffect(() => {
@@ -19,7 +20,7 @@ const PlayerStats = () => {
                 let accData = null;
 
                 // 1. Get Account Info
-                const accRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/riot/account/${gameName}/${tagLine}`);
+                const accRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/riot/account/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`);
                 if (accRes.ok) {
                     accData = await accRes.json();
                     setPlayerData(accData);
@@ -38,7 +39,15 @@ const PlayerStats = () => {
                 // 2. Get Matches
                 let matchesUrl;
                 if (game === 'val') {
-                    matchesUrl = `${import.meta.env.VITE_API_BASE_URL}/api/users/riot/matches/val/${gameName}/${tagLine}`;
+                    matchesUrl = `${import.meta.env.VITE_API_BASE_URL}/api/users/riot/matches/val/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`;
+                    // 2.5 Fetch Playstyle Persona for Valorant
+                    try {
+                        const playstyleRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/riot/val/playstyle/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`);
+                        if (playstyleRes.ok) {
+                            const pData = await playstyleRes.json();
+                            setPersona(pData.persona);
+                        }
+                    } catch(e) { console.error('Persona fetch failed', e); }
                 } else {
                     // LoL needs PUUID
                     if (!accData) throw new Error("Could not retrieve account for LoL match history");
@@ -93,6 +102,16 @@ const PlayerStats = () => {
                         <p className={`font-mono text-sm mt-1 uppercase ${game === 'val' ? 'text-red-400' : 'text-blue-400'}`}>
                             {game === 'val' ? 'Valorant' : 'League of Legends'} Match History
                         </p>
+                        
+                        {persona && game === 'val' && (
+                            <div className="mt-4 inline-flex items-center gap-3 px-4 py-2 rounded-xl border border-white/[0.1] backdrop-blur-md shadow-lg" 
+                                 style={{ background: `linear-gradient(135deg, rgba(255,255,255,0.05), ${persona.color}20)` }}>
+                                 <div className="text-left">
+                                     <p className="text-[10px] font-bold uppercase tracking-widest mb-0.5" style={{ color: persona.color }}>ML Persona</p>
+                                     <p className="text-lg font-black uppercase tracking-tight text-white">{persona.title}</p>
+                                 </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 

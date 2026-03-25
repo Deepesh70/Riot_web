@@ -27,6 +27,7 @@ const UserProfile = () => {
     const [matchesLoading, setMatchesLoading] = useState(false);
     const [lolFetched, setLolFetched] = useState(false);
     const [playerPuuid, setPlayerPuuid] = useState(null);
+    const [persona, setPersona] = useState(null);
 
     // Decorative agents
     const [agents, setAgents] = useState([]);
@@ -72,7 +73,7 @@ const UserProfile = () => {
                     setRiotTagLine(localData.riotTagLine);
 
                     try {
-                        const valAccRes = await fetch(`${API}/api/users/riot/val/account/${localData.riotGameName}/${localData.riotTagLine}`);
+                        const valAccRes = await fetch(`${API}/api/users/riot/val/account/${encodeURIComponent(localData.riotGameName)}/${encodeURIComponent(localData.riotTagLine)}`);
                         if (valAccRes.ok) {
                             const valAcc = await valAccRes.json();
                             enriched = {
@@ -90,7 +91,7 @@ const UserProfile = () => {
 
                     try {
                         setMatchesLoading(true);
-                        const valMatchRes = await fetch(`${API}/api/users/riot/matches/val/${localData.riotGameName}/${localData.riotTagLine}`);
+                        const valMatchRes = await fetch(`${API}/api/users/riot/matches/val/${encodeURIComponent(localData.riotGameName)}/${encodeURIComponent(localData.riotTagLine)}`);
                         if (valMatchRes.ok) {
                             const valData = await valMatchRes.json();
                             setValMatches(Array.isArray(valData) ? valData : []);
@@ -99,7 +100,15 @@ const UserProfile = () => {
                     finally { setMatchesLoading(false); }
 
                     try {
-                        const riotAccRes = await fetch(`${API}/api/users/riot/account/${localData.riotGameName}/${localData.riotTagLine}`);
+                        const playstyleRes = await fetch(`${API}/api/users/riot/val/playstyle/${encodeURIComponent(localData.riotGameName)}/${encodeURIComponent(localData.riotTagLine)}`);
+                        if (playstyleRes.ok) {
+                            const playstyleData = await playstyleRes.json();
+                            setPersona(playstyleData.persona);
+                        }
+                    } catch (e) { console.error('Playstyle fetch failed', e); }
+
+                    try {
+                        const riotAccRes = await fetch(`${API}/api/users/riot/account/${encodeURIComponent(localData.riotGameName)}/${encodeURIComponent(localData.riotTagLine)}`);
                         if (riotAccRes.ok) {
                             const riotAcc = await riotAccRes.json();
                             setPlayerPuuid(riotAcc.puuid);
@@ -280,15 +289,33 @@ const UserProfile = () => {
                                 </div>
                             </div>
 
-                            {/* Quick stats badges */}
-                            <div className="flex gap-3">
-                                <div className="profile-info-card text-center px-5 py-3 rounded-xl border border-white/[0.06]" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                                    <p className="text-2xl font-black text-white">{valMatches.length}</p>
-                                    <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-500">Matches</p>
-                                </div>
-                                <div className="profile-info-card text-center px-5 py-3 rounded-xl border border-white/[0.06]" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                                    <p className="text-2xl font-black text-green-400">{valMatches.filter(m => m.mmr_change_to_last_game > 0).length}</p>
-                                    <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-500">Wins</p>
+
+                            {/* Quick stats badges & Persona */}
+                            <div className="flex flex-col sm:flex-row items-center sm:items-stretch gap-3">
+                                {persona && (
+                                    <div className="profile-persona-card flex items-center gap-3 px-5 py-3 rounded-xl border border-white/[0.1] backdrop-blur-md shadow-2xl transition-transform hover:scale-105" 
+                                         style={{ background: `linear-gradient(135deg, rgba(255,255,255,0.05), ${persona.color}30)` }}>
+                                         <div className="w-10 h-10 rounded-full flex items-center justify-center border shadow-[0_0_15px_rgba(0,0,0,0.5)]" 
+                                              style={{ borderColor: persona.color, backgroundColor: `${persona.color}40`, color: persona.color, boxShadow: `0 0 15px ${persona.color}40` }}>
+                                            <FaGamepad size={18} />
+                                         </div>
+
+                                         <div className="text-left w-max">
+                                             <p className="text-[10px] font-bold uppercase tracking-widest mb-0.5" style={{ color: persona.color }}>ML Persona Engine</p>
+                                             <p className="text-sm font-black uppercase tracking-tight text-white">{persona.title}</p>
+                                             <p className="text-[10px] text-neutral-300 max-w-[150px] leading-tight mt-0.5">{persona.description}</p>
+                                         </div>
+                                    </div>
+                                )}
+                                <div className="flex gap-3">
+                                    <div className="profile-info-card text-center px-5 py-3 rounded-xl border border-white/[0.06]" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                                        <p className="text-2xl font-black text-white">{valMatches.length}</p>
+                                        <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-500">Matches</p>
+                                    </div>
+                                    <div className="profile-info-card text-center px-5 py-3 rounded-xl border border-white/[0.06]" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                                        <p className="text-2xl font-black text-green-400">{valMatches.filter(m => m.mmr_change_to_last_game > 0).length}</p>
+                                        <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-500">Wins</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

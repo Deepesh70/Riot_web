@@ -263,7 +263,127 @@ router.get('/riot/val/smurf-analyze/:name/:tag', async (req, res) => {
     }
 });
 
+router.get('/riot/val/playstyle/:name/:tag', async (req, res) => {
+    try {
+        const { name, tag } = req.params;
+        const region = 'ap'; 
+        const hDevKey = process.env.HENRIK_DEV_API_KEY ? process.env.HENRIK_DEV_API_KEY.trim() : '';
+        
+        // Fetch detailed match history for KDA and Score
+        const url = `https://api.henrikdev.xyz/valorant/v3/matches/${region}/${encodeURIComponent(name.trim())}/${encodeURIComponent(tag.trim())}?size=5`;
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': hDevKey,
+                'Accept': '*/*'
+            }
+        });
 
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(`Val API Error: ${response.status} ${errText}`);
+        }
 
+        const matchData = await response.json();
+        const matches = matchData.data;
+
+        if (!matches || matches.length === 0) {
+            return res.status(400).json({ message: "No matches found." });
+        }
+
+        // Feature Engineering: Extract [Kills, Deaths, Assists, Score] for the requested player
+        const dataset = [];
+        let totalHeadshots = 0;
+        let totalBodyshots = 0;
+        let totalLegshots = 0;
+
+        for (const match of matches) {
+            const player = match.players.all_players.find(p => 
+                p.name.toLowerCase() === name.toLowerCase() && p.tag.toLowerCase() === tag.toLowerCase()
+            );
+            if (player && player.stats) {
+                const { kills, deaths, assists, score, headshots, bodyshots, legshots } = player.stats;
+                dataset.push([kills, deaths, assists, score]);
+                totalHeadshots += headshots || 0;
+                totalBodyshots += bodyshots || 0;
+                totalLegshots += legshots || 0;
+            }
+        }
+
+        if (dataset.length < 2) {
+            return res.status(400).json({ message: "Not enough detailed match data for ML clustering." });
+        }
+
+        // Run K-Means Clustering into 2 clusters (Primary vs Secondary playstyle)
+        const kmeansResult = kMeans(dataset, 2);
+
+        // Find the "Dominant" cluster (the one that has more matches assigned to it)
+        const cluster0Count = kmeansResult.clusters[0].length;
+        const cluster1Count = kmeansResult.clusters[1].length;
+        
+        let dominantCentroid;
+        if (cluster0Count >= cluster1Count) {
+            dominantCentroid = kmeansResult.centroids[0];
+        } else {
+            dominantCentroid = kmeansResult.centroids[1];
+        }
+
+        // Centroid indices: [0]=Kills, [1]=Deaths, [2]=Assists, [3]=Score
+        const avgKills = dominantCentroid[0];
+        const avgDeaths = dominantCentroid[1];
+        const avgAssists = dominantCentroid[2];
+        const avgScore = dominantCentroid[3];
+        const kdaRatio = (avgKills + avgAssists) / Math.max(1, avgDeaths);
+
+        // Derive Persona Archetypes based on Dominant Centroid
+        let persona = "Balanced Flex";
+        let subText = "You adapt to whatever the team needs.";
+        let hexColor = "#3b82f6"; // Blue
+
+        if (avgKills >= 18 && avgDeaths >= 15) {
+            persona = "Aggressive Entry";
+            subText = "First in, high impact, high risk. You create pure chaos.";
+            hexColor = "#ef4444"; // Red
+        } else if (avgAssists >= 8) {
+            persona = "Tactical Support";
+            subText = "The team's backbone. You enable your duelists to shine.";
+            hexColor = "#10b981"; // Green
+        } else if (avgKills >= 16 && avgDeaths <= 13) {
+            persona = "Calculated Lurker";
+            subText = "High survival rate. You strike from the shadows when they least expect it.";
+            hexColor = "#a855f7"; // Purple
+        } else if (kdaRatio >= 2.0) {
+            persona = "Clutch Master";
+            subText = "Outstanding KDA. You always find a way to stay alive and secure the round.";
+            hexColor = "#eab308"; // Yellow
+        }
+
+        // Aim stats aggregate
+        const totalShots = totalHeadshots + totalBodyshots + totalLegshots;
+        const headshotPct = totalShots > 0 ? ((totalHeadshots / totalShots) * 100).toFixed(1) : 0;
+
+        res.json({
+            player: `${name}#${tag}`,
+            matchesAnalyzed: dataset.length,
+            persona: {
+                title: persona,
+                description: subText,
+                color: hexColor,
+                dominant_stats: {
+                    avg_kills: avgKills.toFixed(1),
+                    avg_deaths: avgDeaths.toFixed(1),
+                    avg_assists: avgAssists.toFixed(1),
+                    avg_score: avgScore.toFixed(0),
+                    kda_ratio: kdaRatio.toFixed(2),
+                    headshot_percentage: headshotPct + "%"
+                }
+            },
+            raw_kmeans: kmeansResult
+        });
+
+    } catch (error) {
+        console.error("Playstyle Analysis Error:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 export default router;
