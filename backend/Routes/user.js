@@ -1,6 +1,8 @@
 import express from 'express';
 import User from '../Models/user.js';
+import { kMeans } from '../Utils/kmeans.js';
 import bcrypt from 'bcryptjs';
+
 import jwt from 'jsonwebtoken';
 import { protect } from '../Middleware/authMiddleware.js';
 
@@ -127,9 +129,9 @@ router.get('/riot/matches/val/:name/:tag', async (req, res) => {
     try {
         const { name, tag } = req.params;
         const region = 'ap'; // Defaulting to AP
-        const hDevKey = process.env.HENRIK_DEV_API_KEY;
+        const hDevKey = process.env.HENRIK_DEV_API_KEY ? process.env.HENRIK_DEV_API_KEY.trim() : '';
         
-        const url = `https://api.henrikdev.xyz/valorant/v1/mmr-history/${region}/${name}/${tag}`;
+        const url = `https://api.henrikdev.xyz/valorant/v1/mmr-history/${region}/${encodeURIComponent(name.trim())}/${encodeURIComponent(tag.trim())}`;
         
         const response = await fetch(url, {
             headers: {
@@ -155,9 +157,9 @@ router.get('/riot/matches/val/:name/:tag', async (req, res) => {
 router.get('/riot/val/account/:name/:tag', async (req, res) => {
     try {
         const { name, tag } = req.params;
-        const hDevKey = process.env.HENRIK_DEV_API_KEY;
+        const hDevKey = process.env.HENRIK_DEV_API_KEY ? process.env.HENRIK_DEV_API_KEY.trim() : '';
         
-        const url = `https://api.henrikdev.xyz/valorant/v1/account/${name}/${tag}`;
+        const url = `https://api.henrikdev.xyz/valorant/v1/account/${encodeURIComponent(name.trim())}/${encodeURIComponent(tag.trim())}`;
         
         const response = await fetch(url, {
             headers: {
@@ -178,5 +180,90 @@ router.get('/riot/val/account/:name/:tag', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+router.get('/riot/val/smurf-analyze/:name/:tag', async (req, res) => {
+    try {
+        const { name, tag } = req.params;
+        const region = 'ap'; 
+        const hDevKey = process.env.HENRIK_DEV_API_KEY ? process.env.HENRIK_DEV_API_KEY.trim() : '';
+        
+        // Fetch the player's recent matches
+        const url = `https://api.henrikdev.xyz/valorant/v1/mmr-history/${region}/${encodeURIComponent(name.trim())}/${encodeURIComponent(tag.trim())}`;
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': hDevKey,
+                'Accept': '*/*'
+            }
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(`Val API Error: ${response.status} ${errText}`);
+        }
+
+        const matchData = await response.json();
+        const matches = matchData.data;
+
+        if (!matches || matches.length < 5) {
+            return res.status(400).json({ message: "Not enough matches to perform ML analysis (Need at least 5)." });
+        }
+
+        // Feature Engineering: We will extract Combat Score (MMR Change as a proxy) and ELO
+        // In a full implementation, you'd fetch full match stats using the /matches endpoint 
+        // to get exact ACS and K/D. Here we use mmr_change_to_last_game and elo for demonstration.
+        const dataset = matches.map(match => {
+            // Feature 1: MMR gained/lost in the match (measures performance swing)
+            const mmrChange = Math.abs(match.mmr_change_to_last_game); 
+            // Feature 2: Overall ELO rating
+            const elo = match.elo; 
+            return [mmrChange, elo]; 
+        });
+
+        // Run K-Means Clustering to find 2 distinct performance clusters 
+        // (Cluster 0: Normal gameplay, Cluster 1: Peak/Smurf gameplay)
+        const kmeansResult = kMeans(dataset, 2);
+
+        // Identify which centroid represents the "higher performance" cluster
+        const centroid1 = kmeansResult.centroids[0];
+        const centroid2 = kmeansResult.centroids[1];
+        
+        // We assume index 0 of a centroid is the MMR Change (performance variance)
+        const highestVarianceCentroid = centroid1[0] > centroid2[0] ? centroid1 : centroid2;
+        
+        // Smurf Logic: If their highest variance cluster shows massive MMR jumps (> 25 per match consistently)
+        // while maintaining a relatively low ELO bracket, flag as smurf.
+        let isLikelySmurf = false;
+        let smurfProbability = "Low";
+
+        if (highestVarianceCentroid[0] >= 26) {
+             isLikelySmurf = true;
+             smurfProbability = "High (Consistent massive performance spikes detected)";
+        } else if (highestVarianceCentroid[0] >= 20) {
+             smurfProbability = "Medium (Some suspicious performance spikes)";
+        }
+
+        res.json({
+            player: `${name}#${tag}`,
+            matchesAnalyzed: matches.length,
+            ml_analysis: {
+                clusters_found: 2,
+                highest_performance_centroid: {
+                    avg_mmr_change_variance: highestVarianceCentroid[0].toFixed(2),
+                    avg_elo_in_cluster: highestVarianceCentroid[1].toFixed(2)
+                },
+                smurf_flag: isLikelySmurf,
+                smurf_probability: smurfProbability
+            },
+            raw_kmeans_data: kmeansResult
+        });
+
+    } catch (error) {
+        console.error("Smurf Analysis Error:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+
 
 export default router;

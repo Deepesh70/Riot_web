@@ -3,7 +3,7 @@ import { TiLocationArrow, TiThMenu, TiTimes, TiArrowBack } from 'react-icons/ti'
 import Button from './Button';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-const navItems = ['Home', 'Games', 'News', 'Esport', 'About', 'Contact', 'Profile'];
+const navItems = ['Home', 'Games', 'News', 'Esport', 'Smurf Detector', 'About', 'Contact', 'Profile'];
 
 const Navbar = () => {
 
@@ -153,6 +153,16 @@ const Navbar = () => {
                       {item}
                     </Link>
                   )
+                } else if (item === 'Smurf Detector') {
+                  return (
+                    <Link
+                      key={index}
+                      to="/smurf-detector"
+                      className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors"
+                    >
+                      {item}
+                    </Link>
+                  )
                 } else {
                   return (
                     <a
@@ -252,6 +262,8 @@ const Navbar = () => {
           } else if (item === 'Profile') {
             if (!isLoggedIn) return null;
             return <Link key={index} to="/profile" className={commonClasses} onClick={handleClick}>{item}</Link>
+          } else if (item === 'Smurf Detector') {
+            return <Link key={index} to="/smurf-detector" className={commonClasses} onClick={handleClick}>{item}</Link>
           } else {
             return <a key={index} href={`#${item.toLowerCase()}`} className={commonClasses} onClick={handleClick}>{item}</a>
           }

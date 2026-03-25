@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { TiArrowBack, TiStarFullOutline } from 'react-icons/ti'; // Assuming these exist or I'll use simple text
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
+
 import Navbar from './Navbar';
 
 const PlayerStats = () => {
@@ -62,17 +61,7 @@ const PlayerStats = () => {
         fetchPlayerAndMatches();
     }, [game, gameName, tagLine]);
 
-    useGSAP(() => {
-        if (!loading && matches.length > 0) {
-            gsap.from('.match-card', {
-                y: 30,
-                opacity: 0,
-                duration: 0.5,
-                stagger: 0.1,
-                ease: 'power2.out'
-            });
-        }
-    }, { dependencies: [loading, matches], scope: containerRef });
+
 
     if (loading) return <div className="min-h-screen bg-black text-white flex items-center justify-center font-bold text-xl">Loading Match History...</div>;
     if (error) return (

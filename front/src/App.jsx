@@ -11,6 +11,7 @@ import AboutPage from './components/AboutPage'
 import Games from './components/Games'
 import AgentDetails from './components/AgentDetails'
 import MapDetails from './components/MapDetails'
+import SmurfDetector from './components/SmurfDetector'
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
       <Route path="/news" element={<News />} />
       <Route path="/profile" element={<UserProfile />} />
       <Route path="/player/:game/:gameName/:tagLine" element={<PlayerStats />} />
+      <Route path="/smurf-detector" element={<SmurfDetector />} />
     </Routes>
   )
 }

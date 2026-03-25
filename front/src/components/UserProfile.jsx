@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { TiStarFullOutline } from 'react-icons/ti';
 import { FaTrophy, FaGamepad, FaSearch, FaCrosshairs, FaShieldAlt } from 'react-icons/fa';
 import { SiValorant, SiLeagueoflegends } from 'react-icons/si';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
+
 import Navbar from '../components/Navbar';
 
 const UserProfile = () => {
@@ -153,59 +152,12 @@ const UserProfile = () => {
     // Pick random decorative agents
     const decorAgents = agents.length > 3 ? [agents[2], agents[5], agents[8]] : agents.slice(0, 3);
 
-    // ─── GSAP Animations ───
-    useGSAP(() => {
-        if (loading) return;
-        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-        // Background elements
-        tl.from('.profile-bg-video', { opacity: 0, scale: 1.1, duration: 2, ease: 'power2.out' })
-        // Decorative agents float in
-          .from('.deco-agent', { y: 100, opacity: 0, duration: 1.2, stagger: 0.15, ease: 'power2.out' }, '-=1.5')
-        // Hero section
-          .from('.profile-hero-title', { y: 60, opacity: 0, duration: 0.8 }, '-=1')
-          .from('.profile-hero-subtitle', { y: 30, opacity: 0, duration: 0.6 }, '-=0.5')
-        // Avatar
-          .from('.profile-avatar-section', { scale: 0.8, opacity: 0, duration: 0.7, ease: 'back.out(1.7)' }, '-=0.4')
-        // Info cards
-          .from('.profile-info-card', { y: 40, opacity: 0, duration: 0.5, stagger: 0.1 }, '-=0.3')
-        // Search
-          .from('.profile-search-section', { y: 20, opacity: 0, duration: 0.5 }, '-=0.2')
-        // Match section
-          .from('.profile-matches-section', { y: 40, opacity: 0, duration: 0.6 }, '-=0.2');
-
-        // Floating animation for decorative agents
-        gsap.to('.deco-agent-1', { y: -15, duration: 3, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-        gsap.to('.deco-agent-2', { y: 12, duration: 3.5, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 0.5 });
-        gsap.to('.deco-agent-3', { y: -10, duration: 2.8, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 1 });
-
-        // Particles floating
-        gsap.utils.toArray('.floating-particle').forEach((p, i) => {
-            gsap.to(p, {
-                y: `random(-50, 50)`,
-                x: `random(-30, 30)`,
-                duration: `random(4, 8)`,
-                repeat: -1,
-                yoyo: true,
-                ease: 'sine.inOut',
-                delay: i * 0.3,
-            });
-        });
-    }, { scope: containerRef, dependencies: [loading, agents] });
-
-    // Match card animations on tab switch
-    useGSAP(() => {
-        if (matchesLoading) return;
-        gsap.fromTo('.profile-match-card',
-            { y: 30, opacity: 0, x: -10 },
-            { y: 0, opacity: 1, x: 0, duration: 0.45, stagger: 0.06, ease: 'power2.out' }
-        );
-    }, { dependencies: [activeTab, matchesLoading, valMatches, lolMatches], scope: containerRef });
 
     // ─── Loading ───
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center">
+            <div ref={containerRef} className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center">
                 <div className="three-body"><div className="three-body__dot"></div><div className="three-body__dot"></div><div className="three-body__dot"></div></div>
                 <p className="text-neutral-500 text-xs uppercase tracking-[0.3em] mt-6 font-bold">Loading Profile</p>
             </div>
@@ -214,14 +166,14 @@ const UserProfile = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center gap-4">
+            <div ref={containerRef} className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center gap-4">
                 <p className="text-red-500 font-bold text-xl">{error}</p>
                 <a href="/login" className="px-8 py-3 bg-[#ff4655] text-white font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-[#e83e4d] transition-all">Go to Login</a>
             </div>
         );
     }
 
-    if (!user) return null;
+    if (!user) return <div ref={containerRef} className="min-h-screen bg-[#0a0a0a] text-white" />;
 
     return (
         <div ref={containerRef} className="min-h-screen bg-[#0a0a0a] text-white font-sans relative overflow-hidden">
