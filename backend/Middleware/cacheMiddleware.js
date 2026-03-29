@@ -1,44 +1,41 @@
-// In-memory cache object (poor man's Redis, great for serverless if warm, excellent for VMs)
-const cacheParams = new Map();
+import redisClient from '../Utils/redisClient.js';
 
-/**
- * Cache middleware generator.
- * @param {number} durationInSeconds How long the response should be cached for in seconds
- */
 export const cacheMiddleware = (durationInSeconds) => {
-    return (req, res, next) => {
+    return async (req, res, next) => {
         // Only cache GET requests
         if (req.method !== 'GET') {
             return next();
         }
 
         const key = req.originalUrl || req.url;
-        const cachedResponse = cacheParams.get(key);
 
-        if (cachedResponse) {
-            const now = new Date().getTime();
-            // Check if expired
-            if (now < cachedResponse.expiry) {
-                // Return cached standard JSON response
-                return res.json(cachedResponse.data);
-            } else {
-                // Expired, delete from map
-                cacheParams.delete(key);
+        try {
+            // 1. Ask Redis if it has data for this URL pattern
+            // (Note: everything in Redis is a string, so data comes back stringified)
+            const cachedData = await redisClient.get(key);
+
+            if (cachedData) {
+                // We got a HIT! Parse it back to JSON and send it instantly.
+                return res.json(JSON.parse(cachedData));
             }
+        } catch (error) {
+            console.error("Redis Get Error:", error);
+            // If Redis fails, we just silently continue to the normal API fetch
         }
 
-        // We need to intercept the response being sent to save it in cache
+        // 2. We got a MISS. Data isn't in Redis yet. 
+        // We need to intercept the final response the controller makes so we can save it.
         const originalSend = res.json;
         res.json = (body) => {
-            // Re-assign back to original to avoid infinite loop on next calls
             res.json = originalSend;
 
-            // Only cache successful 200 responses
             if (res.statusCode >= 200 && res.statusCode < 300) {
-                cacheParams.set(key, {
-                    data: body,
-                    expiry: new Date().getTime() + durationInSeconds * 1000
-                });
+                // 3. Save the successfully fetched data into Redis
+                // 'EX' sets an expiration timer (in seconds)
+                // We stringify the JSON body because Redis stores text.
+                redisClient.set(key, JSON.stringify(body), {
+                    EX: durationInSeconds
+                }).catch(err => console.error("Redis Set Error:", err));
             }
 
             return res.json(body);
