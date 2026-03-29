@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { TiArrowBack } from 'react-icons/ti';
 import { gsap } from 'gsap';
-import { agentVideos } from '../agentVideos';
+import { agentVideos } from '../../agentVideos';
 
 const API = import.meta.env.VITE_API_BASE_URL;
 

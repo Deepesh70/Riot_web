@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import Navbar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
 import ValorantPage from './ValorantPage';
 
 

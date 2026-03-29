@@ -251,7 +251,7 @@ const ValorantPage = () => {
                             >
                                 <div className="relative aspect-[3/4] overflow-hidden">
                                     <img src={agent.background} alt="" className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 transition-opacity" />
-                                    <img src={agent.fullPortrait} alt={agent.displayName}
+                                    <img loading="lazy" src={agent.fullPortrait} alt={agent.displayName}
                                         className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[110%] object-contain group-hover:scale-110 transition-transform duration-500" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                                     <div className="absolute bottom-2 left-2 right-2">
@@ -299,7 +299,7 @@ const ValorantPage = () => {
                                 key={map.uuid}
                                 className="group relative rounded-lg overflow-hidden cursor-pointer h-48 md:h-64 transition-all duration-300 hover:scale-[1.02] block element-focus" // Added 'block' for correct Link rendering
                             >
-                                <img src={map.splash} alt={map.displayName}
+                                <img loading="lazy" src={map.splash} alt={map.displayName}
                                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 group-hover:opacity-70 transition-all duration-700" />
 
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />

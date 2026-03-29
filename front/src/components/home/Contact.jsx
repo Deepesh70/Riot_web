@@ -1,6 +1,6 @@
 import React from 'react';
-import AnimatedTitle from './AnimatedTitle';
-import Button from './Button';
+import AnimatedTitle from '../common/AnimatedTitle';
+import Button from '../common/Button';
 
 const ImageClipBox = ({ src, clipClass }) => (
   <div className={clipClass}>

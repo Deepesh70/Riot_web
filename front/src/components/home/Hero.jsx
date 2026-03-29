@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Button from './Button';
+import Button from '../common/Button';
 import { TiLocationArrow } from 'react-icons/ti';
 
 const riotVideos = [

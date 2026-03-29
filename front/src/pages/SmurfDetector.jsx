@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import Navbar from './Navbar';
+import Navbar from '../components/common/Navbar';
 import { TiWarningOutline, TiTickOutline, TiZoomOutline } from 'react-icons/ti';
 import { SiTarget } from 'react-icons/si';
 

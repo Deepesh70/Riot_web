@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { TiArrowBack, TiStarFullOutline } from 'react-icons/ti'; // Assuming these exist or I'll use simple text
 
-import Navbar from './Navbar';
+import Navbar from '../components/common/Navbar';
 
 const PlayerStats = () => {
     const { game, gameName, tagLine } = useParams();

@@ -4,7 +4,7 @@ import { TiStarFullOutline } from 'react-icons/ti';
 import { FaTrophy, FaGamepad, FaSearch, FaCrosshairs, FaShieldAlt } from 'react-icons/fa';
 import { SiValorant, SiLeagueoflegends } from 'react-icons/si';
 
-import Navbar from '../components/Navbar';
+import Navbar from '../components/common/Navbar';
 
 const UserProfile = () => {
     const navigate = useNavigate();
@@ -265,7 +265,7 @@ const UserProfile = () => {
                             {/* Avatar */}
                             <div className="relative shrink-0">
                                 <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl p-[3px] profile-avatar-ring shadow-xl" style={{ background: 'linear-gradient(135deg, #ff4655, #ff8a65, #ff4655)' }}>
-                                    <img src={user.avatar} alt="Avatar" className="w-full h-full rounded-[10px] object-cover border-[3px] border-[#0a0a0a]" />
+                                    <img loading="lazy" src={user.avatar} alt="Avatar" className="w-full h-full rounded-[10px] object-cover border-[3px] border-[#0a0a0a]" />
                                 </div>
                                 <div className="absolute -bottom-1 -right-1 bg-gradient-to-r from-yellow-500 to-amber-400 text-black font-black text-[10px] px-2 py-1 rounded-lg border-2 border-[#0a0a0a] flex items-center gap-0.5 shadow-lg">
                                     <TiStarFullOutline /> LVL {user.level}

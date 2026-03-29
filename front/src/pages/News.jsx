@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from './Navbar';
+import Navbar from '../components/common/Navbar';
 import { TiLocationArrow } from 'react-icons/ti';
 
 const DUMMY_NEWS = [

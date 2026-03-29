@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import userRoutes from './Routes/user.js';
+import mainRoutes from './Routes/index.js';
 
 dotenv.config({ path: new URL('./.env', import.meta.url) });
 
@@ -49,7 +49,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-app.use('/api/users', userRoutes);
+app.use('/api', mainRoutes);
 
 const connectDB = async () => {
     try {
@@ -69,96 +69,7 @@ connectDB().then(() => {
     });
 });
 
-app.get('/api/news', async (req, res) => {
-    try {
-        const apiKey = process.env.NEWS_API_KEY;
-        if (!apiKey) {
-            return res.status(500).json({ connection: false, message: 'Server configuration error' });
-        }
 
-        const query = req.query.q || 'gaming';
-        const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&language=en&sortBy=publishedAt&apiKey=${apiKey}`);
-
-        if (!response.ok) {
-            return res.status(response.status).json({ message: 'External API Error' });
-        }
-
-        const data = await response.json();
-        res.json(data);
-    } catch (error) {
-        console.error('Error fetching news:', error.message);
-        res.status(500).json({ message: 'Error fetching news' });
-    }
-});
-
-app.get('/api/esports/schedule', async (req, res) => {
-    try {
-        const apiKey = process.env.HENRIK_DEV_API_KEY;
-        if (!apiKey) {
-            return res.status(500).json({ message: 'HENRIK_DEV_API_KEY is missing' });
-        }
-
-        let url = 'https://api.henrikdev.xyz/valorant/v1/esports/schedule';
-        const params = new URLSearchParams();
-        if (req.query.region) params.append('region', req.query.region);
-        if (req.query.league) params.append('league', req.query.league);
-        const qs = params.toString();
-        if (qs) url += `?${qs}`;
-
-        const response = await fetch(url, {
-            headers: { 'Authorization': apiKey }
-        });
-
-        if (!response.ok) {
-            return res.status(response.status).json({ message: `HenrikDev API error: ${response.status}` });
-        }
-
-        const data = await response.json();
-        res.json(data);
-    } catch (error) {
-        console.error('Error fetching esports schedule:', error.message);
-        res.status(500).json({ message: 'Error fetching esports schedule' });
-    }
-});
-
-// ── Valorant Game Data (valorant-api.com - no key needed) ──
-app.get('/api/valorant/agents', async (req, res) => {
-    try {
-        const response = await fetch('https://valorant-api.com/v1/agents?isPlayableCharacter=true');
-        if (!response.ok) return res.status(response.status).json({ message: 'Valorant API error' });
-        const data = await response.json();
-        res.json(data);
-    } catch (error) {
-        console.error('Error fetching agents:', error.message);
-        res.status(500).json({ message: 'Error fetching agents' });
-    }
-});
-
-app.get('/api/valorant/agents/:id', async (req, res) => {
-    try {
-        const response = await fetch(`https://valorant-api.com/v1/agents/${req.params.id}`);
-        if (!response.ok) return res.status(response.status).json({ message: 'Valorant API error' });
-        const data = await response.json();
-        res.json(data);
-    } catch (error) {
-        console.error('Error fetching agent:', error.message);
-        res.status(500).json({ message: 'Error fetching agent' });
-    }
-});
-
-app.get('/api/valorant/maps', async (req, res) => {
-    try {
-        const response = await fetch('https://valorant-api.com/v1/maps');
-        if (!response.ok) return res.status(response.status).json({ message: 'Valorant API error' });
-        const data = await response.json();
-        // Filter out non-standard maps (skirmish, range, etc.)
-        const standardMaps = data.data.filter(m => m.tacticalDescription && m.displayIcon);
-        res.json({ status: data.status, data: standardMaps });
-    } catch (error) {
-        console.error('Error fetching maps:', error.message);
-        res.status(500).json({ message: 'Error fetching maps' });
-    }
-});
 
 app.get('/', (req, res) => {
     res.send('Riot Reimagined API is Live.');
