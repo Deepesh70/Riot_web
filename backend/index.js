@@ -1,11 +1,9 @@
+import 'dotenv/config';
 import express from 'express';
-import redisClient from './Utils/redisClient.js';
+
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import mainRoutes from './Routes/index.js';
-
-dotenv.config({ path: new URL('./.env', import.meta.url) });
 
 const app = express();
 
@@ -64,10 +62,7 @@ const connectDB = async () => {
 
 const PORT = process.env.PORT || 5000;
 
-connectDB().then(async () => {
-
-    await redisClient.connect();
-    
+connectDB().then(() => {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
     });

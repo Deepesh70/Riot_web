@@ -1,11 +1,22 @@
-import { createClient } from 'redis';
+import { Redis } from '@upstash/redis';
 
-const redisClient = createClient({
-    url: process.env.REDIS_URL
-});
+let redisClient = null;
 
-
-redisClient.on('error', (err) => console.log('Redis Client Error:',err));
-redisClient.on('connect', () => console.log('Redis Client Connected'));
+// Only initialize Redis if both required environment variables are present.
+// This prevents the server from crashing in environments where Redis isn't configured.
+if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    try {
+        redisClient = new Redis({
+            url: process.env.UPSTASH_REDIS_REST_URL,
+            token: process.env.UPSTASH_REDIS_REST_TOKEN,
+        });
+        console.log('Redis (Upstash) client initialized.');
+    } catch (err) {
+        console.warn('Redis initialization failed, caching will be disabled:', err.message);
+        redisClient = null;
+    }
+} else {
+    console.warn('UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN not set — Redis caching disabled.');
+}
 
 export default redisClient;

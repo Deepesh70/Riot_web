@@ -2,43 +2,40 @@ import redisClient from '../Utils/redisClient.js';
 
 export const cacheMiddleware = (durationInSeconds) => {
     return async (req, res, next) => {
-        // Only cache GET requests
-        if (req.method !== 'GET') {
+        // Only cache GET requests, and only if Redis is available
+        if (req.method !== 'GET' || !redisClient) {
             return next();
         }
 
         const key = req.originalUrl || req.url;
 
         try {
-            // 1. Ask Redis if it has data for this URL pattern
-            // (Note: everything in Redis is a string, so data comes back stringified)
             const cachedData = await redisClient.get(key);
 
             if (cachedData) {
-                // We got a HIT! Parse it back to JSON and send it instantly.
-                return res.json(JSON.parse(cachedData));
+                // Cache HIT — return instantly
+                // console.log(`[CACHE HIT] ${key}`);
+                return res.json(typeof cachedData === 'string' ? JSON.parse(cachedData) : cachedData);
             }
+
+            // console.log(`[CACHE MISS] ${key}`);
         } catch (error) {
-            console.error("Redis Get Error:", error);
-            // If Redis fails, we just silently continue to the normal API fetch
+            console.error("Redis Get Error:", error.message);
+            // If Redis fails, silently fall through to the real API
         }
 
-        // 2. We got a MISS. Data isn't in Redis yet. 
-        // We need to intercept the final response the controller makes so we can save it.
-        const originalSend = res.json;
+        // Cache MISS — intercept the response to store it in Redis
+        const originalJson = res.json.bind(res);
         res.json = (body) => {
-            res.json = originalSend;
+            res.json = originalJson;
 
-            if (res.statusCode >= 200 && res.statusCode < 300) {
-                // 3. Save the successfully fetched data into Redis
-                // 'EX' sets an expiration timer (in seconds)
-                // We stringify the JSON body because Redis stores text.
-                redisClient.set(key, JSON.stringify(body), {
-                    EX: durationInSeconds
-                }).catch(err => console.error("Redis Set Error:", err));
+            if (res.statusCode >= 200 && res.statusCode < 300 && redisClient) {
+                redisClient.set(key, JSON.stringify(body), { ex: durationInSeconds })
+                    .then(() => console.log(`[CACHE SET] ${key} (ttl=${durationInSeconds}s)`))
+                    .catch(err => console.error("Redis Set Error:", err.message));
             }
 
-            return res.json(body);
+            return originalJson(body);
         };
 
         next();
