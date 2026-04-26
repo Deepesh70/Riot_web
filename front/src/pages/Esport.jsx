@@ -41,26 +41,47 @@ const getMatchStatus = (state) => {
   return { color: '#10b981', label: 'COMPLETED', isLive: false };
 };
 
-const MatchCard = ({ match, index }) => {
+const MatchCard = ({ match }) => {
   const cardRef = useRef(null);
+  const rotateXToRef = useRef(null);
+  const rotateYToRef = useRef(null);
+
+  useEffect(() => {
+    const card = cardRef.current;
+
+    if (!card || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return undefined;
+    }
+
+    rotateXToRef.current = gsap.quickTo(card, 'rotateX', {
+      duration: 0.22,
+      ease: 'power2.out',
+    });
+    rotateYToRef.current = gsap.quickTo(card, 'rotateY', {
+      duration: 0.22,
+      ease: 'power2.out',
+    });
+
+    return () => {
+      rotateXToRef.current = null;
+      rotateYToRef.current = null;
+      gsap.killTweensOf(card);
+      gsap.set(card, { clearProps: 'transform' });
+    };
+  }, []);
 
   const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
+    if (!cardRef.current || !rotateXToRef.current || !rotateYToRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 8;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * -8;
-    gsap.to(cardRef.current, {
-      rotateY: x, rotateX: y,
-      duration: 0.4, ease: 'power2.out',
-    });
+    rotateXToRef.current(y);
+    rotateYToRef.current(x);
   };
 
   const handleMouseLeave = () => {
-    if (!cardRef.current) return;
-    gsap.to(cardRef.current, {
-      rotateY: 0, rotateX: 0,
-      duration: 0.6, ease: 'elastic.out(1, 0.5)',
-    });
+    rotateXToRef.current?.(0);
+    rotateYToRef.current?.(0);
   };
 
   const teams = match.match?.teams || [];
@@ -236,7 +257,7 @@ const Esport = () => {
         scrollTrigger: {
           trigger: section,
           start: 'top 85%',
-          toggleActions: 'play none none reverse',
+          once: true,
         },
         y: 60,
         opacity: 0,
@@ -264,6 +285,8 @@ const Esport = () => {
   }, [loading, matches, activeRegion]);
 
   const handleRegionChange = (value) => {
+    if (value === activeRegion) return;
+
     if (matchGridRef.current) {
       const cards = matchGridRef.current.querySelectorAll('.esport-match-card');
       gsap.to(cards, {
@@ -271,6 +294,7 @@ const Esport = () => {
         stagger: 0.02,
         duration: 0.2,
         ease: 'power2.in',
+        overwrite: 'auto',
         onComplete: () => setActiveRegion(value),
       });
     } else {

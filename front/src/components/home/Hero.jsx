@@ -75,6 +75,10 @@ const Hero = () => {
 
     if (!section || !frame) return undefined;
 
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return undefined;
+    }
+
     let rafId = 0;
 
     const updateScrollFrame = () => {

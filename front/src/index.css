@@ -100,45 +100,33 @@ body {
     transform: translate3d(0, var(--hero-frame-shift), 0) scale(var(--hero-frame-scale)) rotate(var(--hero-frame-rotate));
     transform-origin: center center;
     box-shadow: 0 18px 48px rgba(15, 23, 42, 0.18);
-    will-change: transform, clip-path, border-radius;
-    transition:
-      clip-path 220ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
-      border-radius 220ms cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
   }
 
   .hero-scroll-media {
     transform: scale(var(--hero-media-scale));
     transform-origin: center center;
     will-change: transform;
-    transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .hero-scroll-vignette {
     background: linear-gradient(180deg, rgba(4, 6, 15, 0.48) 0%, rgba(4, 6, 15, 0.12) 30%, rgba(4, 6, 15, 0.28) 100%);
     opacity: var(--hero-overlay-opacity);
-    transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .hero-scroll-content {
     transform: translate3d(0, var(--hero-content-shift), 0);
     opacity: var(--hero-content-opacity);
     will-change: transform, opacity;
-    transition:
-      transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 220ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .hero-scroll-accent {
     transform: translate3d(0, var(--hero-accent-shift), 0);
     will-change: transform;
-    transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .hero-scroll-tag {
     pointer-events: none;
-    transition: opacity 180ms cubic-bezier(0.22, 1, 0.36, 1);
     will-change: opacity;
   }
 
