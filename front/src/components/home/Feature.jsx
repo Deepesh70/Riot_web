@@ -1,15 +1,15 @@
 import React from 'react';
 import { TiLocationArrow } from 'react-icons/ti';
+import AutoPlayVideo from '../common/AutoPlayVideo';
 
 
 const BentoCard = ({ src, title, description, isComingSoon }) => {
   return (
     <div className="relative size-full overflow-hidden rounded-xl border border-white/20 bg-black/50 p-6 flex flex-col justify-end min-h-64 group hover:bg-black/70 transition-colors">
-      <video
+      <AutoPlayVideo
         src={src}
-        loop
-        muted
-        autoPlay
+        preload="metadata"
+        rootMargin="150px 0px"
         className="absolute left-0 top-0 size-full object-cover opacity-50 transition-opacity duration-300 group-hover:opacity-80"
       />
 

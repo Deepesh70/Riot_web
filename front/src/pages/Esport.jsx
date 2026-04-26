@@ -4,6 +4,7 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+import AutoPlayVideo from '../components/common/AutoPlayVideo';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -193,7 +194,6 @@ const MatchCard = ({ match }) => {
 
 const Esport = () => {
   const containerRef = useRef(null);
-  const videoRef = useRef(null);
   const matchGridRef = useRef(null);
 
   const [matches, setMatches] = useState([]);
@@ -313,10 +313,11 @@ const Esport = () => {
 
       {/* ═══ HERO ═══ */}
       <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
-        <video
-          ref={videoRef}
+        <AutoPlayVideo
           src="/videos/esport-1.mp4"
-          loop muted autoPlay
+          preload="auto"
+          rootMargin="400px 0px"
+          threshold={0.2}
           className="hero-video absolute top-0 left-0 w-full h-full object-cover opacity-60"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10" />
@@ -463,9 +464,9 @@ const Esport = () => {
             </button>
           </div>
           <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-blue-500/20 group">
-            <video
+            <AutoPlayVideo
               src="/videos/feature-1.mp4"
-              loop muted autoPlay
+              preload="metadata"
               className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-300" />
@@ -475,9 +476,9 @@ const Esport = () => {
 
       {/* ═══ CTA ═══ */}
       <section className="reveal-section relative py-32 flex items-center justify-center overflow-hidden">
-        <video
+        <AutoPlayVideo
           src="/videos/feature-3.mp4"
-          loop muted autoPlay
+          preload="metadata"
           className="absolute inset-0 w-full h-full object-cover opacity-20 hover:opacity-30 transition-opacity duration-700 scale-110"
         />
         <div className="relative z-10 text-center px-4">

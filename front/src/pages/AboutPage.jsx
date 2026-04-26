@@ -4,6 +4,7 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+import AutoPlayVideo from '../components/common/AutoPlayVideo';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -262,9 +263,9 @@ const AboutPage = () => {
             <section className="relative py-20 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="relative rounded-3xl overflow-hidden h-[50vh] md:h-[60vh] about-parallax" style={{ border: '1px solid rgba(255,255,255,0.06)' }}>
-                        <video
+                        <AutoPlayVideo
                             src="/videos/feature-1.mp4"
-                            autoPlay loop muted playsInline
+                            preload="metadata"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
                         <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #0a0a0a 0%, transparent 40%, transparent 60%, #0a0a0a 100%)' }} />
@@ -307,7 +308,7 @@ const AboutPage = () => {
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                         {TEAM.map((member, i) => (
-                            <TeamCard key={i} member={member} index={i} />
+                            <TeamCard key={i} member={member} />
                         ))}
                     </div>
                 </div>

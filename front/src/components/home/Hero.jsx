@@ -52,21 +52,36 @@ const Hero = () => {
   }, [pendingIndex, readyIndices]);
 
   useEffect(() => {
-    videoRefs.current.forEach((video, index) => {
-      if (!video) return;
+    const syncPlayback = () => {
+      const shouldPlayActiveVideo = !document.hidden;
 
-      if (index === activeIndex) {
-        video.currentTime = 0;
-        const playPromise = video.play();
-        if (playPromise?.catch) {
-          playPromise.catch(() => {});
+      videoRefs.current.forEach((video, index) => {
+        if (!video) return;
+
+        if (index === activeIndex && shouldPlayActiveVideo) {
+          const playPromise = video.play();
+          if (playPromise?.catch) {
+            playPromise.catch(() => {});
+          }
+          return;
         }
-        return;
-      }
 
-      video.pause();
-      video.currentTime = 0;
-    });
+        video.pause();
+      });
+    };
+
+    const activeVideo = videoRefs.current[activeIndex];
+    if (activeVideo) {
+      activeVideo.currentTime = 0;
+    }
+
+    syncPlayback();
+
+    document.addEventListener('visibilitychange', syncPlayback);
+
+    return () => {
+      document.removeEventListener('visibilitychange', syncPlayback);
+    };
   }, [activeIndex]);
 
   useEffect(() => {
@@ -145,7 +160,7 @@ const Hero = () => {
                   src={videoSrc}
                   muted
                   playsInline
-                  preload="auto"
+                  preload={index === activeIndex || index === pendingIndex ? 'auto' : 'metadata'}
                   className={`absolute left-0 top-0 size-full object-cover object-center transition-opacity duration-500 ${
                     index === activeIndex ? 'opacity-100' : 'opacity-0'
                   }`}
