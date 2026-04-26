@@ -49,7 +49,7 @@ const Login = () => {
         <div ref={containerRef} className="h-screen w-screen flex bg-[#0c0c0c] overflow-hidden">
 
             {/* ─── LEFT: Form Panel ─── */}
-            <div className="w-full lg:w-[48%] h-full flex flex-col px-8 md:px-16 lg:px-20 py-10 relative z-10 overflow-y-auto overflow-x-hidden custom-scrollbar">
+            <div className="w-full lg:w-[48%] h-full flex flex-col px-8 md:px-16 lg:px-20 pt-10 pb-20 relative z-10 overflow-y-auto overflow-x-hidden custom-scrollbar">
 
                 {/* Top nav */}
                 <div className="flex items-center justify-between flex-shrink-0 mb-8">
@@ -59,7 +59,7 @@ const Login = () => {
                         </div>
                         <span className="text-white font-black text-lg tracking-tight uppercase">Riot</span>
                     </Link>
-                    <div className="login-brand flex items-center gap-8">
+                    <div className="login-brand flex items-center gap-4 sm:gap-8">
                         <Link to="/" className="text-white/50 hover:text-white text-xs font-bold uppercase tracking-[0.15em] transition-colors">Home</Link>
                         <Link to="/signup" className="text-white/50 hover:text-white text-xs font-bold uppercase tracking-[0.15em] transition-colors">Join</Link>
                     </div>

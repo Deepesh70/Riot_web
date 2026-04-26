@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Button from '../common/Button';
-import { TiLocationArrow } from 'react-icons/ti';
 
 const riotVideos = [
   'https://cmsassets.rgpub.io/sanity/files/dsfx7636/news/f6ccf20dfe3f6a24ea9216bb8afaaa66740c715d.mp4',
@@ -155,7 +153,7 @@ const Hero = () => {
 
             <div className="hero-scroll-vignette absolute inset-0" />
 
-            <h1 className="hero-scroll-tag hero-scroll-tag--light special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-100">
+            <h1 className="hero-scroll-tag hero-scroll-tag--light special-font hero-heading absolute bottom-5 right-5 md:bottom-10 md:right-10 z-40 text-blue-100">
               G<b>a</b>ming
             </h1>
 
@@ -168,22 +166,12 @@ const Hero = () => {
                 <p className="mb-5 max-w-64 font-robert-regular text-blue-100">
                   Enter the Metagame Layer <br /> Unleash the Play Economy
                 </p>
-
-                <div className="hero-scroll-accent">
-                  <Button
-                    id="watch-trailer"
-                    title="Next"
-                    onClick={handleNextVideo}
-                    leftIcon={<TiLocationArrow />}
-                    containerClass="!bg-yellow-300 flex-center gap-1"
-                  />
-                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <h1 className="hero-scroll-tag hero-scroll-tag--dark special-font hero-heading absolute bottom-5 right-5 z-20 text-black">
+        <h1 className="hero-scroll-tag hero-scroll-tag--dark special-font hero-heading absolute bottom-5 right-5 md:bottom-10 md:right-10 z-20 text-black">
           G<b>a</b>ming
         </h1>
       </div>

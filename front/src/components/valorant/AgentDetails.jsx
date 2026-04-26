@@ -12,6 +12,7 @@ const AgentDetails = () => {
     const [agent, setAgent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedAbility, setSelectedAbility] = useState(null);
+    const [isVideoFocus, setIsVideoFocus] = useState(false);
 
     const containerRef = useRef(null);
     const portraitRef = useRef(null);
@@ -98,20 +99,22 @@ const AgentDetails = () => {
                     loop
                     muted
                     playsInline
-                    className="absolute inset-0 w-full h-full object-cover opacity-[0.15] mix-blend-screen pointer-events-none transition-opacity duration-1000"
-                    style={{ filter: 'grayscale(30%)' }}
+                    className={`absolute inset-0 w-full h-full object-cover pointer-events-none transition-all duration-700 ${isVideoFocus ? 'opacity-100 mix-blend-normal' : 'opacity-[0.15] mix-blend-screen'}`}
+                    style={{ filter: isVideoFocus ? 'grayscale(0%)' : 'grayscale(30%)' }}
                 />
             ) : agent.background && (
                 <img
                     src={agent.background}
                     alt=""
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[150%] opacity-10 object-cover pointer-events-none"
-                    style={{ filter: 'grayscale(100%)' }}
+                    className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[150%] object-cover pointer-events-none transition-all duration-700 ${isVideoFocus ? 'opacity-100' : 'opacity-10'}`}
+                    style={{ filter: isVideoFocus ? 'grayscale(0%)' : 'grayscale(100%)' }}
                 />
             )}
 
             {/* Frame border like the screenshot */}
-            <div className="absolute inset-4 md:inset-8 border-4 border-[#ff4655] rounded-xl pointer-events-none opacity-80 mix-blend-screen" />
+            {!isVideoFocus && (
+                <div className="absolute inset-4 md:inset-8 border-4 border-[#ff4655] rounded-xl pointer-events-none opacity-80 mix-blend-screen" />
+            )}
 
             {/* Back Button */}
             <button
@@ -122,8 +125,18 @@ const AgentDetails = () => {
                 <span className="font-bold uppercase tracking-widest text-sm hidden sm:block">Back</span>
             </button>
 
+            {(currentVideo || agent.background) && (
+                <button
+                    onClick={() => setIsVideoFocus(prev => !prev)}
+                    className="absolute top-10 right-10 md:top-14 md:right-14 z-50 px-4 py-2 rounded-md border border-white/30 bg-black/45 text-white/90 hover:bg-black/65 hover:border-white/60 transition-all text-xs sm:text-sm font-bold uppercase tracking-widest"
+                    type="button"
+                >
+                    {isVideoFocus ? 'Show Agent Details' : 'Show Full Background'}
+                </button>
+            )}
+
             {/* Main Content */}
-            <div className="relative z-10 w-full max-w-[90rem] mx-auto px-6 md:px-16 flex flex-col lg:flex-row items-center justify-between min-h-[80vh] gap-10">
+            <div className={`relative z-10 w-full max-w-[90rem] mx-auto px-6 md:px-16 flex flex-col lg:flex-row items-center justify-between min-h-[80vh] gap-10 transition-opacity duration-500 ${isVideoFocus ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
 
                 {/* Agent Portrait (Left Side) */}
                 <div ref={portraitRef} className="w-full lg:w-1/2 flex justify-center lg:justify-end lg:-mr-10 xl:-mr-20 z-20">

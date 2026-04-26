@@ -5,7 +5,7 @@ import { Routes, Route } from 'react-router-dom'
 const Home = lazy(() => import('./pages/Home'))
 const Login = lazy(() => import('./pages/Login'))
 const Signup = lazy(() => import('./pages/Signup'))
-const News = lazy(() => import('./pages/News'))
+const News = lazy(() => import('./pages/ValorantArticlesPage'))
 const UserProfile = lazy(() => import('./pages/UserProfile'))
 const Esport = lazy(() => import('./pages/Esport'))
 const PlayerStats = lazy(() => import('./pages/PlayerStats'))

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
-        <footer className="relative w-full bg-[#0a0f16] text-white/80 py-16 overflow-hidden border-t border-white/5">
+        <footer className="relative w-full bg-[#0a0f16] text-white/80 py-16 pb-24 md:pb-16 overflow-hidden border-t border-white/5">
             {/* Background Image with Overlay */}
             <div className="absolute inset-0 z-0 select-none pointer-events-none">
                 <img

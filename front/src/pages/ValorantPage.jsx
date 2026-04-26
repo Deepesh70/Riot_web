@@ -95,8 +95,8 @@ const ValorantPage = () => {
                         <img src="/img/logo.png" alt="Riot Games" className="w-10 h-10 rounded-full" />
                         <span className="text-xs font-bold uppercase tracking-[0.3em] text-white/60">Riot Games</span>
                     </div>
-                    <p className="text-[10px] sm:text-xs uppercase tracking-[0.4em] text-white/50 mb-3">5v5 character-based tactical shooter game</p>
-                    <h1 className="font-riot text-6xl sm:text-8xl md:text-[10rem] lg:text-[14rem] font-black tracking-tight leading-none uppercase"
+                    <p className="text-[10px] sm:text-xs uppercase tracking-widest sm:tracking-[0.4em] text-white/50 mb-3">5v5 character-based tactical shooter game</p>
+                    <h1 className="font-riot text-5xl sm:text-7xl md:text-[8rem] lg:text-[12rem] font-black tracking-tight leading-none uppercase"
                         style={{ background: 'linear-gradient(180deg, #fff 30%, #ff4655 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                         VALORANT
                     </h1>
