@@ -6,6 +6,7 @@ const NewsSection = ({ title, query, limit }) => {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isEmpty, setIsEmpty] = useState(false);
 
     useEffect(() => {
         const fetchNews = async () => {
@@ -20,10 +21,12 @@ const NewsSection = ({ title, query, limit }) => {
                     .slice(0, limit);
 
                 setArticles(validArticles);
-                setError(validArticles.length ? null : 'No articles are available right now.');
+                setError(null);
+                setIsEmpty(validArticles.length === 0);
             } catch (err) {
                 setArticles([]);
                 setError(err.message || 'Unable to load news right now.');
+                setIsEmpty(false);
             } finally {
                 setLoading(false);
             }
@@ -50,7 +53,7 @@ const NewsSection = ({ title, query, limit }) => {
                 <div className="flex items-center justify-center h-48 rounded-xl border border-zinc-800 bg-white/5 px-6 text-center text-sm text-blue-50/70">
                     {error}
                 </div>
-            ) : articles.length === 0 ? (
+            ) : isEmpty && articles.length === 0 ? (
                 <div className="flex items-center justify-center h-48 rounded-xl border border-zinc-800 bg-white/5 px-6 text-center text-sm text-blue-50/70">
                     No articles are available right now.
                 </div>

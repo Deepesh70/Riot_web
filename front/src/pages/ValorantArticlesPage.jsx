@@ -73,7 +73,7 @@ const ValorantArticlesPage = () => {
                     setError(null);
                 } else {
                     setActualArticles([]);
-                    setError('No Valorant articles are available right now.');
+                    setError(null);
                 }
             } catch (err) {
                 setActualArticles([]);
