@@ -27,20 +27,22 @@ const About = () => {
   });
 
   return (
-    <div id="about" className="min-h-screen w-screen">
-      <div className="relative mb-8 mt-36 flex flex-col items-center gap-5">
-        <p className="font-general text-sm uppercase md:text-[10px]">
+    <div id="about" className="min-h-screen w-screen bg-dark-900">
+      <div className="relative mb-8 mt-36 flex flex-col items-center gap-5 px-4">
+        <p className="font-general text-sm uppercase md:text-xs tracking-widest text-white/60">
           Welcome to Riot
         </p>
 
         <AnimatedTitle
           title="Welc<b>o</b>me to the <br /> world of <b>R</b>iot Games"
-          containerClass="mt-5 !text-black text-center"
+          containerClass="mt-5 !text-white text-center"
         />
 
-        <div className="about-subtext">
-          <p>Experience the most played PC game in the world</p>
-          <p className="text-gray-500">
+        <div className="about-subtext max-w-2xl text-center space-y-3">
+          <p className="text-lg font-medium text-white">
+            Experience the most played PC game in the world
+          </p>
+          <p className="text-base leading-relaxed text-white/70">
             From the Rift to the stage, we create games that defy expectations.
             Join millions of players in our ever-expanding universe.
           </p>
@@ -51,7 +53,7 @@ const About = () => {
         <div className="mask-clip-path about-image">
           <img
             src="img/about.webp.jpg"
-            alt="Background"
+            alt="Riot Games immersive experience"
             className="absolute left-0 top-0 size-full object-cover"
           />
         </div>
