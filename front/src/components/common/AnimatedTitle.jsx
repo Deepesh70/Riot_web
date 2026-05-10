@@ -1,5 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 
 const AnimatedTitle = ({ title, containerClass }) => {
@@ -8,8 +11,19 @@ const AnimatedTitle = ({ title, containerClass }) => {
   useEffect(() => {
 
     const ctx = gsap.context(() => {
+      const words = containerRef.current?.querySelectorAll('.animated-word');
+
+      if (!words?.length) {
+        return;
+      }
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        gsap.set(words, { opacity: 1, clearProps: 'transform' });
+        return;
+      }
+
       gsap.fromTo(
-        ".animated-word",
+        words,
         { opacity: 0, transform: 'translate3d(0, 40px, 0) rotateY(10deg)' },
         {
           opacity: 1,
@@ -20,7 +34,7 @@ const AnimatedTitle = ({ title, containerClass }) => {
             trigger: containerRef.current,
             start: '100 bottom',
             end: 'center bottom',
-            toggleActions: 'play none none reverse',
+            once: true,
           }
         }
       );

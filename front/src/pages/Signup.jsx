@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
+import AutoPlayVideo from '../components/common/AutoPlayVideo';
 
 const Signup = () => {
     const [name, setName] = useState('');
@@ -42,7 +43,7 @@ const Signup = () => {
             } else {
                 setError(data.message || 'Signup failed');
             }
-        } catch (err) {
+        } catch {
             setError('Something went wrong. Please try again.');
         }
     };
@@ -177,9 +178,10 @@ const Signup = () => {
 
             {/* ─── RIGHT: Video Panel ─── */}
             <div className="signup-video-panel hidden lg:block w-[52%] h-full relative overflow-hidden" style={{ borderRadius: '2.5rem 0 0 2.5rem' }}>
-                <video
+                <AutoPlayVideo
                     src="/videos/feature-5.mp4"
-                    autoPlay loop muted playsInline
+                    preload="auto"
+                    threshold={0.2}
                     className="absolute inset-0 w-full h-full object-cover"
                 />
                 <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, #0c0c0c 0%, transparent 30%)' }} />

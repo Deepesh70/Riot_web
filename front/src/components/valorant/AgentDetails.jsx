@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { TiArrowBack } from 'react-icons/ti';
 import { gsap } from 'gsap';
 import { agentVideos } from '../../agentVideos';
+import AutoPlayVideo from '../common/AutoPlayVideo';
 
 const API = import.meta.env.VITE_API_BASE_URL;
 
@@ -92,13 +93,11 @@ const AgentDetails = () => {
 
             {/* Background Video */}
             {currentVideo ? (
-                <video
+                <AutoPlayVideo
                     key={currentVideo}
                     src={currentVideo}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
+                    preload="auto"
+                    threshold={0.2}
                     className={`absolute inset-0 w-full h-full object-cover pointer-events-none transition-all duration-700 ${isVideoFocus ? 'opacity-100 mix-blend-normal' : 'opacity-[0.15] mix-blend-screen'}`}
                     style={{ filter: isVideoFocus ? 'grayscale(0%)' : 'grayscale(30%)' }}
                 />

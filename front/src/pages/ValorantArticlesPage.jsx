@@ -3,52 +3,6 @@ import Navbar from '../components/common/Navbar';
 import { TiLocationArrow } from 'react-icons/ti';
 import Footer from '../components/common/Footer';
 
-// Stunning fallback mock data for when the free API limits are reached
-const VALORANT_MOCK_NEWS = [
-    {
-        title: "Patch 8.04: New Agent Clove Revealed",
-        description: "Riot Games officially unveils Clove, the immortal Controller who changes the game even after death. Learn about their abilities and lore.",
-        url: "#",
-        urlToImage: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/news/fb249d970e59a957827de32306788b1cc08b5be4-3840x2160.jpg",
-        publishedAt: new Date().toISOString()
-    },
-    {
-        title: "VCT Masters Madrid Concludes",
-        description: "Sentinels secure an incredible victory at Masters Madrid, defeating Gen.G in a 3-2 thriller. Watch the highlights now.",
-        url: "#",
-        urlToImage: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/news/a3ca8f25841cb8ca638da0bbcdfe92f150495f87-1920x1080.jpg",
-        publishedAt: new Date(Date.now() - 86400000).toISOString()
-    },
-    {
-        title: "New Map Rotation Update",
-        description: "Breeze and Split are rotating out of the Active Duty pool, making way for the return of Haven and a brand new subterranean map.",
-        url: "#",
-        urlToImage: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/news/f0f8a85514b82d9ea12fbede436f56ce2add0865-1920x1080.jpg",
-        publishedAt: new Date(Date.now() - 172800000).toISOString()
-    },
-    {
-        title: "Valorant Premier Stage 2 Registration",
-        description: "Assemble your squad! Stage 2 of Premier is opening soon. Here is everything you need to know about the new divisions and qualification paths.",
-        url: "#",
-        urlToImage: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/news/1381bf482b429074eceea4ba77be31fd95586bb8-1920x1080.jpg",
-        publishedAt: new Date(Date.now() - 259200000).toISOString()
-    },
-    {
-        title: "Kuronami Skinline Breaks Sales Records",
-        description: "The highly anticipated Kuronami bundle has become one of the most successful skinlines in Valorant history. See the conceptual art behind the blades.",
-        url: "#",
-        urlToImage: "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt6d555809ca41ecde/6594d21e8d42d3345465e921/Kuronami_Article_Banner_1920x1080.jpg",
-        publishedAt: new Date(Date.now() - 400000000).toISOString()
-    },
-    {
-        title: "Developer Diary: State of the Agents",
-        description: "The balance team discusses the current Duelist ecosystem internally, hinting at potential adjustments to Iso and Neon in upcoming patches.",
-        url: "#",
-        urlToImage: "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/bltc189a07a126830cb/64b59cb12e3532f8a8d11db8/State_of_the_Agents_July_2023_Banner.jpg",
-        publishedAt: new Date(Date.now() - 600000000).toISOString()
-    }
-];
-
 const ArticleCard = ({ article }) => {
     return (
         <a
@@ -98,13 +52,11 @@ const ArticleCard = ({ article }) => {
 const ValorantArticlesPage = () => {
     const [actualArticles, setActualArticles] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        // We use NewsAPI or a generic fast open API. 
-        // If the fetch fails (due to key limits or CORS), we flawlessly inject the 1:1 structured MOCK data.
         const fetchValorantNews = async () => {
             try {
-                // Notice we try fetching from the free public endpoint
                 const res = await fetch(`https://newsdata.io/api/1/news?apikey=pub_YOUR_FREE_KEY&q=Valorant&language=en`);
                 if (!res.ok) throw new Error('API Rate Limited or Missing Key');
                 
@@ -118,13 +70,14 @@ const ValorantArticlesPage = () => {
                         publishedAt: item.pubDate
                     }));
                     setActualArticles(mappedData);
+                    setError(null);
                 } else {
-                    throw new Error('No articles found');
+                    setActualArticles([]);
+                    setError(null);
                 }
             } catch (err) {
-                // Flawless degraded fallback
-                console.warn("Free API blocked/unavailable. Utilizing HD Mock Framework.");
-                setActualArticles(VALORANT_MOCK_NEWS);
+                setActualArticles([]);
+                setError(err.message || 'Unable to load Valorant articles right now.');
             } finally {
                 setLoading(false);
             }
@@ -168,6 +121,14 @@ const ValorantArticlesPage = () => {
                         <div className="w-12 h-12 border-4 border-[#0f1923]/10 border-t-[#ff4655] rounded-full animate-spin mb-4" />
                         <span className="font-black uppercase tracking-widest text-sm text-[#0f1923]/50">Decrypting Files...</span>
                     </div>
+                ) : error ? (
+                    <div className="flex items-center justify-center rounded border border-[#0f1923]/10 bg-white px-6 py-16 text-center text-sm font-medium text-[#0f1923]/70">
+                        {error}
+                    </div>
+                ) : actualArticles.length === 0 ? (
+                    <div className="flex items-center justify-center rounded border border-[#0f1923]/10 bg-white px-6 py-16 text-center text-sm font-medium text-[#0f1923]/70">
+                        No Valorant articles are available right now.
+                    </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
                         {actualArticles.map((article, index) => (
@@ -177,7 +138,7 @@ const ValorantArticlesPage = () => {
                 )}
                 
                 {/* Visual Load More */}
-                {!loading && (
+                {!loading && !error && actualArticles.length > 0 && (
                     <div className="flex justify-center mt-16">
                         <button className="group relative px-8 py-4 bg-transparent overflow-hidden border border-[#0f1923]/20 hover:border-[#ff4655] transition-colors">
                             <div className="absolute inset-0 bg-[#ff4655] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />

@@ -68,12 +68,13 @@ const Navbar = () => {
           <div className="flex h-full items-center gap-4 md:gap-6">
             <div className="hidden lg:block">
               {navItems.map((item, index) => {
+                const navClass = "nav-hover-btn px-4 text-white/80 hover:text-white transition-colors duration-300 text-sm font-medium";
                 if (item === 'News') {
                   return (
                     <Link
                       key={index}
                       to="/news"
-                      className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors"
+                      className={navClass}
                     >
                       {item}
                     </Link>
@@ -83,7 +84,7 @@ const Navbar = () => {
                     <Link
                       key={index}
                       to="/"
-                      className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors"
+                      className={navClass}
                     >
                       {item}
                     </Link>
@@ -92,15 +93,15 @@ const Navbar = () => {
                   return (
                     <DropdownMenu key={index}>
                       <DropdownMenuTrigger asChild>
-                        <button className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors outline-none cursor-pointer">
+                        <button className={`${navClass} outline-none cursor-pointer`}>
                           {item}
                         </button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-48 bg-[#0f1923] text-white border-white/10" sideOffset={8}>
-                        <DropdownMenuItem asChild className="cursor-pointer focus:bg-white/10 focus:text-white font-medium">
+                      <DropdownMenuContent className="w-48 bg-dark-900 text-white border border-white/10 rounded-lg shadow-xl" sideOffset={8}>
+                        <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 focus:text-white font-medium transition-colors">
                           <Link to="/games/valorant" className="w-full">Valorant</Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem asChild className="cursor-pointer focus:bg-white/10 focus:text-white font-medium">
+                        <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 focus:text-white font-medium transition-colors">
                           <Link to="/games/league-of-legends" className="w-full">League of Legends</Link>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -111,7 +112,7 @@ const Navbar = () => {
                     <Link
                       key={index}
                       to="/esport"
-                      className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors"
+                      className={navClass}
                     >
                       {item}
                     </Link>
@@ -122,7 +123,7 @@ const Navbar = () => {
                     <Link
                       key={index}
                       to="/profile"
-                      className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors"
+                      className={navClass}
                     >
                       {item}
                     </Link>
@@ -132,7 +133,7 @@ const Navbar = () => {
                     <Link
                       key={index}
                       to="/about"
-                      className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors"
+                      className={navClass}
                     >
                       {item}
                     </Link>
@@ -142,7 +143,7 @@ const Navbar = () => {
                     <Link
                       key={index}
                       to="/smurf-detector"
-                      className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors"
+                      className={navClass}
                     >
                       {item}
                     </Link>
@@ -152,7 +153,7 @@ const Navbar = () => {
                     <a
                       key={index}
                       href={`#${item.toLowerCase()}`}
-                      className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors"
+                      className={navClass}
                     >
                       {item}
                     </a>
@@ -162,14 +163,14 @@ const Navbar = () => {
               {isLoggedIn ? (
                 <button
                   onClick={handleLogout}
-                  className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors font-bold cursor-pointer"
+                  className="nav-hover-btn px-4 text-white/80 hover:text-white transition-colors duration-300 font-medium text-sm cursor-pointer"
                 >
                   Logout
                 </button>
               ) : (
                 <Link
                   to="/login"
-                  className="nav-hover-btn px-4 text-white hover:text-red-500 transition-colors font-bold"
+                  className="nav-hover-btn px-4 text-white/80 hover:text-white transition-colors duration-300 font-medium text-sm"
                 >
                   Login
                 </Link>
@@ -224,7 +225,7 @@ const Navbar = () => {
           </button>
         )}
         {navItems.map((item, index) => {
-          const commonClasses = "text-2xl sm:text-3xl font-black uppercase text-white hover:text-blue-500 transition-colors tracking-normal sm:tracking-tighter";
+          const commonClasses = "text-2xl sm:text-3xl font-black uppercase text-white hover:text-accent-primary transition-colors duration-300 tracking-normal sm:tracking-tighter";
           const handleClick = () => setIsMobileMenuOpen(false);
 
           if (item === 'News') {
@@ -235,8 +236,8 @@ const Navbar = () => {
             return (
               <div key={index} className="flex flex-col items-center gap-4 w-full">
                 <span className={`${commonClasses} text-white/50 cursor-default`}>{item}</span>
-                <Link to="/games/valorant" className="text-2xl font-black uppercase text-white hover:text-[#ff4655] transition-colors tracking-tighter" onClick={handleClick}>Valorant</Link>
-                <Link to="/games/league-of-legends" className="text-2xl font-black uppercase text-white hover:text-[#c89b3c] transition-colors tracking-tighter" onClick={handleClick}>League of Legends</Link>
+                <Link to="/games/valorant" className="text-2xl font-black uppercase text-white hover:text-accent-primary transition-colors duration-300 tracking-tighter" onClick={handleClick}>Valorant</Link>
+                <Link to="/games/league-of-legends" className="text-2xl font-black uppercase text-white hover:text-accent-primary transition-colors duration-300 tracking-tighter" onClick={handleClick}>League of Legends</Link>
               </div>
             )
           } else if (item === 'Esport') {
@@ -256,7 +257,7 @@ const Navbar = () => {
         {isLoggedIn ? (
           <button
             onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
-            className="mt-8 px-8 py-3 bg-red-600 text-white font-bold rounded-full uppercase tracking-wider hover:bg-red-700 transition-colors"
+            className="mt-8 px-8 py-3 bg-gradient-to-r from-accent-primary to-blue-400 text-black font-bold rounded-full uppercase tracking-wider hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-300"
           >
             Logout
           </button>
@@ -264,7 +265,7 @@ const Navbar = () => {
           <Link
             to="/login"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="mt-8 px-8 py-3 bg-blue-600 text-white font-bold rounded-full uppercase tracking-wider hover:bg-blue-700 transition-colors"
+            className="mt-8 px-8 py-3 bg-gradient-to-r from-accent-primary to-blue-400 text-black font-bold rounded-full uppercase tracking-wider hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-300"
           >
             Login
           </Link>

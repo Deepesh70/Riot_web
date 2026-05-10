@@ -52,4 +52,4 @@ dist-ssr
 
 .package-lock.json
 
-graphify-out
+graphify-out/

@@ -4,26 +4,26 @@ import Button from '../common/Button';
 
 const Story = () => {
   return (
-    <div id="story" className="min-h-dvh w-full px-4 text-black">
+    <div id="story" className="min-h-dvh w-full px-4 bg-dark-900 text-white">
       <div className="flex size-full flex-col items-center pt-24 pb-24">
 
-        <p className="font-general text-sm text-blue-500 uppercase md:text-[10px]">
+        <p className="font-general text-sm text-accent-primary uppercase md:text-xs tracking-widest">
           The World of Runeterra
         </p>
 
         <div className="relative size-full">
           <AnimatedTitle
             title="Expl<b>o</b>re the <br /> Lore of Le<b>g</b>ends"
-            containerClass="mt-5 pointer-events-none mix-blend-difference relative z-10"
+            containerClass="mt-5 pointer-events-none relative z-10 text-white"
           />
 
 
           <div className="story-img-container transition-all duration-300 transform hover:scale-105">
             <div className="story-img-mask relative">
-              <div className="story-image-content rounded-3xl overflow-hidden shadow-xl">
+              <div className="story-image-content rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="/img/gallery-3.jpg"
-                  alt="Realm Entrance"
+                  alt="Runeterra realm entrance"
                   className="object-contain w-full h-full"
                 />
               </div>
@@ -61,7 +61,7 @@ const Story = () => {
 
         <div className="-mt-80 flex w-full justify-center md:-mt-64 md:me-44 md:justify-end">
           <div className="flex h-full w-fit flex-col items-center md:items-start">
-            <p className="mt-3 max-w-sm text-center font-circular-web text-black md:text-start">
+            <p className="mt-3 max-w-sm text-center font-circular-web text-white/80 md:text-start leading-relaxed">
               From the bustling streets of Zaun to the celestial peak of Targon,
               Runeterra is home to champions of all kinds.
             </p>
@@ -69,7 +69,7 @@ const Story = () => {
             <Button
               id="realm-btn"
               title="Read Universe"
-              containerClass="mt-5 bg-blue-500 text-black hover:bg-blue-600 z-auto"
+              containerClass="mt-5 z-auto"
             />
           </div>
         </div>

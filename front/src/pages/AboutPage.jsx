@@ -4,6 +4,7 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+import AutoPlayVideo from '../components/common/AutoPlayVideo';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,20 +33,47 @@ const STATS = [
     { number: '5000+', label: 'Rioters Worldwide' },
 ];
 
-const TeamCard = ({ member, index }) => {
+const TeamCard = ({ member }) => {
     const cardRef = useRef(null);
+    const rotateXToRef = useRef(null);
+    const rotateYToRef = useRef(null);
+
+    useEffect(() => {
+        const card = cardRef.current;
+
+        if (!card || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return undefined;
+        }
+
+        rotateXToRef.current = gsap.quickTo(card, 'rotateX', {
+            duration: 0.22,
+            ease: 'power2.out',
+        });
+        rotateYToRef.current = gsap.quickTo(card, 'rotateY', {
+            duration: 0.22,
+            ease: 'power2.out',
+        });
+
+        return () => {
+            rotateXToRef.current = null;
+            rotateYToRef.current = null;
+            gsap.killTweensOf(card);
+            gsap.set(card, { clearProps: 'transform' });
+        };
+    }, []);
 
     const handleMouseMove = useCallback((e) => {
-        if (!cardRef.current) return;
+        if (!cardRef.current || !rotateXToRef.current || !rotateYToRef.current) return;
         const rect = cardRef.current.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
         const y = ((e.clientY - rect.top) / rect.height - 0.5) * -12;
-        gsap.to(cardRef.current, { rotateY: x, rotateX: y, duration: 0.4, ease: 'power2.out' });
+        rotateXToRef.current(y);
+        rotateYToRef.current(x);
     }, []);
 
     const handleMouseLeave = useCallback(() => {
-        if (!cardRef.current) return;
-        gsap.to(cardRef.current, { rotateY: 0, rotateX: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)' });
+        rotateXToRef.current?.(0);
+        rotateYToRef.current?.(0);
     }, []);
 
     const initials = member.name.split(' ').map(n => n[0]).join('');
@@ -83,18 +111,38 @@ const AboutPage = () => {
     const cursorGlowRef = useRef(null);
 
     useEffect(() => {
+        const cursorGlow = cursorGlowRef.current;
+
+        if (!cursorGlow) {
+            return undefined;
+        }
+
+        const desktopMediaQuery = window.matchMedia('(min-width: 1024px)');
+        const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        if (!desktopMediaQuery.matches || reducedMotionQuery.matches) {
+            return undefined;
+        }
+
+        const moveX = gsap.quickTo(cursorGlow, 'x', {
+            duration: 0.35,
+            ease: 'power3.out',
+        });
+        const moveY = gsap.quickTo(cursorGlow, 'y', {
+            duration: 0.35,
+            ease: 'power3.out',
+        });
+
         const handleMouseMove = (e) => {
-            if (cursorGlowRef.current) {
-                gsap.to(cursorGlowRef.current, {
-                    x: e.clientX,
-                    y: e.clientY,
-                    duration: 0.8,
-                    ease: 'power2.out',
-                });
-            }
+            moveX(e.clientX);
+            moveY(e.clientY);
         };
+
         window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            gsap.killTweensOf(cursorGlow);
+        };
     }, []);
 
     useGSAP(() => {
@@ -215,9 +263,9 @@ const AboutPage = () => {
             <section className="relative py-20 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="relative rounded-3xl overflow-hidden h-[50vh] md:h-[60vh] about-parallax" style={{ border: '1px solid rgba(255,255,255,0.06)' }}>
-                        <video
+                        <AutoPlayVideo
                             src="/videos/feature-1.mp4"
-                            autoPlay loop muted playsInline
+                            preload="metadata"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
                         <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #0a0a0a 0%, transparent 40%, transparent 60%, #0a0a0a 100%)' }} />
@@ -260,7 +308,7 @@ const AboutPage = () => {
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                         {TEAM.map((member, i) => (
-                            <TeamCard key={i} member={member} index={i} />
+                            <TeamCard key={i} member={member} />
                         ))}
                     </div>
                 </div>
