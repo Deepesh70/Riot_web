@@ -2,11 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import AutoPlayVideo from '../components/common/AutoPlayVideo';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const { login } = useAuth();
     const navigate = useNavigate();
     const containerRef = useRef(null);
 
@@ -28,21 +31,14 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
-            const data = await response.json();
-            if (response.ok) {
-                localStorage.setItem('token', data.token);
-                navigate('/');
-            } else {
-                setError(data.message || 'Login failed');
-            }
-        } catch {
-            setError('Something went wrong. Please try again.');
+            await login(email, password);
+            navigate('/');
+        } catch (err) {
+            setError(err.message || 'Login failed. Please check your credentials.');
+        } finally {
+            setLoading(false);
         }
     };
 

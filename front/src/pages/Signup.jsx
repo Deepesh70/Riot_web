@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import AutoPlayVideo from '../components/common/AutoPlayVideo';
+import { useAuth } from '../context/AuthContext';
 
 const Signup = () => {
     const [name, setName] = useState('');
@@ -10,6 +11,8 @@ const Signup = () => {
     const [riotGameName, setRiotGameName] = useState('');
     const [riotTagLine, setRiotTagLine] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const { signup } = useAuth();
     const navigate = useNavigate();
     const containerRef = useRef(null);
 
@@ -31,20 +34,14 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/signup`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, password, riotGameName, riotTagLine }),
-            });
-            const data = await response.json();
-            if (response.ok) {
-                navigate('/login');
-            } else {
-                setError(data.message || 'Signup failed');
-            }
-        } catch {
-            setError('Something went wrong. Please try again.');
+            await signup({ name, email, password, riotGameName, riotTagLine });
+            navigate('/login');
+        } catch (err) {
+            setError(err.message || 'Signup failed. Please verify your details.');
+        } finally {
+            setLoading(false);
         }
     };
 

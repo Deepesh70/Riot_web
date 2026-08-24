@@ -8,22 +8,26 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
+import { useAuth } from '../../context/AuthContext';
 
 const navItems = ['Home', 'Games', 'News', 'Esport', 'Smurf Detector', 'About', 'Profile'];
 
 const Navbar = () => {
-
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isIndicatorActive, setIsIndicatorActive] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
   const audioElementRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated, logout } = useAuth();
 
   const toggleAudio = () => {
     setIsAudioPlaying((prev) => !prev);
     setIsIndicatorActive((prev) => !prev);
-  }
+  };
 
   useEffect(() => {
     if (isAudioPlaying) {
@@ -33,23 +37,52 @@ const Navbar = () => {
     }
   }, [isAudioPlaying]);
 
-
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token);
-  }, []);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Always show near the top
+      if (currentScrollY < 40) {
+        setIsNavVisible(true);
+        setLastScrollY(currentScrollY);
+        return;
+      }
+
+      // If mobile menu is open, do not hide navbar
+      if (isMobileMenuOpen) {
+        setIsNavVisible(true);
+        return;
+      }
+
+      // Scrolling Down -> Hide Navbar
+      if (currentScrollY > lastScrollY && currentScrollY - lastScrollY > 5) {
+        setIsNavVisible(false);
+      } 
+      // Scrolling Up -> Show Navbar
+      else if (currentScrollY < lastScrollY && lastScrollY - currentScrollY > 5) {
+        setIsNavVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY, isMobileMenuOpen]);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
+    logout();
     navigate('/login');
   };
 
   return (
-    <div className="fixed inset-x-0 top-4 z-50 h-16 border-none transition-all duration-700 sm:inset-x-6">
+    <div
+      className={`fixed inset-x-0 top-4 z-50 h-16 border-none transition-all duration-500 ease-in-out sm:inset-x-6 ${
+        isNavVisible
+          ? 'translate-y-0 opacity-100'
+          : '-translate-y-24 opacity-0 pointer-events-none'
+      }`}
+    >
       <header className="absolute top-1/2 w-full -translate-y-1/2">
         <nav className="flex size-full items-center justify-between p-4 bg-black/50 backdrop-blur-md rounded-lg">
           <div className="flex items-center gap-7">
@@ -118,7 +151,7 @@ const Navbar = () => {
                     </Link>
                   )
                 } else if (item === 'Profile') {
-                  if (!isLoggedIn) return null;
+                  if (!isAuthenticated) return null;
                   return (
                     <Link
                       key={index}
@@ -160,7 +193,7 @@ const Navbar = () => {
                   )
                 }
               })}
-              {isLoggedIn ? (
+              {isAuthenticated ? (
                 <button
                   onClick={handleLogout}
                   className="nav-hover-btn px-4 text-white/80 hover:text-white transition-colors duration-300 font-medium text-sm cursor-pointer"
@@ -245,7 +278,7 @@ const Navbar = () => {
           } else if (item === 'About') {
             return <Link key={index} to="/about" className={commonClasses} onClick={handleClick}>{item}</Link>
           } else if (item === 'Profile') {
-            if (!isLoggedIn) return null;
+            if (!isAuthenticated) return null;
             return <Link key={index} to="/profile" className={commonClasses} onClick={handleClick}>{item}</Link>
           } else if (item === 'Smurf Detector') {
             return <Link key={index} to="/smurf-detector" className={commonClasses} onClick={handleClick}>{item}</Link>
@@ -254,7 +287,7 @@ const Navbar = () => {
           }
         })}
 
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <button
             onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
             className="mt-8 px-8 py-3 bg-gradient-to-r from-accent-primary to-blue-400 text-black font-bold rounded-full uppercase tracking-wider hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-300"
