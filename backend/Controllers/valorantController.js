@@ -1,3 +1,5 @@
+import cacheService from '../Utils/cacheService.js';
+
 export const getEsportsSchedule = async (req, res) => {
     try {
         const apiKey = process.env.HENRIK_DEV_API_KEY;
@@ -5,34 +7,46 @@ export const getEsportsSchedule = async (req, res) => {
             return res.status(503).json({ message: 'HENRIK_DEV_API_KEY is not configured on the server' });
         }
 
-        let url = 'https://api.henrikdev.xyz/valorant/v1/esports/schedule';
-        const params = new URLSearchParams();
-        if (req.query.region) params.append('region', req.query.region);
-        if (req.query.league) params.append('league', req.query.league);
-        const qs = params.toString();
-        if (qs) url += `?${qs}`;
+        const region = req.query.region || '';
+        const league = req.query.league || '';
+        const cacheKey = `valorant:esports:${region}:${league}`;
 
-        const response = await fetch(url, {
-            headers: { 'Authorization': apiKey }
-        });
+        const data = await cacheService.getOrSet(cacheKey, async () => {
+            let url = 'https://api.henrikdev.xyz/valorant/v1/esports/schedule';
+            const params = new URLSearchParams();
+            if (region) params.append('region', region);
+            if (league) params.append('league', league);
+            const qs = params.toString();
+            if (qs) url += `?${qs}`;
 
-        if (!response.ok) {
-            return res.status(response.status).json({ message: `HenrikDev API error: ${response.status}` });
-        }
+            const response = await fetch(url, {
+                headers: { 'Authorization': apiKey }
+            });
 
-        const data = await response.json();
+            if (!response.ok) {
+                const err = new Error(`HenrikDev API error: ${response.status}`);
+                err.status = response.status;
+                throw err;
+            }
+
+            return await response.json();
+        }, 600); // 10 minutes cache
+
         res.json(data);
     } catch (error) {
         console.error('Error fetching esports schedule:', error.message);
-        res.status(500).json({ message: 'Error fetching esports schedule' });
+        res.status(error.status || 500).json({ message: error.message || 'Error fetching esports schedule' });
     }
 };
 
 export const getAgents = async (req, res) => {
     try {
-        const response = await fetch('https://valorant-api.com/v1/agents?isPlayableCharacter=true');
-        if (!response.ok) return res.status(response.status).json({ message: 'Valorant API error' });
-        const data = await response.json();
+        const data = await cacheService.getOrSet('valorant:agents:all', async () => {
+            const response = await fetch('https://valorant-api.com/v1/agents?isPlayableCharacter=true');
+            if (!response.ok) throw new Error('Valorant API error');
+            return await response.json();
+        }, 86400); // 24 hours cache
+
         res.json(data);
     } catch (error) {
         console.error('Error fetching agents:', error.message);
@@ -42,9 +56,13 @@ export const getAgents = async (req, res) => {
 
 export const getAgentById = async (req, res) => {
     try {
-        const response = await fetch(`https://valorant-api.com/v1/agents/${req.params.id}`);
-        if (!response.ok) return res.status(response.status).json({ message: 'Valorant API error' });
-        const data = await response.json();
+        const { id } = req.params;
+        const data = await cacheService.getOrSet(`valorant:agent:${id}`, async () => {
+            const response = await fetch(`https://valorant-api.com/v1/agents/${id}`);
+            if (!response.ok) throw new Error('Valorant API error');
+            return await response.json();
+        }, 86400); // 24 hours cache
+
         res.json(data);
     } catch (error) {
         console.error('Error fetching agent:', error.message);
@@ -54,13 +72,18 @@ export const getAgentById = async (req, res) => {
 
 export const getMaps = async (req, res) => {
     try {
-        const response = await fetch('https://valorant-api.com/v1/maps');
-        if (!response.ok) return res.status(response.status).json({ message: 'Valorant API error' });
-        const data = await response.json();
-        const standardMaps = data.data.filter(m => m.tacticalDescription && m.displayIcon);
-        res.json({ status: data.status, data: standardMaps });
+        const data = await cacheService.getOrSet('valorant:maps:standard', async () => {
+            const response = await fetch('https://valorant-api.com/v1/maps');
+            if (!response.ok) throw new Error('Valorant API error');
+            const json = await response.json();
+            const standardMaps = json.data.filter(m => m.tacticalDescription && m.displayIcon);
+            return { status: json.status, data: standardMaps };
+        }, 86400); // 24 hours cache
+
+        res.json(data);
     } catch (error) {
         console.error('Error fetching maps:', error.message);
         res.status(500).json({ message: 'Error fetching maps' });
     }
 };
+

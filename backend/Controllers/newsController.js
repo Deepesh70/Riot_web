@@ -1,3 +1,5 @@
+import cacheService from '../Utils/cacheService.js';
+
 export const getNews = async (req, res) => {
     try {
         const apiKey = process.env.NEWS_API_KEY;
@@ -6,16 +8,22 @@ export const getNews = async (req, res) => {
         }
 
         const query = req.query.q || 'gaming';
-        const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&language=en&sortBy=publishedAt&apiKey=${apiKey}`);
+        const cacheKey = `news:query:${query.toLowerCase()}`;
 
-        if (!response.ok) {
-            return res.status(response.status).json({ message: 'External API Error' });
-        }
+        const data = await cacheService.getOrSet(cacheKey, async () => {
+            const response = await fetch(`https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&language=en&sortBy=publishedAt&apiKey=${apiKey}`);
+            if (!response.ok) {
+                const err = new Error(`External API Error: ${response.status}`);
+                err.status = response.status;
+                throw err;
+            }
+            return await response.json();
+        }, 900); // 15 minutes cache
 
-        const data = await response.json();
         res.json(data);
     } catch (error) {
         console.error('Error fetching news:', error.message);
-        res.status(500).json({ message: 'Error fetching news' });
+        res.status(error.status || 500).json({ message: error.message || 'Error fetching news' });
     }
 };
+

@@ -4,10 +4,12 @@ const AutoPlayVideo = ({
   active = true,
   className,
   preload = 'metadata',
+  poster,
   rootMargin = '200px 0px',
   threshold = 0.35,
   ...props
 }) => {
+  const derivedPoster = poster || (props.src && props.src.endsWith('.mp4') ? props.src.replace(/\.mp4$/, '-poster.webp') : undefined);
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -82,6 +84,7 @@ const AutoPlayVideo = ({
       loop
       muted
       playsInline
+      poster={derivedPoster}
       preload={preload}
       {...props}
     />

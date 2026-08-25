@@ -1,8 +1,28 @@
 {
-    "rewrites": [
+  "headers": [
+    {
+      "source": "/(assets|videos|img|audio)/(.*)",
+      "headers": [
         {
-            "source": "/(.*)",
-            "destination": "/index.html"
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
-    ]
+      ]
+    },
+    {
+      "source": "/(.*)\\.(ico|png|jpg|jpeg|webp|svg|woff|woff2|ttf)$",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }

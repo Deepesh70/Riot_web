@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import compression from 'compression';
 import mongoose from 'mongoose';
 import mainRoutes from './Routes/index.js';
 import logger from './Utils/logger.js';
@@ -11,7 +12,8 @@ const app = express();
 // Trust reverse proxy (e.g., Vercel / Nginx) for rate-limiting & secure headers
 app.set('trust proxy', 1);
 
-// Security Middlewares
+// Performance & Security Middlewares
+app.use(compression());
 app.use(helmetMiddleware);
 app.use(corsMiddleware);
 app.use(apiLimiter);
