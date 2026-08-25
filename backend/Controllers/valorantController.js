@@ -2,7 +2,7 @@ export const getEsportsSchedule = async (req, res) => {
     try {
         const apiKey = process.env.HENRIK_DEV_API_KEY;
         if (!apiKey) {
-            return res.status(500).json({ message: 'HENRIK_DEV_API_KEY is missing' });
+            return res.status(503).json({ message: 'HENRIK_DEV_API_KEY is not configured on the server' });
         }
 
         let url = 'https://api.henrikdev.xyz/valorant/v1/esports/schedule';

@@ -288,7 +288,7 @@ body {
 .three-body {
   --uib-size: 35px;
   --uib-speed: 0.8s;
-  --uib-color: #5d3fd3;
+  --uib-color: #4FB7DD;
   position: relative;
   display: inline-block;
   height: var(--uib-size);
@@ -462,8 +462,8 @@ body {
 }
 
 .esport-match-card:hover {
-  border-color: rgba(239, 68, 68, 0.25);
-  box-shadow: 0 8px 40px -12px rgba(239, 68, 68, 0.1), 0 0 0 1px rgba(239, 68, 68, 0.08);
+  border-color: rgba(79, 183, 221, 0.35);
+  box-shadow: 0 8px 40px -12px rgba(79, 183, 221, 0.15), 0 0 0 1px rgba(79, 183, 221, 0.1);
 }
 
 /* ── Region Tabs ── */
@@ -489,8 +489,8 @@ body {
 
 .esport-region-tab.active {
   color: #fff;
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.25);
+  background: rgba(79, 183, 221, 0.12);
+  border-color: rgba(79, 183, 221, 0.35);
 }
 
 /* ── Live Dot ── */
@@ -499,7 +499,7 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #ef4444;
+  background: #4FB7DD;
   animation: esportLivePulse 1.5s ease-in-out infinite;
 }
 
@@ -507,11 +507,11 @@ body {
 
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+    box-shadow: 0 0 0 0 rgba(79, 183, 221, 0.6);
   }
 
   50% {
-    box-shadow: 0 0 0 5px rgba(239, 68, 68, 0);
+    box-shadow: 0 0 0 5px rgba(79, 183, 221, 0);
   }
 }
 
@@ -534,9 +534,9 @@ body {
 
 .auth-input:focus {
   outline: none;
-  border-color: rgba(239, 68, 68, 0.5);
+  border-color: rgba(79, 183, 221, 0.6);
   background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.08);
+  box-shadow: 0 0 0 3px rgba(79, 183, 221, 0.12);
 }
 
 .auth-input-icon {
@@ -555,8 +555,8 @@ body {
   margin-top: 0.5rem;
   padding: 0.875rem;
   border-radius: 0.75rem;
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-  color: #fff;
+  background: linear-gradient(135deg, #4FB7DD, #38bdf8);
+  color: #000;
   font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -567,9 +567,9 @@ body {
 }
 
 .auth-submit-btn:hover {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background: linear-gradient(135deg, #67c5e7, #4FB7DD);
   transform: translateY(-1px);
-  box-shadow: 0 8px 25px -8px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 8px 25px -8px rgba(79, 183, 221, 0.45);
 }
 
 /* ── About Team Card ── */
@@ -583,8 +583,8 @@ body {
 }
 
 .about-team-card:hover {
-  border-color: rgba(239, 68, 68, 0.2);
-  box-shadow: 0 8px 30px -10px rgba(239, 68, 68, 0.08);
+  border-color: rgba(79, 183, 221, 0.3);
+  box-shadow: 0 8px 30px -10px rgba(79, 183, 221, 0.15);
 }
 
 /* ── Profile Page ── */
@@ -603,16 +603,16 @@ body {
 
 @keyframes profileAvatarGlow {
   0%, 100% {
-    box-shadow: 0 0 20px -5px rgba(239, 68, 68, 0.3);
+    box-shadow: 0 0 20px -5px rgba(79, 183, 221, 0.4);
   }
   50% {
-    box-shadow: 0 0 30px -3px rgba(239, 68, 68, 0.5);
+    box-shadow: 0 0 30px -3px rgba(79, 183, 221, 0.6);
   }
 }
 
 .profile-search-wrapper:focus-within {
-  border-color: rgba(239, 68, 68, 0.3);
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.06);
+  border-color: rgba(79, 183, 221, 0.4);
+  box-shadow: 0 0 0 3px rgba(79, 183, 221, 0.1);
 }
 
 .profile-match-card {

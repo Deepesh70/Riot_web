@@ -54,20 +54,16 @@ const AgentDetails = () => {
 
     if (loading || !agent) {
         return (
-            <div className="min-h-screen bg-[#0f1923] flex items-center justify-center">
-                <div className="three-body">
-                    <div className="three-body__dot"></div>
-                    <div className="three-body__dot"></div>
-                    <div className="three-body__dot"></div>
-                </div>
+            <div className="min-h-screen bg-dark-900 flex items-center justify-center">
+                <div className="w-10 h-10 border-2 border-accent-primary border-t-transparent rounded-full animate-spin"></div>
             </div>
         );
     }
 
     // Use agent's API gradient colors for styling
     const bgGradient = agent.backgroundGradientColors
-        ? `linear-gradient(135deg, #${agent.backgroundGradientColors[0] || '1a1a2e'}40, #0f1923, #${agent.backgroundGradientColors[2] || '16213e'}40)`
-        : 'linear-gradient(135deg, #1a1a2e40, #0f1923, #16213e40)';
+        ? `linear-gradient(135deg, #${agent.backgroundGradientColors[0] || '1a1a2e'}40, #0a0a0a, #${agent.backgroundGradientColors[2] || '16213e'}40)`
+        : 'linear-gradient(135deg, rgba(79,183,221,0.1), #0a0a0a, rgba(87,36,255,0.1))';
 
     // Get the videos for this agent
     const agentVideosList = agentVideos[id];
@@ -87,7 +83,7 @@ const AgentDetails = () => {
     const currentVideo = getCurrentVideo();
 
     return (
-        <div ref={containerRef} className="relative min-h-screen bg-[#0f1923] text-white overflow-hidden flex items-center">
+        <div ref={containerRef} className="relative min-h-screen bg-dark-900 text-white overflow-hidden flex items-center font-sans">
             {/* Background Map/Gradient */}
             <div className="absolute inset-0" style={{ background: bgGradient }} />
 
@@ -110,24 +106,24 @@ const AgentDetails = () => {
                 />
             )}
 
-            {/* Frame border like the screenshot */}
+            {/* Frame border */}
             {!isVideoFocus && (
-                <div className="absolute inset-4 md:inset-8 border-4 border-[#ff4655] rounded-xl pointer-events-none opacity-80 mix-blend-screen" />
+                <div className="absolute inset-4 md:inset-8 border-2 border-accent-primary/40 rounded-2xl pointer-events-none opacity-80" />
             )}
 
             {/* Back Button */}
             <button
                 onClick={() => navigate(-1)}
-                className="absolute top-10 left-10 md:top-14 md:left-14 z-50 flex items-center gap-2 text-white/50 hover:text-white transition-colors cursor-pointer"
+                className="absolute top-10 left-10 md:top-14 md:left-14 z-50 flex items-center gap-2 text-white/50 hover:text-accent-primary transition-colors cursor-pointer"
             >
                 <TiArrowBack size={36} />
-                <span className="font-bold uppercase tracking-widest text-sm hidden sm:block">Back</span>
+                <span className="font-bold uppercase tracking-widest text-xs hidden sm:block font-mono">Back</span>
             </button>
 
             {(currentVideo || agent.background) && (
                 <button
                     onClick={() => setIsVideoFocus(prev => !prev)}
-                    className="absolute top-10 right-10 md:top-14 md:right-14 z-50 px-4 py-2 rounded-md border border-white/30 bg-black/45 text-white/90 hover:bg-black/65 hover:border-white/60 transition-all text-xs sm:text-sm font-bold uppercase tracking-widest"
+                    className="absolute top-10 right-10 md:top-14 md:right-14 z-50 px-4 py-2 rounded-full border border-white/20 bg-dark-800/80 text-white/90 hover:border-accent-primary hover:text-accent-primary transition-all text-xs font-bold uppercase tracking-widest cursor-pointer backdrop-blur-md"
                     type="button"
                 >
                     {isVideoFocus ? 'Show Agent Details' : 'Show Full Background'}
@@ -142,7 +138,7 @@ const AgentDetails = () => {
                     <img
                         src={agent.fullPortrait}
                         alt={agent.displayName}
-                        className="h-[50vh] sm:h-[60vh] lg:h-[85vh] object-contain drop-shadow-[0_0_50px_rgba(255,255,255,0.1)]"
+                        className="h-[50vh] sm:h-[60vh] lg:h-[85vh] object-contain drop-shadow-[0_0_50px_rgba(79,183,221,0.2)]"
                     />
                 </div>
 
@@ -155,12 +151,11 @@ const AgentDetails = () => {
                             {agent.role?.displayIcon && (
                                 <img src={agent.role.displayIcon} alt={agent.role?.displayName} className="w-5 h-5 brightness-200" />
                             )}
-                            <h3 className="text-white/70 text-sm font-bold uppercase tracking-[0.4em]">
+                            <h3 className="text-accent-primary text-xs font-bold uppercase tracking-[0.4em] font-mono">
                                 {agent.role?.displayName || 'Unknown Role'}
                             </h3>
                         </div>
-                        <h1 className="font-riot text-7xl sm:text-8xl lg:text-[140px] font-black uppercase leading-[0.85] tracking-tighter"
-                            style={{ textShadow: '4px 4px 0 #000' }}>
+                        <h1 className="font-riot text-7xl sm:text-8xl lg:text-[140px] font-black uppercase leading-[0.85] tracking-tighter text-white">
                             {agent.displayName}
                         </h1>
                     </div>
@@ -181,16 +176,16 @@ const AgentDetails = () => {
                                         <button
                                             key={idx}
                                             onClick={() => setSelectedAbility(ability)}
-                                            className={`relative w-14 h-14 p-2.5 border flex items-center justify-center rounded transition-all duration-300 ${isSelected
-                                                ? 'border-[#ff4655] bg-[#ff4655] shadow-[0_0_20px_rgba(255,70,85,0.4)]'
-                                                : 'border-white/20 bg-black/40 hover:border-white/60 hover:bg-black/80'
+                                            className={`relative w-14 h-14 p-2.5 border rounded-xl flex items-center justify-center transition-all duration-300 cursor-pointer ${isSelected
+                                                ? 'border-accent-primary bg-accent-primary/20 shadow-[0_0_20px_rgba(79,183,221,0.4)] scale-105'
+                                                : 'border-white/10 bg-dark-800/80 hover:border-white/40 hover:bg-dark-700'
                                                 }`}
                                         >
                                             {ability.displayIcon ? (
                                                 <img
                                                     src={ability.displayIcon}
                                                     alt={ability.displayName}
-                                                    className={`w-full h-full object-contain ${isSelected ? 'brightness-0 invert' : 'opacity-80'}`}
+                                                    className={`w-full h-full object-contain ${isSelected ? 'brightness-125' : 'opacity-70'}`}
                                                 />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center text-xs text-white/50">?</div>
@@ -202,14 +197,14 @@ const AgentDetails = () => {
 
                             {/* Selected Ability Details */}
                             {selectedAbility && (
-                                <div className="bg-black/60 border border-white/5 p-6 rounded-lg backdrop-blur-md relative overflow-hidden min-h-[200px]">
-                                    {/* Red accent line */}
-                                    <div className="absolute top-0 left-0 w-1 h-full bg-[#ff4655]" />
+                                <div className="bg-dark-800/90 border border-white/10 p-6 rounded-2xl backdrop-blur-md relative overflow-hidden min-h-[200px] shadow-2xl">
+                                    {/* Accent line */}
+                                    <div className="absolute top-0 left-0 w-1 h-full bg-accent-primary" />
 
-                                    <h4 className="text-white font-black uppercase tracking-widest mb-1 text-lg">
+                                    <h4 className="text-white font-black uppercase tracking-wider mb-1 text-lg font-riot">
                                         {selectedAbility.displayName}
                                     </h4>
-                                    <h5 className="text-[#ff4655] text-[10px] font-bold uppercase tracking-widest mb-3">
+                                    <h5 className="text-accent-primary text-[10px] font-bold uppercase tracking-widest mb-3 font-mono">
                                         Slot: {selectedAbility.slot}
                                     </h5>
                                     <p className="text-white/60 text-sm leading-relaxed">

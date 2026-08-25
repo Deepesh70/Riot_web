@@ -12,7 +12,7 @@ const Games = () => {
     const activeGame = game || 'valorant';
 
     return (
-        <main className="min-h-screen bg-[#0f1923] overflow-x-hidden">
+        <main className="min-h-screen bg-dark-900 overflow-x-hidden">
             <Navbar />
 
 

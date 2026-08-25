@@ -51,10 +51,10 @@ const Login = () => {
                 {/* Top nav */}
                 <div className="flex items-center justify-between flex-shrink-0 mb-8">
                     <Link to="/" className="login-brand flex items-center gap-2.5">
-                        <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #ef4444, #b91c1c)' }}>
-                            <span className="text-white font-black text-base">R</span>
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #4FB7DD, #5724FF)' }}>
+                            <span className="text-black font-black text-base">R</span>
                         </div>
-                        <span className="text-white font-black text-lg tracking-tight uppercase">Riot</span>
+                        <span className="text-white font-black text-lg tracking-tight uppercase font-riot">Riot</span>
                     </Link>
                     <div className="login-brand flex items-center gap-4 sm:gap-8">
                         <Link to="/" className="text-white/50 hover:text-white text-xs font-bold uppercase tracking-[0.15em] transition-colors">Home</Link>
@@ -64,19 +64,19 @@ const Login = () => {
 
                 {/* Form */}
                 <div className="max-w-[420px] w-full flex-shrink-0 my-auto py-4">
-                    <p className="login-heading text-red-500 text-xs font-bold uppercase tracking-[0.25em] mb-4">Welcome Back</p>
-                    <h1 className="login-heading text-white font-black text-5xl md:text-6xl uppercase leading-[0.95] mb-4">
+                    <p className="login-heading text-accent-primary text-xs font-bold uppercase tracking-[0.25em] mb-4">Welcome Back</p>
+                    <h1 className="login-heading text-white font-black text-5xl md:text-6xl uppercase leading-[0.95] mb-4 font-riot">
                         Sign In
                     </h1>
                     <p className="login-heading text-white/40 text-sm mb-10">
                         Don't have an Account?{' '}
-                        <Link to="/signup" className="text-red-400 hover:text-red-300 font-bold transition-colors">
+                        <Link to="/signup" className="text-accent-primary hover:text-blue-300 font-bold transition-colors">
                             Create One
                         </Link>
                     </p>
 
                     {error && (
-                        <div className="login-field mb-6 px-4 py-3 rounded-xl text-sm text-red-300" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)' }}>
+                        <div className="login-field mb-6 px-4 py-3 rounded-xl text-sm text-accent-primary bg-accent-primary/10 border border-accent-primary/30">
                             {error}
                         </div>
                     )}

@@ -9,5 +9,6 @@ router.get('/valorant/agents/:id', cacheMiddleware(86400), getAgentById);
 router.get('/valorant/maps', cacheMiddleware(86400), getMaps);
 
 router.get('/esports/schedule', cacheMiddleware(3600), getEsportsSchedule);
+router.get('/valorant/schedule', cacheMiddleware(3600), getEsportsSchedule);
 
 export default router;

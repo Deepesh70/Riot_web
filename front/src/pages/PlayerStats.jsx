@@ -72,43 +72,43 @@ const PlayerStats = () => {
 
 
 
-    if (loading) return <div className="min-h-screen bg-black text-white flex items-center justify-center font-bold text-xl">Loading Match History...</div>;
+    if (loading) return <div className="min-h-screen bg-dark-900 text-white flex items-center justify-center font-bold text-base font-mono uppercase tracking-widest">Loading Match History...</div>;
     if (error) return (
-        <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-4">
-            <p className="text-red-500 font-bold text-2xl">Error: {error}</p>
-            <Link to="/profile" className="text-blue-500 hover:underline">Back to Profile</Link>
+        <div className="min-h-screen bg-dark-900 text-white flex flex-col items-center justify-center gap-4">
+            <p className="text-accent-primary font-bold text-xl font-mono">Error: {error}</p>
+            <Link to="/profile" className="text-accent-primary hover:underline text-sm font-bold uppercase tracking-wider">Back to Profile</Link>
         </div>
     );
 
     return (
-        <div ref={containerRef} className="min-h-screen bg-black text-white font-sans">
+        <div ref={containerRef} className="min-h-screen bg-dark-900 text-white font-sans">
             <Navbar />
             
-            <div className="pt-24 px-4 max-w-6xl mx-auto">
-                <Link to="/profile" className="inline-flex items-center gap-2 text-neutral-400 hover:text-white mb-6 transition-colors">
+            <div className="pt-28 px-4 max-w-6xl mx-auto pb-20">
+                <Link to="/profile" className="inline-flex items-center gap-2 text-white/50 hover:text-white mb-6 transition-colors text-xs font-bold uppercase tracking-wider">
                     <span>&larr;</span> Back to Search
                 </Link>
 
                 {/* Header */}
-                <div className="bg-neutral-900/50 border border-white/10 rounded-2xl p-8 mb-8 flex flex-col md:flex-row items-center gap-6 backdrop-blur-md">
-                    <div className={`w-24 h-24 rounded-full flex items-center justify-center text-4xl font-bold border-4 border-neutral-800 shadow-xl ${game === 'val' ? 'bg-gradient-to-br from-red-500 to-rose-600' : 'bg-gradient-to-br from-blue-600 to-purple-600'}`}>
+                <div className="bg-dark-800/80 border border-white/10 rounded-2xl p-8 mb-8 flex flex-col md:flex-row items-center gap-6 backdrop-blur-md">
+                    <div className="w-24 h-24 rounded-2xl flex items-center justify-center text-4xl font-black font-riot border-2 border-white/10 shadow-xl bg-gradient-to-br from-accent-primary to-accent-secondary text-black">
                         {gameName?.[0]}
                     </div>
                     <div>
-                        <h1 className="text-4xl font-black uppercase tracking-tight flex items-baseline gap-2">
+                        <h1 className="text-4xl font-black uppercase tracking-tight flex items-baseline gap-2 font-riot">
                             {playerData?.gameName}
-                            <span className="text-xl text-neutral-500 font-medium">#{playerData?.tagLine}</span>
+                            <span className="text-xl text-white/40 font-medium font-mono">#{playerData?.tagLine}</span>
                         </h1>
-                        <p className={`font-mono text-sm mt-1 uppercase ${game === 'val' ? 'text-red-400' : 'text-blue-400'}`}>
+                        <p className="font-mono text-xs mt-1 uppercase text-accent-primary font-bold tracking-wider">
                             {game === 'val' ? 'Valorant' : 'League of Legends'} Match History
                         </p>
                         
                         {persona && game === 'val' && (
-                            <div className="mt-4 inline-flex items-center gap-3 px-4 py-2 rounded-xl border border-white/[0.1] backdrop-blur-md shadow-lg" 
+                            <div className="mt-4 inline-flex items-center gap-3 px-4 py-2 rounded-xl border border-white/10 backdrop-blur-md shadow-lg" 
                                  style={{ background: `linear-gradient(135deg, rgba(255,255,255,0.05), ${persona.color}20)` }}>
                                  <div className="text-left">
                                      <p className="text-[10px] font-bold uppercase tracking-widest mb-0.5" style={{ color: persona.color }}>ML Persona</p>
-                                     <p className="text-lg font-black uppercase tracking-tight text-white">{persona.title}</p>
+                                     <p className="text-base font-black uppercase tracking-tight text-white">{persona.title}</p>
                                  </div>
                             </div>
                         )}
@@ -116,7 +116,7 @@ const PlayerStats = () => {
                 </div>
 
                 {/* Match List */}
-                <h2 className={`text-2xl font-bold mb-6 border-l-4 pl-4 ${game === 'val' ? 'border-red-500' : 'border-blue-500'}`}>Recent Matches</h2>
+                <h2 className="text-2xl font-black mb-6 border-l-4 border-accent-primary pl-4 font-riot uppercase">Recent Matches</h2>
                 <div className="space-y-4">
                     {matches.map((match, index) => {
                         // LoL Rendering
@@ -128,33 +128,33 @@ const PlayerStats = () => {
                             const gameCreation = new Date(match.info.gameCreation).toLocaleDateString();
 
                             return (
-                                <div key={match.metadata.matchId} className="match-card relative overflow-hidden bg-neutral-900 border border-white/5 rounded-xl p-4 hover:border-white/20 transition-colors group">
-                                    <div className={`absolute left-0 top-0 bottom-0 w-2 ${isWin ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                                <div key={match.metadata?.matchId || index} className="match-card relative overflow-hidden bg-dark-800/80 border border-white/10 rounded-2xl p-5 hover:border-accent-primary/40 transition-all duration-300 group">
+                                    <div className={`absolute left-0 top-0 bottom-0 w-2 ${isWin ? 'bg-accent-primary shadow-[0_0_10px_rgba(79,183,221,0.6)]' : 'bg-white/20'}`}></div>
                                     <div className="flex flex-col md:flex-row items-center justify-between gap-4 pl-4">
                                         <div className="flex flex-col items-center md:items-start min-w-[120px]">
-                                            <span className={`font-bold text-lg ${isWin ? 'text-green-400' : 'text-red-400'}`}>{isWin ? 'VICTORY' : 'DEFEAT'}</span>
-                                            <span className="text-neutral-500 text-xs uppercase">{match.info.gameMode}</span>
-                                            <span className="text-neutral-600 text-xs">{gameCreation} • {gameDurationMinutes}m</span>
+                                            <span className={`font-black text-lg font-riot ${isWin ? 'text-accent-primary' : 'text-white/40'}`}>{isWin ? 'VICTORY' : 'DEFEAT'}</span>
+                                            <span className="text-white/50 text-xs uppercase font-bold">{match.info.gameMode}</span>
+                                            <span className="text-white/30 text-xs font-mono">{gameCreation} • {gameDurationMinutes}m</span>
                                         </div>
                                         <div className="flex items-center gap-4 flex-1">
-                                            <div className="relative w-12 h-12 rounded-lg bg-neutral-800 overflow-hidden border border-white/10">
+                                            <div className="relative w-12 h-12 rounded-xl bg-dark-700 overflow-hidden border border-white/10">
                                                 <img src={`https://ddragon.leagueoflegends.com/cdn/14.3.1/img/champion/${participant?.championName}.png`} alt={participant?.championName} className="w-full h-full object-cover" onError={(e) => {e.target.style.display='none'}} />
                                             </div>
                                             <div>
                                                 <div className="font-bold text-white">{participant?.championName}</div>
-                                                <div className="text-sm text-neutral-400 flex gap-2">
-                                                    <span className="text-white font-mono">{participant?.kills}</span>/<span className="text-red-400 font-mono">{participant?.deaths}</span>/<span className="text-white font-mono">{participant?.assists}</span>
+                                                <div className="text-sm text-white/50 flex gap-2 font-mono">
+                                                    <span className="text-white">{participant?.kills}</span>/<span className="text-white/40">{participant?.deaths}</span>/<span className="text-white">{participant?.assists}</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="text-right hidden md:block">
-                                            <div className="text-xl font-bold text-neutral-300">{((participant?.kills + participant?.assists) / Math.max(1, participant?.deaths)).toFixed(2)} <span className="text-xs text-neutral-500">KDA</span></div>
-                                            <div className="text-xs text-neutral-500">{participant?.totalMinionsKilled + participant?.neutralMinionsKilled} CS</div>
-                                            <div className="text-sm text-yellow-500/80 mt-1">{participant?.goldEarned.toLocaleString()} Gold</div>
+                                            <div className="text-xl font-bold text-white font-mono">{((participant?.kills + participant?.assists) / Math.max(1, participant?.deaths)).toFixed(2)} <span className="text-xs text-white/40">KDA</span></div>
+                                            <div className="text-xs text-white/40 font-mono">{participant?.totalMinionsKilled + participant?.neutralMinionsKilled} CS</div>
+                                            <div className="text-sm text-accent-tertiary mt-1 font-mono">{participant?.goldEarned.toLocaleString()} Gold</div>
                                         </div>
                                         <div className="flex gap-1">
                                             {[participant?.item0, participant?.item1, participant?.item2, participant?.item3, participant?.item4, participant?.item5].map((item, i) => (
-                                                <div key={i} className="w-8 h-8 bg-neutral-800 rounded border border-white/5 overflow-hidden">
+                                                <div key={i} className="w-8 h-8 bg-dark-700 rounded border border-white/5 overflow-hidden">
                                                     {item > 0 && <img src={`https://ddragon.leagueoflegends.com/cdn/14.3.1/img/item/${item}.png`} alt="" className="w-full h-full" />}
                                                 </div>
                                             ))}
@@ -165,23 +165,21 @@ const PlayerStats = () => {
                         } 
                         // Valorant Rendering (HenrikDev MMR History)
                         else if (game === 'val') {
-                            // API returns: { currenttier_patched, mmr_change_to_last_game, map: { name }, date, ranking_in_tier, images }
                             const isWin = match.mmr_change_to_last_game >= 0; 
-                            // Note: 0 could be draw or just no change, treating as non-loss for color
                             const gameCreation = match.date; 
                             
                             return (
-                                <div key={match.match_id || index} className="match-card relative overflow-hidden bg-neutral-900 border border-white/5 rounded-xl p-4 hover:border-white/20 transition-colors group">
-                                     <div className={`absolute left-0 top-0 bottom-0 w-2 ${isWin ? 'bg-cyan-500' : 'bg-rose-500'}`}></div>
+                                <div key={match.match_id || index} className="match-card relative overflow-hidden bg-dark-800/80 border border-white/10 rounded-2xl p-5 hover:border-accent-primary/40 transition-all duration-300 group">
+                                     <div className={`absolute left-0 top-0 bottom-0 w-2 ${isWin ? 'bg-accent-primary shadow-[0_0_10px_rgba(79,183,221,0.6)]' : 'bg-white/20'}`}></div>
                                      <div className="flex flex-col md:flex-row items-center justify-between gap-4 pl-4">
                                         
                                         {/* Result & Map */}
                                         <div className="flex flex-col items-center md:items-start min-w-[150px]">
-                                            <span className={`font-bold text-lg ${isWin ? 'text-cyan-400' : 'text-rose-400'}`}>
+                                            <span className={`font-black text-lg font-riot ${isWin ? 'text-accent-primary' : 'text-white/40'}`}>
                                                 {match.mmr_change_to_last_game > 0 ? 'VICTORY' : match.mmr_change_to_last_game < 0 ? 'DEFEAT' : 'DRAW'}
                                             </span>
-                                            <span className="text-neutral-500 text-xs uppercase">{match.map?.name || 'Unknown Map'}</span>
-                                            <span className="text-neutral-600 text-xs">{gameCreation}</span>
+                                            <span className="text-white/50 text-xs uppercase font-bold">{match.map?.name || 'Unknown Map'}</span>
+                                            <span className="text-white/30 text-xs font-mono">{gameCreation}</span>
                                         </div>
 
                                         {/* Rank Info */}
@@ -193,9 +191,9 @@ const PlayerStats = () => {
                                             )}
                                             <div>
                                                 <div className="font-bold text-white text-lg">{match.currenttier_patched}</div>
-                                                <div className="text-sm text-neutral-400 flex gap-2 items-center">
+                                                <div className="text-sm text-white/50 flex gap-2 items-center">
                                                     RR Change: 
-                                                    <span className={`font-mono font-bold ${isWin ? 'text-green-400' : 'text-red-400'}`}>
+                                                    <span className={`font-mono font-bold ${isWin ? 'text-accent-primary' : 'text-white/40'}`}>
                                                         {match.mmr_change_to_last_game > 0 ? '+' : ''}{match.mmr_change_to_last_game}
                                                     </span>
                                                 </div>
@@ -204,8 +202,8 @@ const PlayerStats = () => {
 
                                         {/* Stats (ELO) */}
                                         <div className="text-right hidden md:block">
-                                            <div className="text-xl font-bold text-neutral-300">{match.elo} <span className="text-xs text-neutral-500">ELO</span></div>
-                                            <div className="text-xs text-neutral-500">Ranking in Tier: {match.ranking_in_tier}</div>
+                                            <div className="text-xl font-bold text-white font-mono">{match.elo} <span className="text-xs text-white/40">ELO</span></div>
+                                            <div className="text-xs text-white/40 font-mono">Ranking in Tier: {match.ranking_in_tier}</div>
                                         </div>
                                      </div>
                                 </div>

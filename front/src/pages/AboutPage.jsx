@@ -9,14 +9,14 @@ import AutoPlayVideo from '../components/common/AutoPlayVideo';
 gsap.registerPlugin(ScrollTrigger);
 
 const TEAM = [
-    { name: 'Marc Merrill', role: 'Co-Founder & President', color: '#ef4444' },
-    { name: 'Brandon Beck', role: 'Co-Founder & Chairman', color: '#3b82f6' },
-    { name: 'Anna Donlon', role: 'Head of VALORANT', color: '#a855f7' },
-    { name: 'Joe Ziegler', role: 'Game Director', color: '#f97316' },
-    { name: 'Ryan Scott', role: 'Lead Engineer', color: '#06b6d4' },
-    { name: 'Naomi Park', role: 'Creative Director', color: '#10b981' },
-    { name: 'David Nottingham', role: 'Narrative Lead', color: '#eab308' },
-    { name: 'Trevor Romleski', role: 'Lead Designer', color: '#ec4899' },
+    { name: 'Marc Merrill', role: 'Co-Founder & President', color: '#4FB7DD' },
+    { name: 'Brandon Beck', role: 'Co-Founder & Chairman', color: '#5724FF' },
+    { name: 'Anna Donlon', role: 'Head of VALORANT', color: '#818cf8' },
+    { name: 'Joe Ziegler', role: 'Game Director', color: '#38bdf8' },
+    { name: 'Ryan Scott', role: 'Lead Engineer', color: '#4FB7DD' },
+    { name: 'Naomi Park', role: 'Creative Director', color: '#34d399' },
+    { name: 'David Nottingham', role: 'Narrative Lead', color: '#EDFF66' },
+    { name: 'Trevor Romleski', role: 'Lead Designer', color: '#c084fc' },
 ];
 
 const VALUES = [
@@ -187,45 +187,45 @@ const AboutPage = () => {
     }, { scope: containerRef });
 
     return (
-        <div ref={containerRef} className="min-h-screen bg-[#0a0a0a] text-white overflow-hidden font-sans relative">
+        <div ref={containerRef} className="min-h-screen bg-dark-900 text-white overflow-hidden font-sans relative">
 
             {/* Cursor glow */}
             <div ref={cursorGlowRef} className="fixed w-[500px] h-[500px] rounded-full pointer-events-none z-0 -translate-x-1/2 -translate-y-1/2 hidden lg:block"
-                style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.04) 0%, transparent 70%)' }} />
+                style={{ background: 'radial-gradient(circle, rgba(79,183,221,0.08) 0%, transparent 70%)' }} />
 
             <Navbar />
 
             {/* ═══ HERO ═══ */}
             <section className="relative pt-40 pb-24 px-6">
                 <div className="max-w-4xl mx-auto text-center">
-                    <p className="about-label text-red-500 text-xs font-bold uppercase tracking-[0.3em] mb-6">About Us</p>
-                    <h1 className="about-hero-title text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] mb-6">
+                    <p className="about-label text-accent-primary text-xs font-bold uppercase tracking-[0.3em] mb-6">About Us</p>
+                    <h1 className="about-hero-title text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] mb-6 font-riot">
                         Hi. We're
                     </h1>
-                    <h1 className="about-hero-title text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] mb-10">
-                        <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #ef4444, #f97316)' }}>Riot Games.</span>
+                    <h1 className="about-hero-title text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] mb-10 font-riot">
+                        <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #4FB7DD, #5724FF)' }}>Riot Games.</span>
                     </h1>
-                    <p className="about-hero-desc text-white/50 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-4">
+                    <p className="about-hero-desc text-white/70 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-4">
                         We are a team of passionate gamers, developers, artists, and storytellers who believe the most meaningful entertainment comes from shared experiences.
                     </p>
-                    <p className="about-hero-desc text-white/35 text-base max-w-xl mx-auto leading-relaxed">
-                        From the <strong className="text-white/60">Rift</strong> to the <strong className="text-white/60">Arena</strong>, we create games and experiences
+                    <p className="about-hero-desc text-white/50 text-base max-w-xl mx-auto leading-relaxed">
+                        From the <strong className="text-white/80">Rift</strong> to the <strong className="text-white/80">Arena</strong>, we create games and experiences
                         that forge connections and inspire players around the world.
                     </p>
                 </div>
 
                 {/* Decorative lines */}
-                <div className="absolute top-20 left-10 w-px h-32 bg-gradient-to-b from-transparent via-red-500/20 to-transparent about-parallax" />
+                <div className="absolute top-20 left-10 w-px h-32 bg-gradient-to-b from-transparent via-accent-primary/25 to-transparent about-parallax" />
                 <div className="absolute top-40 right-14 w-px h-48 bg-gradient-to-b from-transparent via-white/5 to-transparent about-parallax" />
             </section>
 
             {/* ═══ STATS BAR ═══ */}
-            <section className="about-stats py-16 border-y border-white/[0.04]">
+            <section className="about-stats py-16 border-y border-white/[0.06] bg-dark-800/40">
                 <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
                     {STATS.map((s, i) => (
                         <div key={i} className="about-stat text-center">
-                            <p className="text-4xl md:text-5xl font-black text-white mb-2">{s.number}</p>
-                            <p className="text-white/30 text-xs font-bold uppercase tracking-[0.2em]">{s.label}</p>
+                            <p className="text-4xl md:text-5xl font-black text-white mb-2 font-riot">{s.number}</p>
+                            <p className="text-white/40 text-xs font-bold uppercase tracking-[0.2em]">{s.label}</p>
                         </div>
                     ))}
                 </div>
@@ -236,21 +236,21 @@ const AboutPage = () => {
                 <div className="max-w-6xl mx-auto">
                     <div className="about-story-content grid md:grid-cols-2 gap-16 items-start">
                         <div>
-                            <p className="text-red-500 text-xs font-bold uppercase tracking-[0.25em] mb-4">How It Started</p>
-                            <h2 className="text-4xl md:text-6xl font-black uppercase leading-[0.9] mb-0">Our</h2>
-                            <h2 className="text-4xl md:text-6xl font-black uppercase leading-[0.9] text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #ef4444, #f97316)' }}>Story</h2>
+                            <p className="text-accent-primary text-xs font-bold uppercase tracking-[0.25em] mb-4">How It Started</p>
+                            <h2 className="text-4xl md:text-6xl font-black uppercase leading-[0.9] mb-0 font-riot">Our</h2>
+                            <h2 className="text-4xl md:text-6xl font-black uppercase leading-[0.9] text-transparent bg-clip-text font-riot" style={{ backgroundImage: 'linear-gradient(135deg, #4FB7DD, #5724FF)' }}>Story</h2>
                         </div>
                         <div className="space-y-6 pt-2">
-                            <p className="text-white/50 leading-relaxed">
+                            <p className="text-white/70 leading-relaxed">
                                 <strong className="text-white">Riot Games</strong> was founded in 2006 by Brandon Beck and Marc Merrill, two avid gamers
                                 who believed that the industry was ignoring the most important audience — the players themselves.
                             </p>
-                            <p className="text-white/40 leading-relaxed">
+                            <p className="text-white/60 leading-relaxed">
                                 What started as a bold bet on a single game — League of Legends — grew into a global movement.
                                 Today, we serve over 180 million players across the world with titles like VALORANT, Teamfight Tactics,
                                 Legends of Runeterra, and Wild Rift.
                             </p>
-                            <p className="text-white/40 leading-relaxed">
+                            <p className="text-white/60 leading-relaxed">
                                 Our mission remains the same: to be the most player-focused game company in the world. Every pixel,
                                 every line of code, every story we tell is in service of the players who make this all worthwhile.
                             </p>
@@ -262,17 +262,17 @@ const AboutPage = () => {
             {/* ═══ VIDEO SHOWCASE ═══ */}
             <section className="relative py-20 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6">
-                    <div className="relative rounded-3xl overflow-hidden h-[50vh] md:h-[60vh] about-parallax" style={{ border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div className="relative rounded-3xl overflow-hidden h-[50vh] md:h-[60vh] about-parallax border border-white/10 shadow-2xl">
                         <AutoPlayVideo
                             src="/videos/feature-1.mp4"
                             preload="metadata"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #0a0a0a 0%, transparent 40%, transparent 60%, #0a0a0a 100%)' }} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-dark-900/60" />
                         <div className="absolute inset-0 flex items-center justify-center">
                             <div className="text-center">
-                                <p className="text-white/60 text-sm font-bold uppercase tracking-[0.3em] mb-3">Our Universe</p>
-                                <h3 className="text-4xl md:text-6xl font-black uppercase text-white">Built For Players</h3>
+                                <p className="text-accent-primary text-sm font-bold uppercase tracking-[0.3em] mb-3">Our Universe</p>
+                                <h3 className="text-4xl md:text-6xl font-black uppercase text-white font-riot">Built For Players</h3>
                             </div>
                         </div>
                     </div>
@@ -283,13 +283,12 @@ const AboutPage = () => {
             <section className="about-values py-28 px-6">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-16">
-                        <p className="text-red-500 text-xs font-bold uppercase tracking-[0.25em] mb-4">What Drives Us</p>
-                        <h2 className="text-4xl md:text-5xl font-black uppercase">Our Values</h2>
+                        <p className="text-accent-primary text-xs font-bold uppercase tracking-[0.25em] mb-4">What Drives Us</p>
+                        <h2 className="text-4xl md:text-5xl font-black uppercase font-riot">Our Values</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {VALUES.map((v, i) => (
-                            <div key={i} className="about-value-card p-7 rounded-2xl transition-all duration-400 group cursor-default"
-                                style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03))', border: '1px solid rgba(255,255,255,0.12)' }}>
+                            <div key={i} className="about-value-card p-7 rounded-2xl transition-all duration-300 group cursor-default bg-dark-800/80 border border-white/10 hover:border-accent-primary/40 hover:-translate-y-1">
                                 <div className="text-3xl mb-5 transform group-hover:scale-110 transition-transform duration-300">{v.icon}</div>
                                 <h3 className="text-white font-bold text-lg mb-3">{v.title}</h3>
                                 <p className="text-white/60 text-sm leading-relaxed">{v.desc}</p>
@@ -303,8 +302,8 @@ const AboutPage = () => {
             <section className="about-team py-28 px-6">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-16">
-                        <p className="text-red-500 text-xs font-bold uppercase tracking-[0.25em] mb-4">Riot Team</p>
-                        <h2 className="text-4xl md:text-5xl font-black uppercase">Meet The Team</h2>
+                        <p className="text-accent-primary text-xs font-bold uppercase tracking-[0.25em] mb-4">Riot Team</p>
+                        <h2 className="text-4xl md:text-5xl font-black uppercase font-riot">Meet The Team</h2>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                         {TEAM.map((member, i) => (
@@ -315,19 +314,21 @@ const AboutPage = () => {
             </section>
 
             {/* ═══ JOIN US CTA ═══ */}
-            <section className="about-join relative py-28 overflow-hidden">
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(145deg, #ea580c, #f97316, #fb923c)' }} />
-                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.05) 40px, rgba(255,255,255,0.05) 80px)' }} />
-                <div className="relative z-10 max-w-3xl mx-auto px-6 text-center about-join-content">
-                    <h2 className="text-4xl md:text-6xl font-black text-white uppercase mb-6">Join Us</h2>
-                    <p className="text-white/80 text-lg mb-3">
+            <section className="about-join relative py-28 px-6 overflow-hidden">
+                <div className="relative max-w-4xl mx-auto rounded-3xl bg-dark-800 border border-white/10 p-12 md:p-16 text-center about-join-content shadow-2xl overflow-hidden">
+                    <div className="absolute -top-24 -left-24 w-72 h-72 bg-accent-primary/10 rounded-full blur-3xl pointer-events-none" />
+                    <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-accent-secondary/15 rounded-full blur-3xl pointer-events-none" />
+                    
+                    <p className="text-accent-primary text-xs uppercase tracking-[0.3em] font-bold mb-4">Join The Movement</p>
+                    <h2 className="text-4xl md:text-6xl font-black text-white uppercase mb-6 font-riot">Join Us</h2>
+                    <p className="text-white/80 text-lg mb-3 max-w-2xl mx-auto">
                         We're always looking for passionate players and builders. If you are one, we might just click.
                     </p>
                     <p className="text-white/60 text-sm mb-10 max-w-xl mx-auto leading-relaxed">
                         Work from anywhere, competitive pay, world-class benefits, and a chance to shape the future of gaming.
                         Need we say more? Send over your profile, we'll be in touch sooner than you'd expect.
                     </p>
-                    <a href="#" className="inline-block bg-white text-black font-bold text-sm uppercase tracking-[0.15em] px-10 py-4 rounded-full hover:bg-white/90 hover:scale-105 transition-all duration-300 shadow-lg">
+                    <a href="#" className="inline-block bg-white text-black font-bold text-xs uppercase tracking-[0.2em] px-10 py-4 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg">
                         View Openings
                     </a>
                 </div>

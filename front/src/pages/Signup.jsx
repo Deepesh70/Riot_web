@@ -54,10 +54,10 @@ const Signup = () => {
                 {/* Top nav */}
                 <div className="flex items-center justify-between flex-shrink-0 mb-8">
                     <Link to="/" className="signup-brand flex items-center gap-2.5">
-                        <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #ef4444, #b91c1c)' }}>
-                            <span className="text-white font-black text-base">R</span>
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #4FB7DD, #5724FF)' }}>
+                            <span className="text-black font-black text-base">R</span>
                         </div>
-                        <span className="text-white font-black text-lg tracking-tight uppercase">Riot</span>
+                        <span className="text-white font-black text-lg tracking-tight uppercase font-riot">Riot</span>
                     </Link>
                     <div className="signup-brand flex items-center gap-8">
                         <Link to="/" className="text-white/50 hover:text-white text-xs font-bold uppercase tracking-[0.15em] transition-colors">Home</Link>
@@ -67,19 +67,18 @@ const Signup = () => {
 
                 {/* Form */}
                 <div className="max-w-[420px] w-full flex-shrink-0 my-auto py-2">
-                    {/* <p className="signup-heading text-red-500 text-xs font-bold uppercase tracking-[0.25em] mb-4">Start For Free</p> */}
-                    <h1 className="signup-heading text-white font-black text-4xl md:text-5xl uppercase leading-[0.95] mb-4">
+                    <h1 className="signup-heading text-white font-black text-4xl md:text-5xl uppercase leading-[0.95] mb-4 font-riot">
                         Create New<br />Account
                     </h1>
                     <p className="signup-heading text-white/40 text-sm mb-8">
                         Already A Member?{' '}
-                        <Link to="/login" className="text-red-400 hover:text-red-300 font-bold transition-colors">
+                        <Link to="/login" className="text-accent-primary hover:text-blue-300 font-bold transition-colors">
                             Log In
                         </Link>
                     </p>
 
                     {error && (
-                        <div className="signup-field mb-5 px-4 py-3 rounded-xl text-sm text-red-300" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)' }}>
+                        <div className="signup-field mb-5 px-4 py-3 rounded-xl text-sm text-accent-primary bg-accent-primary/10 border border-accent-primary/30">
                             {error}
                         </div>
                     )}

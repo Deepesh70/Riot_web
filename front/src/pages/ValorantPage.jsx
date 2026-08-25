@@ -72,35 +72,31 @@ const ValorantPage = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#0f1923] flex items-center justify-center">
-                <div className="three-body">
-                    <div className="three-body__dot"></div>
-                    <div className="three-body__dot"></div>
-                    <div className="three-body__dot"></div>
-                </div>
+            <div className="min-h-screen bg-dark-900 flex items-center justify-center">
+                <div className="w-10 h-10 border-2 border-accent-primary border-t-transparent rounded-full animate-spin"></div>
             </div>
         );
     }
 
     return (
-        <div className="valorant-page bg-[#0f1923] text-white">
+        <div className="valorant-page bg-dark-900 text-white font-sans">
             {/* ═══ HERO SECTION ═══ */}
             <section ref={heroRef} className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden">
                 {/* Background gradient */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#ff4655]/20 via-[#0f1923] to-[#0f1923]" />
-                <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 20%, rgba(255, 70, 85, 0.15) 0%, transparent 60%)' }} />
+                <div className="absolute inset-0 bg-gradient-to-b from-accent-primary/10 via-dark-900 to-dark-900" />
+                <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 20%, rgba(79, 183, 221, 0.15) 0%, transparent 60%)' }} />
 
                 <div ref={titleRef} className="relative z-10 text-center px-4">
                     <div className="flex items-center justify-center gap-3 mb-4">
                         <img src="/img/logo.png" alt="Riot Games" className="w-10 h-10 rounded-full" />
                         <span className="text-xs font-bold uppercase tracking-[0.3em] text-white/60">Riot Games</span>
                     </div>
-                    <p className="text-[10px] sm:text-xs uppercase tracking-widest sm:tracking-[0.4em] text-white/50 mb-3">5v5 character-based tactical shooter game</p>
+                    <p className="text-[10px] sm:text-xs uppercase tracking-widest sm:tracking-[0.4em] text-white/50 mb-3 font-mono">5v5 character-based tactical shooter game</p>
                     <h1 className="font-riot text-5xl sm:text-7xl md:text-[8rem] lg:text-[12rem] font-black tracking-tight leading-none uppercase"
-                        style={{ background: 'linear-gradient(180deg, #fff 30%, #ff4655 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                        style={{ background: 'linear-gradient(180deg, #fff 30%, #4FB7DD 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                         VALORANT
                     </h1>
-                    <button className="mt-8 px-10 py-3 bg-[#ff4655] text-white font-bold text-sm uppercase tracking-widest rounded-sm hover:bg-[#e83e4d] transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,70,85,0.4)] hover:scale-105 cursor-pointer">
+                    <button className="mt-8 px-10 py-3.5 bg-gradient-to-r from-accent-primary to-blue-400 text-black font-black text-xs uppercase tracking-widest rounded-full hover:scale-105 active:scale-95 transition-all duration-300 hover:shadow-[0_0_30px_rgba(79,183,221,0.4)] cursor-pointer">
                         Play for Free
                     </button>
                 </div>
@@ -115,33 +111,33 @@ const ValorantPage = () => {
             </section>
 
             {/* ═══ LATEST ARTICLES ═══ */}
-            <section ref={addSectionRef} className="relative py-20 px-4 sm:px-8 lg:px-16" style={{ background: 'linear-gradient(135deg, #ece8e1 0%, #e8d8c4 100%)' }}>
+            <section ref={addSectionRef} className="relative py-20 px-4 sm:px-8 lg:px-16 bg-dark-800/80 border-y border-white/5">
                 <div className="max-w-7xl mx-auto">
                     <div className="flex items-end justify-between mb-10">
-                        <h2 className="font-riot text-4xl sm:text-5xl md:text-6xl font-black uppercase text-[#0f1923] leading-none">
+                        <h2 className="font-riot text-4xl sm:text-5xl md:text-6xl font-black uppercase text-white leading-none">
                             Latest<br />Articles
                         </h2>
-                        <a href="#" className="text-[#0f1923] text-xs uppercase font-bold tracking-widest hover:text-[#ff4655] transition-colors border-b border-[#0f1923]/30 pb-1">
+                        <Link to="/games/valorant/articles" className="text-accent-primary text-xs uppercase font-bold tracking-widest hover:text-blue-300 transition-colors border-b border-accent-primary/30 pb-1">
                             Go to Articles Page →
-                        </a>
+                        </Link>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {agents.slice(0, 3).map((agent, i) => (
-                            <div key={agent.uuid} className="group cursor-pointer">
-                                <div className="relative overflow-hidden rounded-lg aspect-video mb-4"
+                            <div key={agent.uuid} className="group cursor-pointer bg-dark-900/60 p-4 rounded-2xl border border-white/5 hover:border-accent-primary/40 transition-all duration-300">
+                                <div className="relative overflow-hidden rounded-xl aspect-video mb-4"
                                     style={{ background: `linear-gradient(135deg, #${agent.backgroundGradientColors?.[0]?.slice(0, 6) || '1a1a2e'}, #${agent.backgroundGradientColors?.[2]?.slice(0, 6) || '16213e'})` }}>
                                     <img src={agent.fullPortrait} alt={agent.displayName} className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[110%] object-contain group-hover:scale-110 transition-transform duration-500" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                                     <div className="absolute bottom-3 left-3">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider bg-[#ff4655] px-2 py-1 rounded text-white">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider bg-accent-primary px-2.5 py-1 rounded text-black font-mono">
                                             {agent.role?.displayName}
                                         </span>
                                     </div>
                                 </div>
-                                <h3 className="text-[#0f1923] font-bold text-sm uppercase tracking-wider group-hover:text-[#ff4655] transition-colors">
+                                <h3 className="text-white font-bold text-sm uppercase tracking-wider group-hover:text-accent-primary transition-colors font-riot">
                                     {['Community Roundup October 2023', 'Community Creations October 2023', 'Community Roadmap October 2023'][i]}
                                 </h3>
-                                <p className="text-[#0f1923]/50 text-xs mt-1">GAME UPDATES • 10/{i + 1}/23</p>
+                                <p className="text-white/40 text-xs mt-1 font-mono">GAME UPDATES • 10/{i + 1}/23</p>
                             </div>
                         ))}
                     </div>
@@ -150,21 +146,21 @@ const ValorantPage = () => {
 
             {/* ═══ EPISODE / ACT BANNER ═══ */}
             {featuredAgent && (
-                <section ref={addSectionRef} className="relative py-0 overflow-hidden" style={{ minHeight: '60vh' }}>
-                    <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, #${featuredAgent.backgroundGradientColors?.[0]?.slice(0, 6) || '30336e'} 0%, #0f1923 50%, #${featuredAgent.backgroundGradientColors?.[2]?.slice(0, 6) || '20155d'} 100%)` }} />
+                <section ref={addSectionRef} className="relative py-0 overflow-hidden bg-dark-900" style={{ minHeight: '60vh' }}>
+                    <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, #${featuredAgent.backgroundGradientColors?.[0]?.slice(0, 6) || '1e293b'} 0%, #0a0a0a 50%, #${featuredAgent.backgroundGradientColors?.[2]?.slice(0, 6) || '0f172a'} 100%)` }} />
 
                     <div className="relative z-10 max-w-7xl mx-auto flex flex-col lg:flex-row items-center min-h-[60vh]">
                         {/* Agent Portrait */}
                         <div className="relative w-full lg:w-1/2 flex justify-center lg:justify-start">
-                            <img src={featuredAgent.background} alt="" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[120%] opacity-30" />
+                            <img src={featuredAgent.background} alt="" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[120%] opacity-20" />
                             <img src={featuredAgent.fullPortrait} alt={featuredAgent.displayName} className="relative z-10 h-[50vh] lg:h-[70vh] object-contain drop-shadow-2xl" />
                         </div>
 
                         {/* Episode Info */}
                         <div className="w-full lg:w-1/2 p-8 lg:p-16 text-center lg:text-left">
-                            <p className="text-xs uppercase tracking-[0.5em] text-white/40 mb-2">Episode 09 // Act III // Yr 3</p>
+                            <p className="text-xs uppercase tracking-[0.5em] text-accent-primary mb-2 font-mono font-bold">Episode 09 // Act III // Yr 3</p>
                             <h2 className="font-riot text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase leading-none mb-6"
-                                style={{ background: 'linear-gradient(135deg, #ff4655, #ff8a65)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                                style={{ background: 'linear-gradient(135deg, #fff, #4FB7DD)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                                 Evolution
                             </h2>
 
@@ -172,17 +168,17 @@ const ValorantPage = () => {
                                 <div className="flex items-center gap-3 mb-2 justify-center lg:justify-start">
                                     {featuredAgent.displayIcon && <img src={featuredAgent.displayIcon} alt="" className="w-10 h-10" />}
                                     <div>
-                                        <h3 className="text-2xl font-black uppercase">{featuredAgent.displayName}</h3>
+                                        <h3 className="text-2xl font-black uppercase font-riot">{featuredAgent.displayName}</h3>
                                         <div className="flex items-center gap-2">
                                             {featuredAgent.role?.displayIcon && <img src={featuredAgent.role.displayIcon} alt="" className="w-4 h-4 brightness-200" />}
-                                            <span className="text-xs uppercase tracking-widest text-white/60">{featuredAgent.role?.displayName}</span>
+                                            <span className="text-xs uppercase tracking-widest text-white/60 font-mono">{featuredAgent.role?.displayName}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <p className="text-white/50 text-sm leading-relaxed max-w-md mt-4">{featuredAgent.description}</p>
                             </div>
 
-                            <button className="px-8 py-3 bg-[#ff4655] text-white font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-[#e83e4d] transition-all duration-300 hover:shadow-[0_0_25px_rgba(255,70,85,0.4)] cursor-pointer">
+                            <button className="px-8 py-3.5 bg-gradient-to-r from-accent-primary to-blue-400 text-black font-black text-xs uppercase tracking-widest rounded-full hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg cursor-pointer">
                                 Act Summary →
                             </button>
                         </div>
@@ -191,19 +187,19 @@ const ValorantPage = () => {
             )}
 
             {/* ═══ WE ARE VALORANT ═══ */}
-            <section ref={addSectionRef} className="relative py-24 px-4 sm:px-8 lg:px-16 overflow-hidden" style={{ background: 'linear-gradient(180deg, #ece8e1 0%, #e2d5c3 100%)' }}>
+            <section ref={addSectionRef} className="relative py-24 px-4 sm:px-8 lg:px-16 overflow-hidden bg-dark-800/60 border-y border-white/5">
                 <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12">
                     <div className="w-full lg:w-1/2 text-center lg:text-left">
-                        <h2 className="font-riot text-5xl sm:text-6xl md:text-7xl font-black uppercase text-[#0f1923] leading-[0.9] mb-6">
+                        <h2 className="font-riot text-5xl sm:text-6xl md:text-7xl font-black uppercase text-white leading-[0.9] mb-6">
                             We Are<br />Valorant
                         </h2>
-                        <h3 className="text-xl font-black uppercase text-[#0f1923] mb-4 tracking-wider">Defy the Limits</h3>
-                        <p className="text-[#0f1923]/60 text-sm leading-relaxed max-w-lg mb-8">
+                        <h3 className="text-xl font-black uppercase text-accent-primary mb-4 tracking-wider font-riot">Defy the Limits</h3>
+                        <p className="text-white/60 text-sm leading-relaxed max-w-lg mb-8">
                             Blend your style and experience on a global, competitive stage. You get to pick your character, your team gets to pick the strategy.
                             Take on enemies with sharp gunplay and tactical abilities. It's a world where creativity is your greatest weapon – make the play others will remember for years.
                             Team up with friends. Take on challenges. And show the world what you're made of with Deathmatch and Spike Rush.
                         </p>
-                        <button className="px-10 py-3 bg-[#ff4655] text-white font-bold text-sm uppercase tracking-widest rounded-sm hover:bg-[#e83e4d] transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,70,85,0.3)] cursor-pointer">
+                        <button className="px-10 py-3.5 bg-gradient-to-r from-accent-primary to-blue-400 text-black font-black text-xs uppercase tracking-widest rounded-full hover:scale-105 active:scale-95 transition-all duration-300 hover:shadow-[0_0_30px_rgba(79,183,221,0.3)] cursor-pointer">
                             Enter the Rift
                         </button>
                     </div>
@@ -227,14 +223,14 @@ const ValorantPage = () => {
 
             {/* ═══ YOUR AGENTS ═══ */}
             <section ref={addSectionRef} className="relative py-24 px-4 sm:px-8 lg:px-16">
-                <div className="absolute inset-0 bg-gradient-to-b from-[#0f1923] via-[#1a1030] to-[#0f1923]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-dark-900 via-dark-800 to-dark-900" />
                 <div className="relative z-10 max-w-7xl mx-auto">
                     <div className="text-center mb-16">
                         <h2 className="font-riot text-5xl sm:text-6xl md:text-8xl font-black uppercase leading-[0.9]"
-                            style={{ background: 'linear-gradient(180deg, #fff 0%, #ff4655 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                            style={{ background: 'linear-gradient(180deg, #fff 0%, #4FB7DD 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                             Your<br />Agents
                         </h2>
-                        <h3 className="text-lg font-black uppercase tracking-wider mt-4 mb-3 text-white/90">Creativity is Your Greatest Weapon</h3>
+                        <h3 className="text-lg font-black uppercase tracking-wider mt-4 mb-3 text-white/90 font-riot">Creativity is Your Greatest Weapon</h3>
                         <p className="text-white/40 text-sm max-w-2xl mx-auto leading-relaxed">
                             Each Agent brings unique abilities to the fight. Master them all, find your favorites, and lead your team to victory.
                             Duelists, Sentinels, Controllers, and Initiators — build the perfect composition for every strategy.
@@ -246,8 +242,8 @@ const ValorantPage = () => {
                             <Link
                                 to={`/games/valorant/agents/${agent.uuid}`}
                                 key={agent.uuid}
-                                className="group relative rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:z-10 block"
-                                style={{ background: `linear-gradient(180deg, #${agent.backgroundGradientColors?.[0]?.slice(0, 6) || '1a1a2e'}90, #0f1923)` }}
+                                className="group relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:z-10 block border border-white/10 hover:border-accent-primary/50"
+                                style={{ background: `linear-gradient(180deg, #${agent.backgroundGradientColors?.[0]?.slice(0, 6) || '1a1a2e'}90, #0a0a0a)` }}
                             >
                                 <div className="relative aspect-[3/4] overflow-hidden">
                                     <img src={agent.background} alt="" className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 transition-opacity" />
@@ -259,9 +255,9 @@ const ValorantPage = () => {
                                             {agent.role?.displayIcon && (
                                                 <img src={agent.role.displayIcon} alt="" className="w-3 h-3 brightness-200 opacity-60" />
                                             )}
-                                            <span className="text-[9px] uppercase tracking-wider text-white/40">{agent.role?.displayName}</span>
+                                            <span className="text-[9px] uppercase tracking-wider text-white/40 font-mono">{agent.role?.displayName}</span>
                                         </div>
-                                        <p className="text-xs font-bold uppercase tracking-wider">{agent.displayName}</p>
+                                        <p className="text-xs font-bold uppercase tracking-wider font-riot">{agent.displayName}</p>
                                     </div>
                                 </div>
                             </Link>
@@ -270,7 +266,7 @@ const ValorantPage = () => {
                     <div className="text-center mt-10">
                         <button
                             onClick={() => setShowAllAgents((prev) => !prev)}
-                            className="px-8 py-3 border border-white/20 text-white font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-white/10 transition-all duration-300 cursor-pointer"
+                            className="px-8 py-3.5 border border-white/20 text-white font-bold text-xs uppercase tracking-widest rounded-full hover:border-accent-primary hover:text-accent-primary transition-all duration-300 cursor-pointer"
                         >
                             {showAllAgents ? 'Show Less ←' : 'View All Agents →'}
                         </button>
@@ -280,13 +276,12 @@ const ValorantPage = () => {
 
             {/* ═══ MAPS ═══ */}
             <section ref={addSectionRef} className="relative py-24 px-4 sm:px-8 lg:px-16 overflow-hidden">
-                {/* Background Video that changes on map hover */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#0f1923] to-[#1a2a3a]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-dark-900 to-dark-800" />
 
                 <div className="relative z-10 max-w-7xl mx-auto">
                     <div className="mb-12">
-                        <h2 className="font-riot text-5xl sm:text-6xl md:text-7xl font-black uppercase text-white leading-[0.9] mb-3">Map</h2>
-                        <h3 className="text-sm font-bold uppercase tracking-widest text-white/70 mb-4">Fight in All Parts of the World</h3>
+                        <h2 className="font-riot text-5xl sm:text-6xl md:text-7xl font-black uppercase text-white leading-[0.9] mb-3">Maps</h2>
+                        <h3 className="text-sm font-bold uppercase tracking-widest text-accent-primary mb-4">Fight in All Parts of the World</h3>
                         <p className="text-white/40 text-sm max-w-xl leading-relaxed">
                             Each map is a playground to showcase your creative abilities. Multiple game modes, diverse locations, and dynamic environments ensure every match is unique.
                         </p>
@@ -297,15 +292,15 @@ const ValorantPage = () => {
                             <Link
                                 to={`/games/valorant/maps/${map.uuid}`}
                                 key={map.uuid}
-                                className="group relative rounded-lg overflow-hidden cursor-pointer h-48 md:h-64 transition-all duration-300 hover:scale-[1.02] block element-focus" // Added 'block' for correct Link rendering
+                                className="group relative rounded-2xl overflow-hidden cursor-pointer h-48 md:h-64 transition-all duration-300 hover:scale-[1.02] block border border-white/10 hover:border-accent-primary/50 shadow-xl"
                             >
                                 <img loading="lazy" src={map.splash} alt={map.displayName}
                                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 group-hover:opacity-70 transition-all duration-700" />
 
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                                 <div className="absolute bottom-4 left-4 pointer-events-none">
-                                    <p className="text-xs uppercase tracking-widest text-white/50 mb-1">{map.tacticalDescription}</p>
-                                    <h3 className="text-2xl font-black uppercase tracking-wider">{map.displayName}</h3>
+                                    <p className="text-xs uppercase tracking-widest text-accent-primary mb-1 font-mono font-bold">{map.tacticalDescription}</p>
+                                    <h3 className="text-2xl font-black uppercase tracking-wider font-riot">{map.displayName}</h3>
                                     {map.coordinates && (
                                         <p className="text-[10px] text-white/30 mt-1 font-mono">{map.coordinates}</p>
                                     )}
@@ -316,7 +311,7 @@ const ValorantPage = () => {
                     <div className="text-center mt-10">
                         <button
                             onClick={() => setShowAllMaps((prev) => !prev)}
-                            className="px-8 py-3 border border-white/20 text-white font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-white/10 transition-all duration-300 cursor-pointer"
+                            className="px-8 py-3.5 border border-white/20 text-white font-bold text-xs uppercase tracking-widest rounded-full hover:border-accent-primary hover:text-accent-primary transition-all duration-300 cursor-pointer"
                         >
                             {showAllMaps ? 'Show Less ←' : 'View All Maps →'}
                         </button>

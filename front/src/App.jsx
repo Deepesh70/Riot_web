@@ -18,9 +18,9 @@ const MapDetails = lazy(() => import('./components/valorant/MapDetails'));
 const SmurfDetector = lazy(() => import('./pages/SmurfDetector'));
 
 const AppLoadingFallback = () => (
-  <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-4">
-    <div className="w-12 h-12 border-4 border-red-600/30 border-t-red-600 rounded-full animate-spin" />
-    <span className="text-neutral-400 font-mono text-sm tracking-wider uppercase">Loading Riot Ecosystem...</span>
+  <div className="min-h-screen bg-dark-900 flex flex-col items-center justify-center gap-4">
+    <div className="w-12 h-12 border-4 border-accent-primary/30 border-t-accent-primary rounded-full animate-spin" />
+    <span className="text-white/60 font-mono text-sm tracking-wider uppercase">Loading Riot Ecosystem...</span>
   </div>
 );
 

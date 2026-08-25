@@ -252,7 +252,7 @@ const Navbar = () => {
         {location.pathname !== '/' && (
           <button
             onClick={() => { navigate(-1); setIsMobileMenuOpen(false); }}
-            className="flex items-center gap-2 text-3xl font-black uppercase text-white hover:text-red-500 transition-colors tracking-tighter"
+            className="flex items-center gap-2 text-3xl font-black uppercase text-white hover:text-accent-primary transition-colors tracking-tighter"
           >
             <TiArrowBack size={32} /> Back
           </button>

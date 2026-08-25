@@ -236,27 +236,27 @@ const UserProfile = () => {
 
                 {/* ═══════ HERO SECTION ═══════ */}
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center mb-12">
-                    <p className="profile-hero-subtitle text-xs uppercase tracking-[0.4em] text-red-500/60 font-bold mb-4">Player HQ</p>
+                    <p className="profile-hero-subtitle text-xs uppercase tracking-[0.4em] text-accent-primary font-bold mb-4">Player HQ</p>
                     <h1 className="profile-hero-title font-riot text-5xl sm:text-6xl md:text-8xl font-black uppercase leading-[0.9] mb-3"
-                        style={{ background: 'linear-gradient(180deg, #fff 20%, #ff4655 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                        style={{ background: 'linear-gradient(180deg, #fff 20%, #4FB7DD 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                         {user.username}
                     </h1>
-                    <p className="profile-hero-subtitle text-neutral-500 text-sm font-mono tracking-wider">{user.tag} • {user.region}</p>
+                    <p className="profile-hero-subtitle text-white/50 text-sm font-mono tracking-wider">{user.tag} • {user.region}</p>
                 </div>
 
                 {/* ═══════ PROFILE CARD ═══════ */}
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 mb-10">
-                    <div className="profile-avatar-section relative overflow-hidden rounded-2xl border border-white/[0.06]" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.005))' }}>
+                    <div className="profile-avatar-section relative overflow-hidden rounded-2xl border border-white/[0.06] bg-dark-800/60 backdrop-blur-md">
                         {/* Banner */}
                         {user.coverWide ? (
                             <div className="h-44 sm:h-56 overflow-hidden relative profile-banner-container">
                                 <img src={user.coverWide} alt="Banner" className="profile-banner-img w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent"></div>
-                                <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/50 to-transparent"></div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/40 to-transparent"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-dark-900/50 to-transparent"></div>
                             </div>
                         ) : (
-                            <div className="h-44 sm:h-56 relative" style={{ background: 'linear-gradient(135deg, #1a1030, #0f1923, #1a0a0a)' }}>
-                                <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 30% 50%, rgba(255,70,85,0.15), transparent 60%)' }}></div>
+                            <div className="h-44 sm:h-56 relative bg-gradient-to-r from-dark-800 to-dark-700">
+                                <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 30% 50%, rgba(79,183,221,0.15), transparent 60%)' }}></div>
                             </div>
                         )}
 
@@ -264,26 +264,26 @@ const UserProfile = () => {
                         <div className="px-6 sm:px-8 pb-6 -mt-14 flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6 relative z-10">
                             {/* Avatar */}
                             <div className="relative shrink-0">
-                                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl p-[3px] profile-avatar-ring shadow-xl" style={{ background: 'linear-gradient(135deg, #ff4655, #ff8a65, #ff4655)' }}>
+                                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl p-[3px] profile-avatar-ring shadow-xl" style={{ background: 'linear-gradient(135deg, #4FB7DD, #5724FF, #4FB7DD)' }}>
                                     <img loading="lazy" src={user.avatar} alt="Avatar" className="w-full h-full rounded-[10px] object-cover border-[3px] border-[#0a0a0a]" />
                                 </div>
-                                <div className="absolute -bottom-1 -right-1 bg-gradient-to-r from-yellow-500 to-amber-400 text-black font-black text-[10px] px-2 py-1 rounded-lg border-2 border-[#0a0a0a] flex items-center gap-0.5 shadow-lg">
+                                <div className="absolute -bottom-1 -right-1 bg-gradient-to-r from-accent-tertiary to-amber-400 text-black font-black text-[10px] px-2 py-1 rounded-lg border-2 border-[#0a0a0a] flex items-center gap-0.5 shadow-lg">
                                     <TiStarFullOutline /> LVL {user.level}
                                 </div>
                             </div>
 
                             {/* Name block */}
                             <div className="flex-1 text-center sm:text-left">
-                                <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight leading-none">
+                                <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight leading-none font-riot">
                                     {user.username}
-                                    <span className="text-neutral-500 text-base ml-2 font-medium normal-case">{user.tag}</span>
+                                    <span className="text-white/40 text-base ml-2 font-medium normal-case font-mono">{user.tag}</span>
                                 </h2>
                                 <div className="flex items-center gap-3 mt-2 justify-center sm:justify-start">
-                                    <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-red-400/80">
+                                    <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-accent-primary">
                                         <FaCrosshairs className="text-[10px]" /> {user.region}
                                     </span>
-                                    <span className="w-1 h-1 rounded-full bg-neutral-700"></span>
-                                    <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-yellow-500/80">
+                                    <span className="w-1 h-1 rounded-full bg-white/20"></span>
+                                    <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-accent-tertiary">
                                         <FaShieldAlt className="text-[10px]" /> Level {user.level}
                                     </span>
                                 </div>
@@ -303,18 +303,18 @@ const UserProfile = () => {
                                          <div className="text-left w-max">
                                              <p className="text-[10px] font-bold uppercase tracking-widest mb-0.5" style={{ color: persona.color }}>ML Persona Engine</p>
                                              <p className="text-sm font-black uppercase tracking-tight text-white">{persona.title}</p>
-                                             <p className="text-[10px] text-neutral-300 max-w-[150px] leading-tight mt-0.5">{persona.description}</p>
+                                             <p className="text-[10px] text-white/50 max-w-[150px] leading-tight mt-0.5">{persona.description}</p>
                                          </div>
                                     </div>
                                 )}
                                 <div className="flex gap-3">
-                                    <div className="profile-info-card text-center px-5 py-3 rounded-xl border border-white/[0.06]" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                                        <p className="text-2xl font-black text-white">{valMatches.length}</p>
-                                        <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-500">Matches</p>
+                                    <div className="profile-info-card text-center px-5 py-3 rounded-xl border border-white/[0.06] bg-dark-800">
+                                        <p className="text-2xl font-black text-white font-riot">{valMatches.length}</p>
+                                        <p className="text-[9px] font-bold uppercase tracking-widest text-white/40">Matches</p>
                                     </div>
-                                    <div className="profile-info-card text-center px-5 py-3 rounded-xl border border-white/[0.06]" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                                        <p className="text-2xl font-black text-green-400">{valMatches.filter(m => m.mmr_change_to_last_game > 0).length}</p>
-                                        <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-500">Wins</p>
+                                    <div className="profile-info-card text-center px-5 py-3 rounded-xl border border-white/[0.06] bg-dark-800">
+                                        <p className="text-2xl font-black text-accent-primary font-riot">{valMatches.filter(m => m.mmr_change_to_last_game > 0).length}</p>
+                                        <p className="text-[9px] font-bold uppercase tracking-widest text-white/40">Wins</p>
                                     </div>
                                 </div>
                             </div>
@@ -325,24 +325,24 @@ const UserProfile = () => {
                 {/* ═══════ SEARCH BAR ═══════ */}
                 <div className="profile-search-section max-w-6xl mx-auto px-4 sm:px-6 mb-10">
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                        <div className="flex-1 flex items-center profile-search-wrapper rounded-xl overflow-hidden border border-white/[0.06] transition-all" style={{ background: 'rgba(255,255,255,0.025)' }}>
-                            <div className="flex items-center gap-1 px-4 text-neutral-600">
+                        <div className="flex-1 flex items-center profile-search-wrapper rounded-xl overflow-hidden border border-white/10 bg-white/[0.03] transition-all">
+                            <div className="flex items-center gap-1 px-4 text-white/40">
                                 <FaSearch className="text-sm" />
                             </div>
                             <input type="text" placeholder="Game Name" value={riotGameName} onChange={(e) => setRiotGameName(e.target.value)}
-                                className="bg-transparent text-white px-2 py-3 outline-none flex-1 min-w-0 placeholder-neutral-600 text-sm" />
+                                className="bg-transparent text-white px-2 py-3 outline-none flex-1 min-w-0 placeholder-white/30 text-sm font-medium" />
                             <div className="w-px h-6 bg-white/10"></div>
                             <input type="text" placeholder="#TAG" value={riotTagLine} onChange={(e) => setRiotTagLine(e.target.value)}
-                                className="bg-transparent text-white px-3 py-3 outline-none w-24 placeholder-neutral-600 text-sm font-mono" />
+                                className="bg-transparent text-white px-3 py-3 outline-none w-24 placeholder-white/30 text-sm font-mono" />
                             <div className="w-px h-6 bg-white/10"></div>
                             <select value={selectedGame} onChange={(e) => setSelectedGame(e.target.value)}
-                                className="bg-transparent text-neutral-400 px-3 py-3 outline-none cursor-pointer text-sm font-bold uppercase hover:text-white transition-colors">
-                                <option value="val" className="bg-neutral-900">Valorant</option>
-                                <option value="lol" className="bg-neutral-900">LoL</option>
+                                className="bg-transparent text-white/60 px-3 py-3 outline-none cursor-pointer text-sm font-bold uppercase hover:text-white transition-colors">
+                                <option value="val" className="bg-dark-800">Valorant</option>
+                                <option value="lol" className="bg-dark-800">LoL</option>
                             </select>
                         </div>
                         <button onClick={handleSearch}
-                            className="profile-search-btn bg-[#ff4655] hover:bg-[#e83e4d] text-white font-bold py-3 px-8 rounded-xl transition-all text-xs uppercase tracking-widest shadow-lg hover:shadow-[0_0_25px_rgba(255,70,85,0.3)] hover:translate-y-[-1px]">
+                            className="profile-search-btn bg-gradient-to-r from-accent-primary to-blue-400 hover:scale-105 active:scale-95 text-black font-black py-3 px-8 rounded-xl transition-all text-xs uppercase tracking-widest shadow-lg hover:shadow-[0_0_25px_rgba(79,183,221,0.4)] cursor-pointer">
                             Search Player
                         </button>
                     </div>
@@ -356,37 +356,38 @@ const UserProfile = () => {
                             style={{ background: 'linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.4) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                             Match<br />History
                         </h2>
-                        <p className="text-neutral-600 text-xs uppercase tracking-widest font-bold mt-2">Recent competitive performance</p>
+                        <p className="text-white/40 text-xs uppercase tracking-widest font-bold mt-2">Recent competitive performance</p>
                     </div>
 
-                    <div className="profile-matches-container border border-white/[0.06] rounded-2xl overflow-hidden" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005))' }}>
+                    <div className="profile-matches-container border border-white/[0.06] rounded-2xl overflow-hidden bg-dark-800/40">
                         {/* Tabs */}
                         <div className="flex items-center border-b border-white/[0.06] px-6 pt-1">
                             <button
                                 onClick={() => setActiveTab('valorant')}
-                                className={`profile-tab-btn flex items-center gap-2.5 px-5 py-4 text-sm font-bold uppercase tracking-wider transition-all relative ${activeTab === 'valorant' ? 'text-red-400' : 'text-neutral-600 hover:text-neutral-400'}`}>
+                                className={`profile-tab-btn flex items-center gap-2.5 px-5 py-4 text-sm font-bold uppercase tracking-wider transition-all relative ${activeTab === 'valorant' ? 'text-accent-primary' : 'text-white/40 hover:text-white'}`}>
                                 <SiValorant className="text-base" /> Valorant
-                                {activeTab === 'valorant' && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-red-500 to-orange-500 rounded-t shadow-[0_-4px_15px_rgba(255,70,85,0.5)]"></span>}
+                                {activeTab === 'valorant' && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-primary to-blue-400 rounded-t shadow-[0_-4px_15px_rgba(79,183,221,0.5)]"></span>}
                             </button>
                             <button
                                 onClick={() => setActiveTab('lol')}
-                                className={`profile-tab-btn flex items-center gap-2.5 px-5 py-4 text-sm font-bold uppercase tracking-wider transition-all relative ${activeTab === 'lol' ? 'text-blue-400' : 'text-neutral-600 hover:text-neutral-400'}`}>
+                                className={`profile-tab-btn flex items-center gap-2.5 px-5 py-4 text-sm font-bold uppercase tracking-wider transition-all relative ${activeTab === 'lol' ? 'text-accent-primary' : 'text-white/40 hover:text-white'}`}>
                                 <SiLeagueoflegends className="text-base" /> League of Legends
-                                {activeTab === 'lol' && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500 to-cyan-400 rounded-t shadow-[0_-4px_15px_rgba(59,130,246,0.5)]"></span>}
+                                {activeTab === 'lol' && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-primary to-blue-400 rounded-t shadow-[0_-4px_15px_rgba(79,183,221,0.5)]"></span>}
                             </button>
                         </div>
 
                         {/* Content */}
                         <div className="p-6 min-h-[350px]">
                             {matchesLoading ? (
-                                <div className="flex flex-col items-center justify-center py-16 gap-4">
-                                    <div className="three-body"><div className="three-body__dot"></div><div className="three-body__dot"></div><div className="three-body__dot"></div></div>
-                                    <p className="text-neutral-600 text-xs uppercase tracking-[0.3em] font-bold">Loading Matches</p>
+                                <div className="flex flex-col items-center justify-center py-20 gap-3">
+                                    <div className="w-10 h-10 border-2 border-accent-primary border-t-transparent rounded-full animate-spin"></div>
+                                    <p className="text-white/40 text-xs font-mono uppercase tracking-widest">Retrieving telemetry...</p>
                                 </div>
-                            ) : activeTab === 'valorant' ? (
-                                <ValMatchList matches={valMatches} />
                             ) : (
-                                <LolMatchList matches={lolMatches} puuid={playerPuuid} />
+                                <>
+                                    {activeTab === 'valorant' && <ValMatchList matches={valMatches} />}
+                                    {activeTab === 'lol' && <LolMatchList matches={lolMatches} puuid={playerPuuid} />}
+                                </>
                             )}
                         </div>
                     </div>
@@ -401,7 +402,7 @@ const UserProfile = () => {
 // ═══════════════════════════════════════════
 const ValMatchList = ({ matches }) => {
     if (!matches || matches.length === 0) {
-        return <EmptyState message="No Valorant match data found" icon={<SiValorant className="text-3xl text-red-500/40" />} />;
+        return <EmptyState message="No Valorant match data found" icon={<SiValorant className="text-3xl text-accent-primary/40" />} />;
     }
     return (
         <div className="space-y-3">
@@ -410,13 +411,13 @@ const ValMatchList = ({ matches }) => {
                 const result = match.mmr_change_to_last_game > 0 ? 'VICTORY' : match.mmr_change_to_last_game < 0 ? 'DEFEAT' : 'DRAW';
 
                 return (
-                    <div key={match.match_id || i} className="profile-match-card group relative overflow-hidden rounded-xl border border-white/[0.04] hover:border-white/10 transition-all duration-300 hover:translate-x-1">
-                        <div className={`absolute left-0 top-0 bottom-0 w-[3px] ${isWin ? 'bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.6)]' : 'bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.6)]'}`}></div>
+                    <div key={match.match_id || i} className="profile-match-card group relative overflow-hidden rounded-xl border border-white/[0.06] hover:border-accent-primary/30 transition-all duration-300 hover:translate-x-1">
+                        <div className={`absolute left-0 top-0 bottom-0 w-[3px] ${isWin ? 'bg-accent-primary shadow-[0_0_10px_rgba(79,183,221,0.6)]' : 'bg-white/20'}`}></div>
                         <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-5 py-4 pl-6 bg-white/[0.015] group-hover:bg-white/[0.04] transition-colors">
                             <div className="flex flex-col items-center md:items-start min-w-[140px]">
-                                <span className={`font-black text-lg tracking-wide ${isWin ? 'text-cyan-400' : 'text-rose-400'}`}>{result}</span>
-                                <span className="text-neutral-500 text-xs uppercase font-bold tracking-widest">{match.map?.name || 'Unknown'}</span>
-                                <span className="text-neutral-700 text-[11px] mt-0.5">{match.date}</span>
+                                <span className={`font-black text-lg tracking-wide font-riot ${isWin ? 'text-accent-primary' : 'text-white/40'}`}>{result}</span>
+                                <span className="text-white/50 text-xs uppercase font-bold tracking-widest">{match.map?.name || 'Unknown'}</span>
+                                <span className="text-white/30 text-[11px] mt-0.5 font-mono">{match.date}</span>
                             </div>
                             <div className="flex items-center gap-4 flex-1">
                                 {match.images?.small && (
@@ -426,16 +427,16 @@ const ValMatchList = ({ matches }) => {
                                 )}
                                 <div>
                                     <div className="font-bold text-white">{match.currenttier_patched}</div>
-                                    <div className="text-sm text-neutral-500 flex gap-2 items-center">
-                                        RR: <span className={`font-mono font-bold ${isWin ? 'text-green-400' : 'text-red-400'}`}>
+                                    <div className="text-sm text-white/50 flex gap-2 items-center">
+                                        RR: <span className={`font-mono font-bold ${isWin ? 'text-accent-primary' : 'text-white/40'}`}>
                                             {match.mmr_change_to_last_game > 0 ? '+' : ''}{match.mmr_change_to_last_game}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <div className="text-right hidden md:block">
-                                <div className="text-xl font-bold text-neutral-300">{match.elo} <span className="text-xs text-neutral-700">ELO</span></div>
-                                <div className="text-xs text-neutral-700">Tier: {match.ranking_in_tier}</div>
+                                <div className="text-xl font-bold text-white font-mono">{match.elo} <span className="text-xs text-white/40">ELO</span></div>
+                                <div className="text-xs text-white/40 font-mono">Tier: {match.ranking_in_tier}</div>
                             </div>
                         </div>
                     </div>
@@ -450,7 +451,7 @@ const ValMatchList = ({ matches }) => {
 // ═══════════════════════════════════════════
 const LolMatchList = ({ matches, puuid }) => {
     if (!matches || matches.length === 0) {
-        return <EmptyState message="No League of Legends match data found" icon={<SiLeagueoflegends className="text-3xl text-blue-500/40" />} />;
+        return <EmptyState message="No League of Legends match data found" icon={<SiLeagueoflegends className="text-3xl text-accent-primary/40" />} />;
     }
     return (
         <div className="space-y-3">
@@ -464,36 +465,36 @@ const LolMatchList = ({ matches, puuid }) => {
                 const kda = ((participant.kills + participant.assists) / Math.max(1, participant.deaths)).toFixed(2);
 
                 return (
-                    <div key={match.metadata?.matchId || i} className="profile-match-card group relative overflow-hidden rounded-xl border border-white/[0.04] hover:border-white/10 transition-all duration-300 hover:translate-x-1">
-                        <div className={`absolute left-0 top-0 bottom-0 w-[3px] ${isWin ? 'bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.6)]' : 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.6)]'}`}></div>
+                    <div key={match.metadata?.matchId || i} className="profile-match-card group relative overflow-hidden rounded-xl border border-white/[0.06] hover:border-accent-primary/30 transition-all duration-300 hover:translate-x-1">
+                        <div className={`absolute left-0 top-0 bottom-0 w-[3px] ${isWin ? 'bg-accent-primary shadow-[0_0_10px_rgba(79,183,221,0.6)]' : 'bg-white/20'}`}></div>
                         <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-5 py-4 pl-6 bg-white/[0.015] group-hover:bg-white/[0.04] transition-colors">
                             <div className="flex flex-col items-center md:items-start min-w-[120px]">
-                                <span className={`font-black text-lg ${isWin ? 'text-blue-400' : 'text-red-400'}`}>{isWin ? 'VICTORY' : 'DEFEAT'}</span>
-                                <span className="text-neutral-500 text-xs uppercase font-bold">{match.info.gameMode}</span>
-                                <span className="text-neutral-700 text-[11px] mt-0.5">{gameDate} • {durationMin}m</span>
+                                <span className={`font-black text-lg font-riot ${isWin ? 'text-accent-primary' : 'text-white/40'}`}>{isWin ? 'VICTORY' : 'DEFEAT'}</span>
+                                <span className="text-white/50 text-xs uppercase font-bold">{match.info.gameMode}</span>
+                                <span className="text-white/30 text-[11px] mt-0.5 font-mono">{gameDate} • {durationMin}m</span>
                             </div>
                             <div className="flex items-center gap-4 flex-1">
-                                <div className="relative w-12 h-12 rounded-lg bg-neutral-800 overflow-hidden border border-white/10">
+                                <div className="relative w-12 h-12 rounded-lg bg-dark-700 overflow-hidden border border-white/10">
                                     <img src={`https://ddragon.leagueoflegends.com/cdn/14.3.1/img/champion/${participant.championName}.png`} alt={participant.championName}
                                         className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none' }} />
                                 </div>
                                 <div>
                                     <div className="font-bold text-white">{participant.championName}</div>
-                                    <div className="text-sm text-neutral-400 flex gap-1">
-                                        <span className="text-white font-mono">{participant.kills}</span>/
-                                        <span className="text-red-400 font-mono">{participant.deaths}</span>/
-                                        <span className="text-white font-mono">{participant.assists}</span>
+                                    <div className="text-sm text-white/50 flex gap-1 font-mono">
+                                        <span className="text-white">{participant.kills}</span>/
+                                        <span className="text-white/40">{participant.deaths}</span>/
+                                        <span className="text-white">{participant.assists}</span>
                                     </div>
                                 </div>
                             </div>
                             <div className="text-right hidden md:block">
-                                <div className="text-xl font-bold text-neutral-300">{kda} <span className="text-xs text-neutral-700">KDA</span></div>
-                                <div className="text-xs text-neutral-500">{participant.totalMinionsKilled + participant.neutralMinionsKilled} CS</div>
-                                <div className="text-sm text-yellow-500/80 mt-0.5">{participant.goldEarned.toLocaleString()} Gold</div>
+                                <div className="text-xl font-bold text-white font-mono">{kda} <span className="text-xs text-white/40">KDA</span></div>
+                                <div className="text-xs text-white/40 font-mono">{participant.totalMinionsKilled + participant.neutralMinionsKilled} CS</div>
+                                <div className="text-sm text-accent-tertiary mt-0.5 font-mono">{participant.goldEarned.toLocaleString()} Gold</div>
                             </div>
                             <div className="flex gap-1">
                                 {[participant.item0, participant.item1, participant.item2, participant.item3, participant.item4, participant.item5].map((item, idx) => (
-                                    <div key={idx} className="w-8 h-8 bg-neutral-800/60 rounded border border-white/5 overflow-hidden">
+                                    <div key={idx} className="w-8 h-8 bg-dark-700 rounded border border-white/5 overflow-hidden">
                                         {item > 0 && <img src={`https://ddragon.leagueoflegends.com/cdn/14.3.1/img/item/${item}.png`} alt="" className="w-full h-full" />}
                                     </div>
                                 ))}
