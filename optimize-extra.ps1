@@ -1,9 +1,9 @@
 $ErrorActionPreference = "Stop"
 
 $workspace = "c:\Users\aadit\Desktop\Riot_web"
-$videosDir = Join-Path $workspace "front\public\videos"
-$imgDir = Join-Path $workspace "front\public\img"
-$distDir = Join-Path $workspace "front\dist"
+$videosDir = Join-Path $workspace "frontend\public\videos"
+$imgDir = Join-Path $workspace "frontend\public\img"
+$distDir = Join-Path $workspace "frontend\dist"
 
 Write-Host "=== Generating Video Posters and WebP Images ===" -ForegroundColor Cyan
 

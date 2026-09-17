@@ -1,9 +1,9 @@
 $ErrorActionPreference = "Stop"
 
 $workspace = "c:\Users\aadit\Desktop\Riot_web"
-$videosDir = Join-Path $workspace "front\public\videos"
-$imgDir = Join-Path $workspace "front\public\img"
-$backupDir = Join-Path $workspace "front\public_media_backup"
+$videosDir = Join-Path $workspace "frontend\public\videos"
+$imgDir = Join-Path $workspace "frontend\public\img"
+$backupDir = Join-Path $workspace "frontend\public_media_backup"
 
 Write-Host "=== Starting Media Optimization Pipeline ===" -ForegroundColor Cyan
 
@@ -106,9 +106,9 @@ foreach ($file in $imgFiles) {
 }
 
 # Also update dist if it exists
-$distDir = Join-Path $workspace "front\dist"
+$distDir = Join-Path $workspace "frontend\dist"
 if (Test-Path $distDir) {
-    Write-Host "Syncing optimized assets to front/dist..." -ForegroundColor Cyan
+    Write-Host "Syncing optimized assets to frontend/dist..." -ForegroundColor Cyan
     Copy-Item -Recurse -Force "$videosDir\*" (Join-Path $distDir "videos") -ErrorAction SilentlyContinue
     Copy-Item -Recurse -Force "$imgDir\*" (Join-Path $distDir "img") -ErrorAction SilentlyContinue
 }

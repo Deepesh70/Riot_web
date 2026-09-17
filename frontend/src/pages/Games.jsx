@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import ValorantPage from './ValorantPage';
@@ -8,7 +8,6 @@ import ValorantPage from './ValorantPage';
 
 const Games = () => {
     const { game } = useParams();
-    const navigate = useNavigate();
     const activeGame = game || 'valorant';
 
     return (

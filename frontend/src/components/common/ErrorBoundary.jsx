@@ -46,7 +46,7 @@ class ErrorBoundary extends Component {
               An unexpected glitch occurred while rendering this interface. Our technicians have been notified.
             </p>
 
-            {process.env.NODE_ENV !== 'production' && this.state.error && (
+            {Boolean(import.meta.env?.DEV) && this.state.error && (
               <div className="text-left bg-black/60 rounded-lg p-3 mb-6 border border-white/10 text-xs font-mono text-accent-primary overflow-x-auto max-h-32">
                 {this.state.error.toString()}
               </div>

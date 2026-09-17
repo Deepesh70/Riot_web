@@ -6,6 +6,8 @@ import { SiValorant, SiLeagueoflegends } from 'react-icons/si';
 
 import Navbar from '../components/common/Navbar';
 
+const API = import.meta.env.VITE_API_BASE_URL || '';
+
 const UserProfile = () => {
     const navigate = useNavigate();
     const containerRef = useRef(null);
@@ -31,8 +33,6 @@ const UserProfile = () => {
 
     // Decorative agents
     const [agents, setAgents] = useState([]);
-
-    const API = import.meta.env.VITE_API_BASE_URL;
 
     // ─── Fetch decorative agents from Valorant API ───
     useEffect(() => {
@@ -135,7 +135,7 @@ const UserProfile = () => {
             }
         } catch (e) { console.error('LoL matches fetch failed', e); }
         finally { setMatchesLoading(false); setLolFetched(true); }
-    }, [playerPuuid, lolFetched, API]);
+    }, [playerPuuid, lolFetched]);
 
     useEffect(() => {
         if (activeTab === 'lol') fetchLolMatches();

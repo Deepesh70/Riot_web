@@ -1,106 +1,96 @@
-# Riot ReImagined
+<p align="center">
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white" />
+  <img src="https://img.shields.io/badge/Node.js-20-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
+  <img src="https://img.shields.io/badge/Express-5.2-000000?style=for-the-badge&logo=express&logoColor=white" />
+  <img src="https://img.shields.io/badge/MongoDB-7-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
+  <img src="https://img.shields.io/badge/Redis-7-DC382D?style=for-the-badge&logo=redis&logoColor=white" />
+  <img src="https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/GSAP-3.13-0AE448?style=for-the-badge&logo=greensock&logoColor=white" />
+</p>
 
-![Riot ReImagined Banner](https://img.shields.io/badge/Status-Development-green) ![License](https://img.shields.io/badge/License-ISC-blue)
+# 🎮 Riot ReImagined - Enterprise Gaming Portal & Community Hub
 
-**Riot ReImagined** is a cutting-edge, full-stack web application that serves as a modern, reimagined landing and community hub for the Riot Games universe. It combines a visually stunning, high-performance frontend with a robust backend API to deliver an immersive experience for gamers.
-
-The project features a sleek UI with advanced animations powered by GSAP, comprehensive game information (Valorant, League of Legends), esports updates, and a personalized user profile system integrating directly with Riot Games APIs.
-
----
-
-## 📑 Table of Contents
-
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Environment Variables](#environment-variables)
-- [API Documentation](#-api-documentation)
-- [Frontend Pages](#-frontend-pages)
-- [Deployment](#-deployment)
-- [Contributing](#-contributing)
-- [License](#-license)
+A production-grade, full-stack gaming portal and analytics hub celebrating the Riot Games universe. Built as an **npm Workspaces Monorepo** featuring a high-performance **React 19** frontend with **GSAP** scroll-triggered animations, an **Express.js BFF (Backend-For-Frontend)**, multi-tier caching with **Redis**, on-demand **K-Means ML smurf detection**, and full **Docker Compose** containerization.
 
 ---
 
-## ✨ Features
+## 🏗️ System Architecture
 
-### 🎨 Frontend Experience
-- **Immersive UI/UX:** Built with **React 19** and **Tailwind CSS** for a responsive, modern design.
-- **Advanced Animations:** Utilizes **GSAP (GreenSock Animation Platform)** for scroll-triggered animations, seamless transitions, and interactive elements.
-- **Dynamic Routing:** Client-side routing with **React Router v7** for smooth navigation between pages.
-- **Rich Media:** Integration of high-quality videos, audio, and imagery to capture the essence of Riot Games.
-- **Player Stats:** Real-time lookup of player statistics for Valorant and League of Legends which are fetched using Riot and HenrikDev APIs.
-
-### 🔐 Backend & Security
-- **Secure Authentication:** User registration and login protected by **JWT (JSON Web Tokens)** and **bcrypt** password hashing.
-- **RESTful API:** A scalable **Express.js** API handling user data and external API requests.
-- **Database Integration:** **MongoDB** (via Mongoose) for persistent user storage.
-- **External API Integration:**
-  - **Riot Games API:** For fetching League of Legends match history and account data.
-  - **HenrikDev Valorant API:** For retrieving Valorant MMR and match history.
-
----
-
-## 🛠 Tech Stack
-
-### Frontend (`/front`)
-*   **Framework:** [React 19](https://react.dev/) via [Vite](https://vitejs.dev/)
-*   **Styling:** [Tailwind CSS v3](https://tailwindcss.com/), PostCSS
-*   **Animations:** [GSAP v3](https://greensock.com/gsap/) (@gsap/react)
-*   **Routing:** React Router DOM v6/v7
-*   **Icons:** React Icons
-*   **Utilities:** clsx (class name utility)
-
-### Backend (`/backend`)
-*   **Runtime:** [Node.js](https://nodejs.org/)
-*   **Framework:** [Express.js v5](https://expressjs.com/) (Beta)
-*   **Database:** MongoDB with [Mongoose](https://mongoosejs.com/)
-*   **Authentication:** `jsonwebtoken` (JWT), `bcryptjs`
-*   **Security:** `cors`, `dotenv`
-*   **Dev Tools:** `nodemon`
+```
+                                [Web Browser / Client]
+                                          │
+                         (JWT Auth Token / Guest Session)
+                                          │
+                                          ▼
+                         [Nginx Reverse Proxy & Static Host]
+                                          │
+                        /api/*            │        Static SPA Assets
+                                          ▼
+                      [Riot ReImagined API Server (Node.js)]
+                 ┌────────────────────────┴────────────────────────┐
+                 ▼                                                 ▼
+        [Security & Resilience]     [Persistence & ML Engine]    [External Integrations]
+        - Helmet, Strict CORS       - MongoDB (Mongoose ODM)     - Upstash / Local Redis
+        - Express Rate Limiting     - K-Means Smurf Clustering   - Riot Games API
+        - Structured JSON Logs      - User Auth (JWT & Bcrypt)   - HenrikDev Valorant API
+        - Non-root Docker User
+```
 
 ---
 
-## 📂 Project Structure
+## ⭐ Production Highlights
 
-```plaintext
-Riot_ReImagined/
-├── backend/                  # Express.js API Server
-│   ├── Middleware/           # Custom middleware
-│   │   └── authMiddleware.js # JWT verification middleware
-│   ├── Models/               # Mongoose Data Models
-│   │   └── user.js           # User schema (name, email, password, riot IDs)
-│   ├── Routes/               # API Route Handlers
-│   │   └── user.js           # Auth & Riot API routes
-│   ├── index.js              # Server entry point & config
-│   ├── package.json          # Backend dependencies
-│   └── vercel.json           # Backend deployment config
-│
-├── front/                    # React Frontend Application
-│   ├── public/               # Static Assets
-│   │   ├── audio/            # Sound effects & background music
-│   │   ├── fonts/            # Custom typefaces (Zentry, etc.)
-│   │   ├── img/              # Images & sprites
-│   │   └── videos/           # Hero & background videos
-│   ├── src/                  # Source Code
-│   │   ├── components/       # Reusable UI Components & Pages
-│   │   │   ├── Hero.jsx      # Main landing hero section
-│   │   │   ├── Navbar.jsx    # Navigation bar
-│   │   │   ├── About.jsx     # About section
-│   │   │   ├── Games.jsx     # Games hub
-│   │   │   ├── Login.jsx     # Auth forms
-│   │   │   └── ...           # Many more feature components
-│   │   ├── App.jsx           # Main App component & Routing
-│   │   ├── main.jsx          # React entry point
-│   │   └── index.css         # Global styles & Tailwind directives
-│   ├── package.json          # Frontend dependencies
-│   ├── vite.config.cjs       # Vite configuration
-│   └── tailwind.config.cjs   # Tailwind configuration
-│
-└── README.md                 # Project Documentation
+| Feature | Description |
+| :--- | :--- |
+| 🛡️ **Zero Secret Exposure** | Riot Games and HenrikDev private API keys live strictly on the backend service. |
+| ⚡ **Multi-Tier Caching** | Redis caching layer prevents third-party API rate limit spikes and optimizes repeated stat queries. |
+| 🤖 **AI-Driven Smurf Detector** | Unsupervised K-Means clustering algorithm evaluates KD, ACS, and round deviations to flag smurf accounts. |
+| 🎬 **Cinematic Hero Experience** | Live background video carousel with audio protocol toggle, GSAP scroll triggers, and 3D tilt interactions. |
+| 📊 **Real-Time Match Analytics** | Live player search fetching current rank badges, match history, and performance stats across Valorant and LoL. |
+| 🐳 **Full Containerization** | Multi-stage Dockerfiles and `docker-compose.yml` orchestrating MongoDB, Redis, API, and Nginx. |
+| 🤖 **Automated CI Pipeline** | GitHub Actions validating backend tests, ESLint rules, and 100% frontend production builds on PR/push. |
+
+---
+
+## 📂 Clean Monorepo Directory Structure
+
+```
+Riot_web/
+├── .github/
+│   ├── workflows/ci.yml         # Fullstack GitHub Actions CI pipeline
+│   └── PULL_REQUEST_TEMPLATE.md # Standard PR checklist & change categorization
+├── frontend/                    # 🌐 React 19 Client Application
+│   ├── src/                     # Components, pages, context, and styles
+│   │   ├── components/          # Hero, Navbar, Footer, AgentDetails, UI
+│   │   ├── context/             # AudioContext and AuthContext
+│   │   ├── pages/               # Home, Games, ValorantPage, PlayerStats, SmurfDetector
+│   │   └── __tests__/           # Frontend smoke & integrity tests
+│   ├── public/                  # Media assets (audio, images, videos)
+│   ├── Dockerfile               # Multi-stage production Nginx container
+│   ├── nginx.conf               # Nginx reverse proxy & gzip configuration
+│   └── package.json             # Frontend dependencies & scripts
+├── backend/                     # ⚙️ Node.js/Express BFF & API Server
+│   ├── Controllers/             # Auth, News, Riot, and Valorant controllers
+│   ├── Middleware/              # Auth, RateLimiter, Security, ErrorHandler, Validator
+│   ├── Models/                  # Mongoose User model & schemas
+│   ├── Routes/                  # Auth, News, Riot, Valorant, and Health endpoints
+│   ├── Utils/                   # Redis client, logger, K-Means clustering
+│   ├── tests/                   # Backend integration & unit tests
+│   ├── Dockerfile               # Multi-stage production backend container (non-root)
+│   └── package.json             # Backend dependencies & scripts
+├── docs/                        # 📚 Technical documentation suite
+│   ├── README.md                # Documentation index
+│   ├── project-overview.md      # System goals, tech stack, and user flows
+│   ├── setup-guide.md           # Local development & Docker Compose guide
+│   ├── architecture-guide.md    # Topology, BFF pattern, and caching design
+│   ├── feature-walkthrough.md   # Tour of key platform capabilities
+│   └── github-workflows-guide.md# Universal CI/CD pipeline and PR standards
+├── docker-compose.yml           # Production stack (MongoDB + Redis + API + Web)
+├── package.json                 # Root monorepo workspaces orchestrator
+├── package-lock.json            # Monorepo lockfile
+├── .gitignore                   # Multi-tier ignore rules (DBs, envs, logs)
+└── .env.example                 # Unified monorepo environment template
 ```
 
 ---
@@ -108,140 +98,72 @@ Riot_ReImagined/
 ## 🚀 Getting Started
 
 ### Prerequisites
-Ensure you have the following installed:
-- **Node.js** (v16.14.0 or higher)
-- **npm** (Node Package Manager)
-- **MongoDB** (Local instance or [MongoDB Atlas](https://www.mongodb.com/atlas/database) URI)
+* **Node.js**: `v20.x` or `v22.x` LTS
+* **npm**: `v10.x` or higher
+* **Docker & Docker Compose** *(optional, for containerized run)*
 
-### Installation
+### Quickstart (Local Monorepo)
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/yourusername/riot-reimagined.git
-    cd Riot_ReImagined
-    ```
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Deepesh70/Riot_web.git
+   cd Riot_web
+   ```
 
-2.  **Install Backend Dependencies:**
-    ```bash
-    cd backend
-    npm install
-    ```
+2. **Install all dependencies:**
+   ```bash
+   npm install
+   ```
 
-3.  **Install Frontend Dependencies:**
-    Open a new terminal window:
-    ```bash
-    cd front
-    npm install
-    ```
+3. **Configure Environment Variables:**
+   ```bash
+   cp .env.example .env
+   cp .env.example backend/.env
+   cp .env.example frontend/.env
+   ```
 
-### Environment Variables
-
-You must configure environment variables for the backend to function correctly.
-
-1.  Create a `.env` file in the `backend/` directory.
-2.  Add the following keys:
-
-    ```env
-    # Server Configuration
-    PORT=5000
-    ALLOWED_ORIGINS=http://localhost:5173
-
-    # Database
-    MONGO_URI=mongodb+srv://<your_user>:<your_password>@cluster.mongodb.net/riot_db?retryWrites=true&w=majority
-
-    # Security
-    JWT_SECRET=your_super_secret_jwt_key_here
-
-    # External APIs (Required for Player Stats)
-    RIOT_API_KEY=your_riot_games_api_key
-    HENRIK_DEV_API_KEY=your_henrikdev_valorant_api_key
-    ```
-    > **Note:** Get your Riot API key from the [Riot Developer Portal](https://developer.riotgames.com/) and HenrikDev key from [Unofficial Valorant API](https://docs.henrikdev.xyz/).
+4. **Start Development Servers (Concurrently):**
+   ```bash
+   npm run dev
+   # or
+   npm run dev:all
+   ```
+   * **Frontend Application**: http://localhost:5173
+   * **Backend API**: http://localhost:5000
+   * **API Health Check**: http://localhost:5000/api/health
 
 ---
 
-## 🖥️ Running the Application
+## 🐳 Running with Docker Compose
 
-### 1. Start the Backend Server
-From the `backend/` directory:
+Spin up MongoDB, Redis, the Express API, and Nginx Web with a single command:
+
 ```bash
-# Production mode
-npm start
-
-# Development mode (with auto-reload)
-npm run dev
+docker compose up --build -d
 ```
-The server will start on `http://localhost:5000`.
 
-### 2. Start the Frontend Client
-From the `front/` directory:
-```bash
-cd front
-npm run dev
-```
-The application will launch at `http://localhost:5173`.
+* **Frontend Web App**: http://localhost (Port 80 via Nginx proxy)
+* **Backend API**: http://localhost:5000
 
 ---
 
-## 📡 API Documentation
+## 🛠 Available Monorepo Scripts
 
-Base URL: `http://localhost:5000`
-
-### Authentication
-| Method | Endpoint | Description | Body |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/signup` | Register a new user | `{ email, password, name, riotGameName?, riotTagLine? }` |
-| `POST` | `/login` | Authenticate user & get token | `{ email, password }` |
-| `GET` | `/profile` | Get current user info (Protected) | **Headers:** `Authorization: Bearer <token>` |
-
-### Riot Games Data
-| Method | Endpoint | Description | Params |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/riot/account/:gameName/:tagLine` | Fetch Riot Account PUUID & Region | `gameName`, `tagLine` |
-| `GET` | `/riot/matches/lol/:puuid` | Get last 5 LoL matches | `puuid` |
-| `GET` | `/riot/matches/val/:name/:tag` | Get Valorant MMR History | `name`, `tag` (Riot ID) |
+| Command | Description |
+| :--- | :--- |
+| `npm run dev` / `npm run dev:all` | Runs backend and frontend concurrently with colored prefixes |
+| `npm run dev:frontend` | Runs only the Vite frontend dev server |
+| `npm run dev:backend` | Runs only the Express backend dev server |
+| `npm test` | Executes both backend tests and frontend smoke tests |
+| `npm run test:backend` | Runs the Node test runner on backend test suites |
+| `npm run test:frontend` | Runs frontend asset and architecture integrity tests |
+| `npm run lint` | Validates frontend code with ESLint |
+| `npm run build` | Compiles the production bundle for the frontend |
 
 ---
 
-## 🌐 Frontend Pages
+## 📄 License & Contributing
 
-- **`/` (Home):** The main landing page featuring the Hero section, animated story elements, and feature highlights.
-- **`/esport`:** Dedicated page for esports news and updates.
-- **`/games`:** A hub showcasing Riot's game portfolio.
-  - **`/games/valorant/agents/:id`:** Detailed view of a specific Valorant agent.
-  - **`/games/valorant/maps/:id`:** Interactive map details.
-- **`/login` & `/signup`:** User authentication pages.
-- **`/profile`:** User dashboard displaying saved preferences and linked Riot accounts.
-- **`/player/:game/:gameName/:tagLine`:** A dynamic stats page that fetches and displays live data for a specific player.
-- **`/news`:** Latest updates and articles.
-- **`/about`:** Information about the "Riot ReImagined" project vision.
+Contributions are welcome! Please open an issue or pull request adhering to [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md).
 
----
-
-## 📦 Deployment
-
-The project is configured for deployment on **Vercel**.
-
-1.  **Frontend:** Connect your GitHub repo to Vercel and set the Root Directory to `front`.  
-    *   *Build Command:* `vite build`
-    *   *Output Directory:* `dist`
-2.  **Backend:** Deploy as a separate project or serverless functions.
-    *   Ensure all Environment Variables from your `.env` are added to the Vercel project settings.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please fork the repository and create a pull request with your changes. Ensure that you adhere to the existing code style and linting rules.
-
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
-
----
-
-## 📜 License
-
-This project is licensed under the **ISC License**.
+Licensed under the **ISC License**.
